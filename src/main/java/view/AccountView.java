@@ -8,6 +8,7 @@ package view;
  *   
  * @author Rick Mercer
  */
+
 import java.sql.ResultSet;
 
 import javafx.geometry.Insets;

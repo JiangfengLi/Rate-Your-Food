@@ -4,7 +4,9 @@
  * 
  * @author Rick Mercer
  */
-import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,11 +14,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import model.DataBaseAdapter;
 import model.SecureIt;
+
+import static org.junit.Assert.assertEquals;
 
 public class DataBaseTest {
 
@@ -70,26 +71,26 @@ public class DataBaseTest {
 
     try {
       ResultSet rs = dba.getAllAccounts();
-    
+
       // Update cursor to the first record
       rs.next();
       assertEquals(1, rs.getInt("id"));
       assertEquals("Rick", rs.getString("first_name"));
       assertEquals("one", SecureIt.decrypt(rs.getString("password")));
-         
+
       // Update cursor to the next record
       rs.next();
       assertEquals("Miller", rs.getString("last_name"));
       assertEquals("miller@cs.arizona.edu", rs.getString("account_Id"));
       assertEquals("two", SecureIt.decrypt(rs.getString("password")));
-           
+
       // Update cursor to the 3rd and final record
       rs.next();
       assertEquals(3, rs.getInt("id"));
       assertEquals("Kim", rs.getString("first_name"));
       assertEquals("Baker", rs.getString("last_name"));
       assertEquals("three", SecureIt.decrypt(rs.getString("password")));
-          
+
     } catch (SQLException e) {
     }
   }

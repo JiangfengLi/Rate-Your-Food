@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="SecureItTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2019-09-24T02:29:19" hostname="Ricks-MBP.hsd1.az.comcast.net" time="0.22">
-  <properties/>
-  <testcase name="testEncryptDecrypt" classname="SecureItTest" time="0.22"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

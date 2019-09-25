@@ -41,12 +41,12 @@ dependencies {
     testImplementation 'junit:junit:4.12' 
    
     // Let gradle find mysql connector
-    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.15'
-    runtime "mysql:mysql-connector-java:8.0.15.jar"
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.17'
+    runtime "mysql:mysql-connector-java:8.0.17.jar"
     
     
     // Add your dependencies here, for example:
-    // compile group: 'org.controlsfx', name: 'controlsfx', version: '8.40.14'
+//     compile group: 'org.controlsfx', name: 'controlsfx', version: '8.40.14'
     
     // We are not using Java 11:
     /*
@@ -76,7 +76,7 @@ run {
   doFirst {
     jvmArgs = [
               // Need Java 11 for --module
- 
+
            '--module-path', classpath.asPath,
            '--add-modules', 'javafx.fxml,javafx.controls'
     ]
@@ -95,7 +95,7 @@ apply plugin: 'com.sandec.jpro'
  * App Main Class
  */
 //mainClassName = 'com.jpro.hellojpro.HelloJPro'
-mainClassName = 'view.Spike1View'
+mainClassName = 'Main'
 
 /**
  * jpro settings
