@@ -11,7 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 
-public class HUD extends FlowPane
+public class HUD extends FlowPane 
 {
     public HUD( ) throws IOException
     {
