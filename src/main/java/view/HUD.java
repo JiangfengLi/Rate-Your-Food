@@ -3,6 +3,8 @@ package view;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -11,18 +13,25 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 
-public class HUD extends FlowPane
+public class HUD extends FlowPane 
 {
-    public HUD( ) throws IOException
-    {
+	private ViewController viewController;
+	
+    public HUD(ViewController viewController ) {
+    	this.viewController = viewController;
+    	
         setOrientation( Orientation.HORIZONTAL );
         setPrefWidth( 1000 );
         setPrefHeight( 75 );
         setHgap( 10 );
         setStyle( "-fx-background-color: linear-gradient(to bottom, #0087CB, #000000);" );
         setAlignment( Pos.CENTER );
-
-        ImageView searchIcon = new ImageView( new Image( new FileInputStream( "src/main/resources/images/search.png" ) ) );
+        ImageView searchIcon = null;
+        try {
+        	searchIcon = new ImageView( new Image( new FileInputStream( "src/main/resources/images/search.png" ) ) );
+        } catch (Exception x) {
+        	System.err.println("Error: unable to find search icon image.");
+        }
         searchIcon.setFitHeight( 50 );
         searchIcon.setFitWidth( 50 );
         searchIcon.setSmooth( true );
@@ -68,6 +77,7 @@ public class HUD extends FlowPane
         logoutBtn.setText( "Logout" );
         logoutBtn.setPrefSize( 150, 50 );
         setButtonStyle( logoutBtn );
+        logoutBtn.setOnAction(new SignOutHandler());
         return logoutBtn;
     }
 
@@ -90,4 +100,11 @@ public class HUD extends FlowPane
         style += "-fx-text-fill: snow;";
         aButton.setStyle( style );
     }
+    
+	// CREATE ACCOUNT HANDLER
+	private class SignOutHandler implements EventHandler<ActionEvent> {
+		public void handle(ActionEvent e) {
+			viewController.moveToLogInRoot();
+		}
+	}
 }
