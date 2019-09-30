@@ -1,25 +1,22 @@
 package view;
 
 import java.io.FileInputStream;
-import java.io.IOException;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.*;
 
-public class HUD extends FlowPane 
+public class HUD extends FlowPane
 {
 	private ViewController viewController;
-	
+
     public HUD(ViewController viewController ) {
     	this.viewController = viewController;
-    	
+
         setOrientation( Orientation.HORIZONTAL );
         setPrefWidth( 1000 );
         setPrefHeight( 75 );
@@ -32,15 +29,59 @@ public class HUD extends FlowPane
         } catch (Exception x) {
         	System.err.println("Error: unable to find search icon image.");
         }
-        searchIcon.setFitHeight( 50 );
-        searchIcon.setFitWidth( 50 );
-        searchIcon.setSmooth( true );
-        searchIcon.setCache( true );
+        if (searchIcon != null) {
+            searchIcon.setFitHeight( 50 );
+            searchIcon.setFitWidth( 50 );
+            searchIcon.setSmooth( true );
+            searchIcon.setCache( true );
+        }
 
         FlowPane searchPane = new FlowPane( searchIcon, makeSearchArea() );
         searchPane.setOrientation( Orientation.HORIZONTAL );
+        searchPane.setAlignment(Pos.CENTER);
 
-        getChildren().addAll( makeHomeBtn(), searchPane, makeAccountBtn(), makeLogoutBtn(), makeCartBtn() );
+        // Create menu
+        ImageView menuIcon = null;
+        try {
+            menuIcon = new ImageView( new Image( new FileInputStream( "src/main/resources/images/menu_icon.png" ) ) );
+        } catch (Exception x) {
+            System.err.println("Error: Unable to find menu icon image.");
+        }
+        if ( menuIcon != null ) {
+            menuIcon.setFitHeight( 50 );
+            menuIcon.setFitWidth( 25 );
+            menuIcon.setSmooth( true );
+            menuIcon.setCache( true );
+        }
+
+        Menu theMenu = new Menu();
+        theMenu.setStyle("-fx-background-color: transparent");
+        theMenu.setGraphic(menuIcon);
+
+        // Create menu items
+        MenuItem accountItem = new MenuItem("Account");
+        MenuItem logoutItem = new MenuItem("Sign Out");
+
+        // add menu items to menu
+        theMenu.getItems().add(accountItem);
+        theMenu.getItems().add(logoutItem);
+
+        // Add event
+        accountItem.setOnAction(null); //TODO: Link to account page
+        logoutItem.setOnAction( new SignOutHandler() );
+
+        // Create a menu bar
+        MenuBar menuBar = new MenuBar();
+        menuBar.setBackground(Background.EMPTY);
+        menuBar.getMenus().add(theMenu);
+
+        // Create holder for menu
+        VBox menuBox = new VBox(menuBar);
+        menuBox.setMaxWidth(25);
+        menuBox.setAlignment(Pos.CENTER);
+        menuBox.setBackground(Background.EMPTY);
+
+        getChildren().addAll( makeHomeBtn(), searchPane, makeAccountBtn(), makeCartBtn(), menuBox );
 
         setAlignment( Pos.CENTER );
     }
@@ -65,20 +106,10 @@ public class HUD extends FlowPane
     private Button makeAccountBtn( )
     {
         Button accountBtn = new Button();
-        accountBtn.setText( "Manage Account" );
+        accountBtn.setText( "My Page" );
         accountBtn.setPrefSize( 150, 50 );
         setButtonStyle( accountBtn );
         return accountBtn;
-    }
-
-    private Button makeLogoutBtn( )
-    {
-        Button logoutBtn = new Button();
-        logoutBtn.setText( "Logout" );
-        logoutBtn.setPrefSize( 150, 50 );
-        setButtonStyle( logoutBtn );
-        logoutBtn.setOnAction(new SignOutHandler());
-        return logoutBtn;
     }
 
     private Button makeCartBtn( )
@@ -100,7 +131,7 @@ public class HUD extends FlowPane
         style += "-fx-text-fill: snow;";
         aButton.setStyle( style );
     }
-    
+
 	// CREATE ACCOUNT HANDLER
 	private class SignOutHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
