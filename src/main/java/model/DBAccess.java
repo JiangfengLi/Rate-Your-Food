@@ -64,7 +64,6 @@ public class DBAccess {
     		User newUser = null;
     		// should only return 1 result, since ID is a primary key
     		while (rs.next()) {
-    			System.out.println(rs.getString(1));
     			newUser = new User(rs.getString(1),rs.getString(2),rs.getString(3),SecureIt.decrypt(rs.getString(4)));
     		}
     		stmt.close();

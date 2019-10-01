@@ -135,6 +135,7 @@ public class HUD extends FlowPane
 	// CREATE ACCOUNT HANDLER
 	private class SignOutHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
+			viewController.logOut();
 			viewController.moveToLogInRoot();
 		}
 	}
