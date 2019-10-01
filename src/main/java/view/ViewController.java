@@ -162,7 +162,13 @@ public class ViewController {
      * returns null if successful or error message otherwise
      */
     public String addUser(String email, String firstName, String lastName, String password) {
-    	return dbaccess.addUser(email, firstName, lastName, password);
+    	User existingUser = dbaccess.getUser(email);
+    	if (existingUser == null) {
+    		return dbaccess.addUser(email, firstName, lastName, password);
+    	} else {
+    		return "User account for this email already exists!";
+    	}
+    	 
     }
     
     /**

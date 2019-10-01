@@ -131,10 +131,11 @@ public class HUD extends FlowPane
         style += "-fx-text-fill: snow;";
         aButton.setStyle( style );
     }
-
+ 
 	// CREATE ACCOUNT HANDLER
 	private class SignOutHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
+			viewController.logOut();
 			viewController.moveToLogInRoot();
 		}
 	}
