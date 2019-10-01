@@ -76,7 +76,7 @@ public class DBAccess {
     }
     
 	/**
-	 * ADD USER
+	 * ADD USER 
 	 * creates the new User instance and instantiating a new ID for it, adds a user to database, logs them in
 	 * 		assumes that you have already validated that the user doesn't already exist before
 	 * returns null if successful, or error message if otherwise
