@@ -91,6 +91,7 @@ public class HUD extends FlowPane
         Button homeBtn = new Button();
         homeBtn.setText( "Home" );
         homeBtn.setPrefSize( 100, 50 );
+        homeBtn.setOnAction( new HomePageHandler() );
         setButtonStyle( homeBtn );
         return homeBtn;
     }
@@ -108,6 +109,7 @@ public class HUD extends FlowPane
         Button accountBtn = new Button();
         accountBtn.setText( "My Page" );
         accountBtn.setPrefSize( 150, 50 );
+        accountBtn.setOnAction( new MyPageHandler() );
         setButtonStyle( accountBtn );
         return accountBtn;
     }
@@ -139,4 +141,20 @@ public class HUD extends FlowPane
 			viewController.moveToLogInRoot();
 		}
 	}
+
+	// CREATE HOMEPAGE HANDLER
+	private class HomePageHandler implements EventHandler<ActionEvent> {
+		public void handle(ActionEvent e) {
+			viewController.moveToHomePage();;
+		}
+	}
+
+	
+	// CREATE MYPAGE HANDLER
+	private class MyPageHandler implements EventHandler<ActionEvent> {
+		public void handle(ActionEvent e) {
+			viewController.moveToMyPage();
+		}
+	}
+
 }

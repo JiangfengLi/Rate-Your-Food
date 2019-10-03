@@ -1,8 +1,5 @@
-import java.io.FileInputStream;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
-
 import view.ViewController;
 
 public class Main extends Application {

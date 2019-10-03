@@ -1,11 +1,5 @@
 package view;
 
-import model.DBAccess;
-import model.User;
-import view.login.CreateAccount;
-import view.login.LogInRoot;
-import view.login.SignIn;
-
 import java.io.FileInputStream;
 
 import javafx.geometry.Pos;
@@ -14,6 +8,11 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import model.DBAccess;
+import model.User;
+import view.login.CreateAccount;
+import view.login.LogInRoot;
+import view.login.SignIn;
 
 
 /**
@@ -37,6 +36,7 @@ public class ViewController {
     private ScrollPane mainPageHolder;
     private HUD theHUD;
     private StartPage theStartPage;
+    private MyPage mypage;
     
     // DATABASE MODEL CLASSES
     private DBAccess dbaccess;
@@ -48,6 +48,7 @@ public class ViewController {
      */
 	public void onLaunch(Stage primaryStage) {
 		// stage setup
+		this.stage = primaryStage;
 		primaryStage.setTitle( "Food 4 Life" );
 		try {
 			primaryStage.getIcons().add( new Image( new FileInputStream( "src/main/resources/images/icon.png" ) ) );
@@ -69,6 +70,7 @@ public class ViewController {
         createAccountPage = new CreateAccount(this);
         theHUD = new HUD(this);
         theStartPage = new StartPage();
+        mypage = new MyPage(this);
         
         // Set alignment for all views going into main borderpane
         BorderPane.setAlignment( logInRoot, Pos.CENTER );
@@ -145,6 +147,19 @@ public class ViewController {
         theWindow.setBottom(null);
     }
 
+    /**
+     * MOVE TO MYPAGE
+     * moves us to 'MyPage' page
+     */   
+	public void moveToMyPage() {
+        theWindow.setTop( theHUD );
+        theWindow.setCenter( mypage );
+        theWindow.setLeft(null);
+        theWindow.setRight(null);
+        theWindow.setBottom(null);		
+	}
+    
+    
     // ******************************** INTERFACE FOR VIEWS ACCESSING THE MODEL ****************************
     /**
      * GET CURRENT USER
@@ -188,6 +203,16 @@ public class ViewController {
     public String logIn(String email, String password) {
     	return dbaccess.logIn(email, password);
     }
+
+
+    /**
+     * returnStage
+     * 
+     * returns stage
+     */    
+	public Stage returnStage() {
+		return this.stage;
+	}
     
     
     
