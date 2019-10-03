@@ -23,7 +23,4 @@ public class Main extends Application {
         viewController = new ViewController();
         viewController.onLaunch(primaryStage);
     }
-    
-
-
 }

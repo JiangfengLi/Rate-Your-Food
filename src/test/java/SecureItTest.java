@@ -4,12 +4,12 @@
 /**
  * Test encryption and decryption of strings
  */
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 
 import model.SecureIt;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class SecureItTest {
   
