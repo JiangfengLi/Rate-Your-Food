@@ -29,3 +29,7 @@ RUNNING_PID
 .idea/
 /build/
 /gradle/
+/.settings/
+.classpath
+.project
+/bin/
