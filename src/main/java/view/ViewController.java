@@ -34,9 +34,11 @@ public class ViewController {
     
     // HOME PAGE VIEW CLASSES
     private ScrollPane mainPageHolder;
+    private ScrollPane scrollForRecipe;
     private HUD theHUD;
     private StartPage theStartPage;
     private MyPage mypage;
+    private RecipeView recipeView;
     
     // DATABASE MODEL CLASSES
     private DBAccess dbaccess;
@@ -69,8 +71,9 @@ public class ViewController {
         signInPage = new SignIn(this);
         createAccountPage = new CreateAccount(this);
         theHUD = new HUD(this);
-        theStartPage = new StartPage();
+        theStartPage = new StartPage(this);
         mypage = new MyPage(this);
+        recipeView = new RecipeView();
         
         // Set alignment for all views going into main borderpane
         BorderPane.setAlignment( logInRoot, Pos.CENTER );
@@ -78,6 +81,7 @@ public class ViewController {
         BorderPane.setAlignment( signInPage, Pos.CENTER );
         BorderPane.setAlignment( theHUD, Pos.CENTER );
         BorderPane.setAlignment( theStartPage, Pos.CENTER );
+        BorderPane.setAlignment( recipeView, Pos.CENTER);
 
         // Create scroll view for home page
         mainPageHolder = new ScrollPane();
@@ -85,6 +89,10 @@ public class ViewController {
         mainPageHolder.setVbarPolicy( ScrollPane.ScrollBarPolicy.ALWAYS );
         mainPageHolder.setFitToWidth( true );
         mainPageHolder.setFitToHeight( true );
+        
+        // create scroll view for recipeView
+        scrollForRecipe = new ScrollPane();
+        scrollForRecipe.setContent(recipeView);
 
         // update dimension properties
         theHUD.prefWidthProperty().bind( theScene.widthProperty() );
@@ -157,6 +165,21 @@ public class ViewController {
         theWindow.setLeft(null);
         theWindow.setRight(null);
         theWindow.setBottom(null);		
+	}
+	
+	/*
+	 * MOVE TO RECIPEVIEW
+	 * moves to the recipe view of the 
+	 * recipepreview clicked on
+	 */
+	
+	public void moveToRecipe() {
+		 theWindow.setTop( theHUD );
+	     theWindow.setCenter( scrollForRecipe );
+	     theWindow.setLeft(null);
+	     theWindow.setRight(null);
+	     theWindow.setBottom(null);		
+		
 	}
     
     

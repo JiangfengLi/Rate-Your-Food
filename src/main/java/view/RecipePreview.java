@@ -3,15 +3,17 @@ package view;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 public class RecipePreview extends VBox
 {
-    public RecipePreview( String aTitle, String aImagePath, String aDescription )
+    public RecipePreview( ViewController vc, String aTitle, String aImagePath, String aDescription )
     {
         // Create title
         Label theTitle = new Label( aTitle );
@@ -48,5 +50,15 @@ public class RecipePreview extends VBox
                 "    -fx-padding: 10;\n" +
                 "    -fx-background-color: snow;\n" +
                 "    -fx-spacing: 8;" );
+        
+    setOnMouseClicked(new EventHandler<MouseEvent>() {
+        public void handle(MouseEvent me) {
+            System.out.println("Mouse clicked!!");
+            vc.moveToRecipe();
+        }
+    });
+    
     }
+    
+    
 }

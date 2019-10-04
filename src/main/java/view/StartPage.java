@@ -18,8 +18,13 @@ import javafx.scene.layout.VBox;
 
 public class StartPage extends VBox
 {
-    public StartPage( )
+	
+	ViewController viewController;
+	
+    public StartPage( ViewController vc)
     {
+    	
+    	this.viewController = vc;
         VBox theFeaturedRecipes = makeFeaturedRecipes();
         VBox theAllRecipes = makeAllRecipes();
 
@@ -55,6 +60,7 @@ public class StartPage extends VBox
         for ( int i = 0; i < 5; i++ )
         {
             aFeaturedRecipeHolder.getChildren().add( new RecipePreview(
+            		viewController,
                     "This is a title",
                     "src/main/resources/images/preview.png",
                     "A pretty fairly long description to test how long a description can be without looking weird." ) );
@@ -88,6 +94,7 @@ public class StartPage extends VBox
         {
             allRecipes.getChildren().add(
                     new RecipePreview(
+                    		viewController,
                             "This is a title",
                             "src/main/resources/images/preview.png",
                             "A pretty fairly long description to test how long a description can be without looking weird." ) );

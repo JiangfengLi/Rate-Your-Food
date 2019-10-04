@@ -100,6 +100,7 @@ public class MyPage extends HBox {
         for ( int i = 0; i < 10; i++ )
         {
         	recipeObList.add( new RecipePreview(
+        			viewController,
                     "This is a title",
                     "src/main/resources/images/preview.png",
                     "A pretty fairly long description to test how long a description can be without looking weird." ) );

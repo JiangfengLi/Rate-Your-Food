@@ -1,19 +1,16 @@
 package view;
 
-import javafx.scene.paint.*;
 import javafx.scene.shape.*;
 import javafx.scene.image.*;
 import javafx.geometry.*;
-import javafx.scene.effect.*;
 import javafx.scene.control.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.lang.*;
 import javafx.scene.layout.*;
 
 public class RecipeView extends AnchorPane {
-
+	
 	private Label creator;
 	private ImageView imageView;
 	private Label recipeName;
@@ -74,6 +71,8 @@ public class RecipeView extends AnchorPane {
 		setAddReviewButton();
 
 		setReviewList();
+		
+		setNodesToParent();
 
 	}
 
