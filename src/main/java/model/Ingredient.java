@@ -40,4 +40,11 @@ public class Ingredient {
 		return this.unit;
 	}
 	
+	public String toString() {
+		return
+			getAmount() + " " +
+			getUnit()   + " " +
+			getName();
+	}
+	
 }
