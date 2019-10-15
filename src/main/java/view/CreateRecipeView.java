@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -20,11 +22,13 @@ import javafx.stage.FileChooser;
 
 public class CreateRecipeView extends GridPane {
 
-	private final String url = "src/main/resources/images/preview.png";
+	private final String defaultURL = "src/main/resources/images/preview.png";
 	
 	private Label recipeName;
 	private TextField recipeNameField;
 	private Label recipeSummary;
+	private Label tags;
+	private TextField tagsField;
 	private TextField recipeSummaryField;
 	private TextField ingredientField;
 	private HBox ingredientButtons;
@@ -41,16 +45,18 @@ public class CreateRecipeView extends GridPane {
 	private FileChooser fileChooser;
 
 	public CreateRecipeView() {
+		
+		this.setPadding(new Insets(10,10,10,10));
 
 		try {
 			initializeAllNodes();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		setNodesToParent();
 		setIngredientButtonsHandler();
 		setChooseFileButton();
+		setSubmitButton();
 	}
 
 	private void initializeAllNodes() throws FileNotFoundException {
@@ -58,8 +64,12 @@ public class CreateRecipeView extends GridPane {
 		recipeName = new Label("Recipe Name");
 		recipeNameField = new TextField();
 		recipeSummary = new Label("Summary");
+		tags = new Label("tags by space");
+		tagsField = new TextField();
 		image = new ImageView();
-		image.setImage(new Image(new FileInputStream(url)));
+		image.setImage(new Image(new FileInputStream(defaultURL)));
+		image.setFitWidth(400);
+		image.setFitHeight(500);
 		recipeSummaryField = new TextField();
 		ingredientField = new TextField("1 tomatoe");
 		ingredientButtons = new HBox(5);
@@ -84,16 +94,18 @@ public class CreateRecipeView extends GridPane {
 		this.setVgap(gap);
 		this.add(recipeName, 0, 0);
 		this.add(recipeNameField, 1, 0);
-		this.add(image,2,0,1,3);
+		this.add(image,2,0,1,4);
 		this.add(recipeSummary, 0, 1);
 		this.add(recipeSummaryField, 1, 1);
-		this.add(ingredientsList, 0, 2, 2, 2);
-		this.add(ingredientField, 1, 4);
-		this.add(ingredientButtons, 0, 4);
-		this.add(chooseFile,2,4);
-		this.add(instructions, 0, 5);
-		this.add(instructionsField, 1, 5);
-		this.add(submitButton, 0, 6, 2, 1);
+		this.add(tags,0,2);
+		this.add(tagsField,1,2);
+		this.add(ingredientsList, 0, 3, 2, 2);
+		this.add(ingredientField, 1, 5);
+		this.add(ingredientButtons, 0, 5);
+		this.add(chooseFile,2,5);
+		this.add(instructions, 0, 6);
+		this.add(instructionsField, 1, 6);
+		this.add(submitButton, 0, 7, 2, 1);
 	}
 
 	private void setIngredientButtonsHandler() {
@@ -138,6 +150,31 @@ public class CreateRecipeView extends GridPane {
 			image.setImage(new Image(file.toURI().toString()));
 			
 			
+		});
+	}
+	
+	private void setSubmitButton() {
+		
+		String name = recipeNameField.getText();
+		String summary = recipeSummaryField.getText();
+		ObservableList<String> ingredients = ingredientsList.getItems();
+		String instructions = instructionsField.getText();
+		
+		submitButton.setOnAction(ae -> {
+
+			if (
+			!name.isEmpty() &&
+			!summary.isEmpty() &&
+			!ingredients.isEmpty() &&
+			!instructions.isEmpty()
+			
+			) {
+				
+				//TODO
+				
+			}
+				
+				
 		});
 	}
 	

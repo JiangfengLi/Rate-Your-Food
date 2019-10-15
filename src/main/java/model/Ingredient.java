@@ -1,75 +1,43 @@
+
 package model;
 
-/*
- * create a baseline for the ingredient
- * used for the recipe and Shopping cart
- * 
- * WIP
- * 
- * Joseph Corona 
+/**
+ * INGREDIENT
+ * Data object to hold fields for Ingredients stored in DB
+ * @author Alexander Miller
+ *
  */
 public class Ingredient {
-	
+
 	private String name;
-	private int amount;
-	private String amountMeasure; // for type e.g. grams, ounces.
+	private String recipeName;
+	private String recipeCreator;
+	private float amount;
+	private String unit;
 	
-	public Ingredient() {
-		
-		name = "testing";
-		amount = 1;
-		amountMeasure = null;
+	public Ingredient(String name, String recipeName, String recipeCreator, float amount, String unit) {
+		this.name=name;
+		this.recipeName=recipeName;
+		this.recipeCreator=recipeCreator;
+		this.amount=amount;
+		this.unit=unit;
 	}
 	
-	public Ingredient(String name, int amount) {
-		this.name = name;
-		this.amount = amount;
-		this.amountMeasure = null;
-	}
-	
-	public Ingredient(String name, int amount, String amountType) {
-		this.name = name;
-		this.amount = amount;
-		this.amountMeasure = amountType;
-		
-	}
-	
-	
-	public String toString() {
-		
-		if (amountMeasure == null) {
-			return "" + amount + " " + name;
-		
-		} else {
-			return "" + amount + " " + amountMeasure + " " + name;
-		}
-		
-	}
-
+	// GETTERS
 	public String getName() {
-		return name;
+		return this.name;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	public String getRecipeName() {
+		return this.recipeName;
 	}
-
-	public int getAmount() {
-		return amount;
+	public String getRecipeCreator() {
+		return this.recipeCreator;
 	}
-
-	public void setAmount(int amount) {
-		this.amount = amount;
+	public float getAmount() {
+		return this.amount;
 	}
-
-	public String getAmountType() {
-		return amountMeasure;
-	}
-
-	public void setAmountType(String amountType) {
-		this.amountMeasure = amountType;
+	public String getUnit() {
+		return this.unit;
 	}
 	
-	
-
 }

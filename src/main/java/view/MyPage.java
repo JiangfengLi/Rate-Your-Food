@@ -129,6 +129,11 @@ public class MyPage extends HBox {
 		
 		this.getChildren().addAll(recipeColum, reviewColum);
 		
+		//set createRecipe button to move to CreateTRecipeView
+		createRecipe.setOnAction(ae -> {
+			viewController.moveToCreateRecipe();
+		});
+		
 	}
 	
 	/**
