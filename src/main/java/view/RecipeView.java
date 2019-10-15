@@ -23,19 +23,20 @@ public class RecipeView extends AnchorPane {
 	private Circle circle2;
 	private Label difficulty;
 	private Label ingredientsLabel;
-	private TableView ingredientsList;
-	private TableColumn ingAmount;
-	private TableColumn ingName;
+	private ListView ingredientsList;
+	//private TableColumn ingAmount;
+	//private TableColumn ingName;
 	private Label instructionsLabel;
 	private TextArea instructions;
 	private Label reviewLabel;
 	private Button addReviewButton;
 	private ListView reviewList;
+	
 
 	//stub method to call the view without any information in it
 	public RecipeView() {
 
-		intitializeAllNodes();
+		inititializeAllNodes();
 
 		setMaxHeight(USE_PREF_SIZE);
 		setMaxWidth(USE_PREF_SIZE);
@@ -131,11 +132,13 @@ public class RecipeView extends AnchorPane {
 		ingredientsList.setPrefHeight(226.0);
 		ingredientsList.setPrefWidth(256.0);
 
+		/*
 		ingAmount.setPrefWidth(50.0);
 		ingAmount.setText("amount");
 
 		ingName.setPrefWidth(205.0);
 		ingName.setText("ingredient");
+		*/
 	}
 
 	private void setIngredientLabel() {
@@ -246,7 +249,7 @@ public class RecipeView extends AnchorPane {
 
 	}
 
-	private void intitializeAllNodes() {
+	private void inititializeAllNodes() {
 		creator = new Label();
 		imageView = new ImageView();
 		recipeName = new Label();
@@ -259,9 +262,9 @@ public class RecipeView extends AnchorPane {
 		circle2 = new Circle();
 		difficulty = new Label();
 		ingredientsLabel = new Label();
-		ingredientsList = new TableView();
-		ingAmount = new TableColumn();
-		ingName = new TableColumn();
+		ingredientsList = new ListView();
+		//ingAmount = new TableColumn();
+		//ingName = new TableColumn();
 		instructionsLabel = new Label();
 		instructions = new TextArea();
 		reviewLabel = new Label();
@@ -284,8 +287,6 @@ public class RecipeView extends AnchorPane {
 		difficultyLayout.getChildren().add(difficulty);
 		getChildren().add(difficultyLayout);
 		getChildren().add(ingredientsLabel);
-		ingredientsList.getColumns().add(ingAmount);
-		ingredientsList.getColumns().add(ingName);
 		getChildren().add(ingredientsList);
 		getChildren().add(instructionsLabel);
 		getChildren().add(instructions);

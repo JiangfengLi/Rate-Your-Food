@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -35,10 +36,12 @@ public class ViewController {
     // HOME PAGE VIEW CLASSES
     private ScrollPane mainPageHolder;
     private ScrollPane scrollForRecipe;
+    private ScrollPane createRecipeScroll;
     private HUD theHUD;
     private StartPage theStartPage;
     private MyPage mypage;
     private RecipeView recipeView;
+    private CreateRecipeView createRecipe;
     
     // DATABASE MODEL CLASSES
     private DBAccess dbaccess;
@@ -74,6 +77,7 @@ public class ViewController {
         theStartPage = new StartPage(this);
         mypage = new MyPage(this);
         recipeView = new RecipeView();
+        createRecipe = new CreateRecipeView();
         
         // Set alignment for all views going into main borderpane
         BorderPane.setAlignment( logInRoot, Pos.CENTER );
@@ -93,6 +97,13 @@ public class ViewController {
         // create scroll view for recipeView
         scrollForRecipe = new ScrollPane();
         scrollForRecipe.setContent(recipeView);
+        
+        // create scroll view for createRecipeView
+        createRecipeScroll = new ScrollPane();
+        createRecipeScroll.setContent(createRecipe);
+        createRecipeScroll.setHbarPolicy(ScrollBarPolicy.NEVER);
+        //createRecipeScroll.setFitToWidth( true );
+        //createRecipeScroll.setFitToHeight( true );
 
         // update dimension properties
         theHUD.prefWidthProperty().bind( theScene.widthProperty() );
@@ -180,6 +191,14 @@ public class ViewController {
 	     theWindow.setRight(null);
 	     theWindow.setBottom(null);		
 		
+	}
+	
+	public void moveToCreateRecipe() {
+		theWindow.setTop( theHUD );
+	     theWindow.setCenter( createRecipeScroll );
+	     theWindow.setLeft(null);
+	     theWindow.setRight(null);
+	     theWindow.setBottom(null);		
 	}
     
     
