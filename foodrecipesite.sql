@@ -61,15 +61,20 @@ CREATE TABLE Instruction (
 	PRIMARY KEY (ID, RecipeName, RecipeCreator)
 );
 
- 
+
 # INSERT SAMPLE DATA:
 
 # USER DATA
-INSERT INTO User VALUES('jack@gmail.com','jack','jack','jack');
-INSERT INTO User VALUES('john@gmail.com','john','jacks','john');
-INSERT INTO User VALUES('joe@gmail.com','joe','johnny','joeyboy');
-INSERT INTO User VALUES('elizasmith@yahoo.com','eliza','smith','eliza');
-INSERT INTO User VALUES('hotsoccermomma@hotmail.com','sally','sue','championship');
+# password encrypted version of 'jack'
+INSERT INTO User VALUES('jack@gmail.com','jack','jack','0mXzfRPHTa40SIZ2gPWoJw==');
+# password encrypted version of 'john'
+INSERT INTO User VALUES('john@gmail.com','john','jacks','z9/AA0XRBSK/uI8heorA6Q==');
+# password encrypted version of 'joeyboy'
+INSERT INTO User VALUES('joe@gmail.com','joe','johnny','Z8okvgI5JiCGyYJFteaGRw==');
+# password encrypted version of 'eliza'
+INSERT INTO User VALUES('elizasmith@yahoo.com','eliza','smith','yPfTGWqwikDosG+nwsx5Pw==');
+# password encrypted version of 'championship'
+INSERT INTO User VALUES('hotsoccermomma@hotmail.com','sally','sue','TKtrbh2idppc4NJNhx03Jg==');
 
 
 # RECIPES
