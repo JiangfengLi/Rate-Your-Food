@@ -47,7 +47,7 @@ public class DBAccess implements DatabaseInterface{
 	// Instruction Queries
 	private static final String GET_INSTRUCTION = "SELECT * FROM Instruction WHERE ID=? AND RecipeName=? AND RecipeCreator=?;";
 	private static final String ADD_INSTRUCTION = "INSERT INTO Instruction(RecipeName, RecipeCreator, Text) VALUES (?,?,?);";
-	private static final String GET_ALL_INSTRUCTIONS_FOR_RECIPE = "SELECT * FROM Instruction WHERE RecipeName=? AND RecipeCreator=?;";
+	private static final String GET_ALL_INSTRUCTIONS_FOR_RECIPE = "SELECT * FROM Instruction WHERE RecipeName=? AND RecipeCreator=? ORDER BY ID ASC;";
 	
 	// current user (who's logged in?)
 	private User currentUser;
