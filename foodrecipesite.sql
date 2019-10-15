@@ -61,7 +61,7 @@ CREATE TABLE Instruction (
 	PRIMARY KEY (ID, RecipeName, RecipeCreator)
 );
 
-
+ 
 # INSERT SAMPLE DATA:
 
 # USER DATA

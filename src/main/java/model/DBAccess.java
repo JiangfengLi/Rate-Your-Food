@@ -31,7 +31,7 @@ public class DBAccess implements DatabaseInterface{
 	private static final String ADD_RECIPE = "INSERT INTO Recipe(RecipeName, Creator, Difficulty, Rating) VALUES(?,?,?,?);";
 	private static final String GET_ALL_RECIPES_FOR_USER = "SELECT * FROM Recipe WHERE Creator=?;";
 	private static final String GET_ALL_RECIPES = "SELECT * FROM Recipe;";
-	
+	 
 	// Review Queries
 	private static final String GET_REVIEW = "SELECT * FROM Review WHERE Author=? AND RecipeName=? AND RecipeCreator=?;";
 	private static final String ADD_REVIEW = "INSERT INTO Review(Author, RecipeName, RecipeCreator, Text, Difficulty, Rating) VALUES(?,?,?,?,?,?);";
