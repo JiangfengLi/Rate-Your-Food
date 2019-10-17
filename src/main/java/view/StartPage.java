@@ -2,6 +2,7 @@ package view;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -15,16 +16,20 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import model.DBAccess;
+import model.Recipe;
 
 public class StartPage extends VBox
 {
 	
 	ViewController viewController;
+	DBAccess dbAccess;
 	
     public StartPage( ViewController vc)
     {
     	
     	this.viewController = vc;
+    	this.dbAccess = new DBAccess();
         VBox theFeaturedRecipes = makeFeaturedRecipes();
         VBox theAllRecipes = makeAllRecipes();
 
@@ -90,14 +95,16 @@ public class StartPage extends VBox
         allRecipes.setVgap( 5 );
         allRecipes.setAlignment( Pos.CENTER );
 
-        for ( int i = 0; i < 20; i++ )
+        List<Recipe> recipeData = dbAccess.getAllRecipes();
+
+        for( Recipe aRecipe : recipeData )
         {
             allRecipes.getChildren().add(
                     new RecipePreview(
-                    		viewController,
-                            "This is a title",
+                            viewController,
+                            aRecipe.getRecipeName(),
                             "src/main/resources/images/preview.png",
-                            "A pretty fairly long description to test how long a description can be without looking weird." ) );
+                            "tags") );
         }
 
         aPane.setPadding( new Insets( 20, 0, 10, 0 ) );
