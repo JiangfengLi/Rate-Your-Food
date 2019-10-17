@@ -7,7 +7,7 @@ public class Main extends Application {
 	private ViewController viewController;
 
     /**
-     * MAIN
+     * MAIN Jiangfeng Branch sprint2
      * @param args
      */
     public static void main( String[] args ) {
