@@ -2,7 +2,9 @@ package view;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -62,13 +64,25 @@ public class StartPage extends VBox
         aFeaturedRecipeHolder.setVgap( 5 );
         aFeaturedRecipeHolder.setAlignment( Pos.CENTER );
 
-        for ( int i = 0; i < 5; i++ )
+        List<Recipe> recipeData = dbAccess.getAllRecipes();
+
+        Random rand = new Random(  );
+        ArrayList<Integer> pickedRecipes = new ArrayList<>(  );
+
+        for ( int i = 1; i < 6; i++ )
         {
+            int aRecipeIndex = rand.nextInt( recipeData.size() );
+            while( pickedRecipes.contains( aRecipeIndex ) )
+            {
+                aRecipeIndex = rand.nextInt( recipeData.size() );
+            }
+            pickedRecipes.add( aRecipeIndex );
+
             aFeaturedRecipeHolder.getChildren().add( new RecipePreview(
             		viewController,
-                    "This is a title",
+                    recipeData.get( aRecipeIndex ).getRecipeName(),
                     "src/main/resources/images/preview.png",
-                    "A pretty fairly long description to test how long a description can be without looking weird." ) );
+                    "Favorite " + i ) );
         }
 
         aPane.setPadding( new Insets( 20, 0, 10, 0 ) );
