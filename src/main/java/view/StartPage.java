@@ -27,11 +27,11 @@ import model.Recipe;
 public class StartPage extends VBox
 {
 	
-	ViewController viewController;
-	DBAccess dbAccess;
-	TextField theSearchArea;
-	ImageView theSearchIcon;
-	
+	private ViewController viewController;
+    private DBAccess dbAccess;
+    private TextField theSearchArea;
+    private ImageView theSearchIcon;
+
     public StartPage( ViewController vc)
     {
     	
