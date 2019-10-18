@@ -32,6 +32,7 @@ public class DBAccess implements DatabaseInterface{
 	private static final String ADD_RECIPE = "INSERT INTO Recipe(RecipeName, Creator, Difficulty, Rating) VALUES(?,?,?,?);";
 	private static final String GET_ALL_RECIPES_FOR_USER = "SELECT * FROM Recipe WHERE Creator=?;";
 	private static final String GET_ALL_RECIPES = "SELECT * FROM Recipe;";
+	private static final String SEARCH_RECIPES = "SELECT * FROM Recipe WHERE RecipeName LIKE ?;";
 	 
 	// Review Queries
 	private static final String GET_REVIEW = "SELECT * FROM Review WHERE Author=? AND RecipeName=? AND RecipeCreator=?;";
@@ -273,9 +274,33 @@ public class DBAccess implements DatabaseInterface{
     		return null;
     	}
 	}
-	
-	
-	
+
+	/**
+	 * SEARCH RECIPES HELPER
+	 * handles common logic for searchRecipes
+	 * @param searchKey
+	 * @return
+	 */
+	public List<Recipe> searchRecipes(String searchKey) {
+		try {
+			Connection conn = establishConnection();
+			PreparedStatement stmt;
+			stmt = conn.prepareStatement( SEARCH_RECIPES );
+			stmt.setString( 1, "%" + searchKey + "%" );
+			ResultSet rs = stmt.executeQuery();
+			LinkedList<Recipe> recipeList = new LinkedList<Recipe>();
+			while (rs.next()) {
+				Recipe recipe = new Recipe(rs.getString(1),rs.getString(2),rs.getInt(3),rs.getInt(4));
+				recipeList.add(recipe);
+			}
+			stmt.close();
+			conn.close();
+			return recipeList;
+		} catch (Exception x) {
+			x.printStackTrace();
+			return null;
+		}
+	}
 	
 	// *****************************************************************
 	// ************************** REVIEW INTERFACE *********************

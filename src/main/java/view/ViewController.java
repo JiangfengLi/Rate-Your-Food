@@ -256,6 +256,10 @@ public class ViewController {
 		return this.stage;
 	}
     
-    
+
+	public HUD getHud()
+    {
+        return theHUD;
+    }
     
 }
