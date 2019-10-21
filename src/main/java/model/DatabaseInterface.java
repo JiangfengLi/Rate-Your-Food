@@ -22,6 +22,7 @@ public interface DatabaseInterface {
 	public String addRecipe(String recipeName, String creator, int difficulty, int rating);
 	public List<Recipe> getAllRecipesForUser(String creator);
 	public List<Recipe> getAllRecipes();
+	public List<Recipe> searchRecipes(String searchKey);
 	
 	// MANAGING REVIEWS
 	public Review getReview(String author, String recipeName, String recipeCreator);

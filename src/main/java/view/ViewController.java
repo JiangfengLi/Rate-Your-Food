@@ -88,11 +88,7 @@ public class ViewController {
         BorderPane.setAlignment( recipeView, Pos.CENTER);
 
         // Create scroll view for home page
-        mainPageHolder = new ScrollPane();
-        mainPageHolder.setContent( theStartPage );
-        mainPageHolder.setVbarPolicy( ScrollPane.ScrollBarPolicy.ALWAYS );
-        mainPageHolder.setFitToWidth( true );
-        mainPageHolder.setFitToHeight( true );
+        createStartPage();
         
         // create scroll view for recipeView
         scrollForRecipe = new ScrollPane();
@@ -115,6 +111,16 @@ public class ViewController {
         primaryStage.setScene( theScene );
         primaryStage.show();
 	}
+
+	private void createStartPage()
+    {
+        theStartPage = new StartPage( this );
+        mainPageHolder = new ScrollPane();
+        mainPageHolder.setContent( theStartPage );
+        mainPageHolder.setVbarPolicy( ScrollPane.ScrollBarPolicy.ALWAYS );
+        mainPageHolder.setFitToWidth( true );
+        mainPageHolder.setFitToHeight( true );
+    }
 	
 
     // ************************************ NAVIGATING SCREENS ****************************
@@ -159,6 +165,7 @@ public class ViewController {
      * moves us to home page
      */
     public void moveToHomePage() {
+        createStartPage();
         theWindow.setTop( theHUD );
         theWindow.setCenter( mainPageHolder );
         theWindow.setLeft(null);
@@ -256,6 +263,10 @@ public class ViewController {
 		return this.stage;
 	}
     
-    
+
+	public HUD getHud()
+    {
+        return theHUD;
+    }
     
 }
