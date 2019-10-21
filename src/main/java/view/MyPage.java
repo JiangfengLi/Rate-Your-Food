@@ -75,7 +75,7 @@ public class MyPage extends HBox {
 		
 		//set createReview button to move to Review
 		createReview.setOnAction(ae -> {
-			viewController.moveToReview();
+			viewController.moveToReview("MyPage");
 		});
 		
 		// set up style of label

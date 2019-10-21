@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import javafx.scene.layout.*;
 
 public class RecipeView extends AnchorPane {
-	
+	private ViewController viewController;
 	private Label creator;
 	private ImageView imageView;
 	private Label recipeName;
@@ -34,8 +34,8 @@ public class RecipeView extends AnchorPane {
 	
 
 	//stub method to call the view without any information in it
-	public RecipeView() {
-
+	public RecipeView(ViewController viewController2) {
+		this.viewController = viewController2;
 		inititializeAllNodes();
 
 		setMaxHeight(USE_PREF_SIZE);
@@ -94,6 +94,9 @@ public class RecipeView extends AnchorPane {
 		addReviewButton.setLayoutY(630.0);
 		addReviewButton.setMnemonicParsing(false);
 		addReviewButton.setText("addReview");
+		addReviewButton.setOnAction(ae -> {
+			viewController.moveToReview("RcipeView");
+		});
 	}
 
 	private void setReviewLabel() {

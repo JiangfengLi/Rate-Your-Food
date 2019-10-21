@@ -78,7 +78,7 @@ public class ViewController {
         theStartPage = new StartPage(this);
         mypage = new MyPage(this);
         review = new Review(this);
-        recipeView = new RecipeView();
+        recipeView = new RecipeView(this);
         createRecipe = new CreateRecipeView();
         
         // Set alignment for all views going into main borderpane
@@ -210,13 +210,14 @@ public class ViewController {
 	     theWindow.setBottom(null);		
 	}
 
-	public void moveToReview() {
+	public void moveToReview(String view) {
 		// TODO Auto-generated method stub
 		theWindow.setTop( theHUD );
-	     theWindow.setCenter( review );
-	     theWindow.setLeft(null);
-	     theWindow.setRight(null);
-	     theWindow.setBottom(null);		
+		review.setReturnPoint(view);
+	    theWindow.setCenter( review );
+	    theWindow.setLeft(null);
+	    theWindow.setRight(null);
+	    theWindow.setBottom(null);		
 		
 	}
 	
