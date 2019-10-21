@@ -16,20 +16,19 @@ import javafx.scene.control.TableView;
 //import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import model.DBAccess;
 //import model.Ingredient;
 import model.Ingredient;
 
 public class CreateRecipeView extends GridPane {
 
-	private final String defaultURL = "src/main/resources/images/preview.png";
-	private ObservableList<Ingredient> ingredientList;
-	
 	private Label recipeName;
 	private TextField recipeNameField;
 	private Label recipeSummary;
@@ -49,10 +48,10 @@ public class CreateRecipeView extends GridPane {
 	private HBox ingredientButtons;
 	private Button addIngredientButton;
 	private Button deleteIngredientButton;
-	private TableView<Ingredient> ingredientsList;
-	private TableColumn<Ingredient,Integer> ingAmount;
-	private TableColumn<Ingredient,String> ingUnit;
-	private TableColumn<Ingredient,String> ingName;
+	private TableView<Ingredient> ingredientTable;
+	private TableColumn<Ingredient, Integer> ingAmount;
+	private TableColumn<Ingredient, String> ingUnit;
+	private TableColumn<Ingredient, String> ingName;
 	private Label instructions;
 	private TextArea instructionsField;
 	private Button submitButton;
@@ -60,9 +59,14 @@ public class CreateRecipeView extends GridPane {
 	private Button chooseFile;
 	private FileChooser fileChooser;
 
-	public CreateRecipeView() {
-		
-		this.setPadding(new Insets(10,10,10,10));
+	private ViewController viewController;
+	private final String defaultURL = "src/main/resources/images/preview.png";
+	private ObservableList<Ingredient> ingredientList;
+
+	public CreateRecipeView(ViewController vc) {
+
+		this.viewController = vc;
+		this.setPadding(new Insets(10, 10, 10, 10));
 
 		try {
 			initializeAllNodes();
@@ -70,13 +74,21 @@ public class CreateRecipeView extends GridPane {
 			e.printStackTrace();
 		}
 		setNodesToParent();
+		setCellColumn();
 		setIngredientButtonsHandler();
 		setChooseFileButton();
 		setSubmitButton();
 	}
 
+	private void setCellColumn() {
+		ingAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+		ingUnit.setCellValueFactory(new PropertyValueFactory<>("unit"));
+		ingName.setCellValueFactory(new PropertyValueFactory<>("name"));
+		ingredientTable.setItems(ingredientList);
+	}
+
 	private void initializeAllNodes() throws FileNotFoundException {
-		
+
 		ingredientList = FXCollections.observableArrayList();
 
 		recipeName = new Label("Recipe Name");
@@ -98,25 +110,25 @@ public class CreateRecipeView extends GridPane {
 		ingredientNameField = new TextField("sugar");
 		ingredientAmountLabel = new Label("Amount");
 		ingredientUnitLabel = new Label("Unit");
-		ingredientNameLabel = new Label("Name");	
-		ingredientAmount.getChildren().addAll(ingredientAmountField,ingredientAmountLabel);
-		ingredientUnit.getChildren().addAll(ingredientUnitField,ingredientUnitLabel);
-		ingredientName.getChildren().addAll(ingredientNameField,ingredientNameLabel);
-		ingredientFields.getChildren().addAll(ingredientAmount,ingredientUnit,ingredientName);
+		ingredientNameLabel = new Label("Name");
+		ingredientAmount.getChildren().addAll(ingredientAmountField, ingredientAmountLabel);
+		ingredientUnit.getChildren().addAll(ingredientUnitField, ingredientUnitLabel);
+		ingredientName.getChildren().addAll(ingredientNameField, ingredientNameLabel);
+		ingredientFields.getChildren().addAll(ingredientAmount, ingredientUnit, ingredientName);
 		ingredientButtons = new HBox(5);
 		addIngredientButton = new Button("Add");
 		deleteIngredientButton = new Button("delete");
 		ingredientButtons.getChildren().addAll(addIngredientButton, deleteIngredientButton);
-		ingredientsList = new TableView<Ingredient>();
-		ingAmount = new TableColumn<Ingredient,Integer>("amount");
-		ingUnit = new TableColumn<Ingredient,String>("unit");
-		ingName = new TableColumn<Ingredient,String>("item");
-		ingAmount.prefWidthProperty().bind(ingredientsList.widthProperty().multiply(1.0/10.0));
-		ingUnit.prefWidthProperty().bind(ingredientsList.widthProperty().multiply(2.0/10.0));
-		ingName.prefWidthProperty().bind(ingredientsList.widthProperty().multiply(7.0/10.0));
+		ingredientTable = new TableView<Ingredient>();
+		ingAmount = new TableColumn<Ingredient, Integer>("amount");
+		ingUnit = new TableColumn<Ingredient, String>("unit");
+		ingName = new TableColumn<Ingredient, String>("item");
+		ingAmount.prefWidthProperty().bind(ingredientTable.widthProperty().multiply(1.0 / 10.0));
+		ingUnit.prefWidthProperty().bind(ingredientTable.widthProperty().multiply(2.0 / 10.0));
+		ingName.prefWidthProperty().bind(ingredientTable.widthProperty().multiply(7.0 / 10.0));
 
-		ingredientsList.getColumns().addAll(ingAmount,ingUnit,ingName);
-		
+		ingredientTable.getColumns().addAll(ingAmount, ingUnit, ingName);
+
 		instructions = new Label("Instructions");
 		instructionsField = new TextArea();
 		submitButton = new Button("Submit");
@@ -131,98 +143,106 @@ public class CreateRecipeView extends GridPane {
 		this.setVgap(gap);
 		this.add(recipeName, 0, 0);
 		this.add(recipeNameField, 1, 0);
-		this.add(image,2,0,1,4);
+		this.add(image, 2, 0, 1, 4);
 		this.add(recipeSummary, 0, 1);
 		this.add(recipeSummaryField, 1, 1);
-		this.add(tags,0,2);
-		this.add(tagsField,1,2);
-		this.add(ingredientsList, 0, 3, 2, 2);
+		this.add(tags, 0, 2);
+		this.add(tagsField, 1, 2);
+		this.add(ingredientTable, 0, 3, 2, 2);
 		this.add(ingredientFields, 1, 5);
 		this.add(ingredientButtons, 0, 5);
-		this.add(chooseFile,2,5);
+		this.add(chooseFile, 2, 5);
 		this.add(instructions, 0, 6);
 		this.add(instructionsField, 1, 6);
 		this.add(submitButton, 0, 7, 2, 1);
+		// this.setPrefWidth(this.widthProperty().doubleValue());
 	}
 
 	private void setIngredientButtonsHandler() {
 
-	
 		addIngredientButton.setOnAction(ae -> {
-			
+
 			String amount = ingredientAmountField.getText();
-			int amountInt = Integer.parseInt(ingredientAmountField.getText());
+			int amountInt = Integer.parseInt(amount);
 			String unit = ingredientUnitField.getText();
 			String name = ingredientNameField.getText();
-			
-			Ingredient ingredient = new Ingredient(name,null,null,amountInt,unit);
-			if (!amount.isEmpty() && name.isEmpty()) {
+			String user = "";
+			if (viewController != null)
+				user = viewController.getCurrentUser().getEmail();
+			else
+				user = null;
+
+			Ingredient ingredient = new Ingredient(name, null, user, amountInt, unit);
+			if (!amount.isEmpty() && !name.isEmpty()) {
 				ingredientList.add(ingredient);
-				//Ingredient tempIng = new Ingredient()
-				//ingredientsList.getItems().add();
+				System.out.println("added ingredient " + ingredientList.size());
+				// Ingredient tempIng = new Ingredient()
+				// ingredientsList.getItems().add();
 			}
 
 		});
 
 		deleteIngredientButton.setOnAction(ae -> {
 
-			final int size = ingredientsList.getItems().size();
+			final int size = ingredientTable.getItems().size();
 
 			if (size > 0) {
-				final int selectedIdx = ingredientsList.getSelectionModel().getSelectedIndex();
+				final int selectedIdx = ingredientTable.getSelectionModel().getSelectedIndex();
 				if (selectedIdx != -1) {
 
-					final int newSelectedIdx = 
-							(selectedIdx == ingredientsList.getItems().size() - 1) 
-							? selectedIdx - 1
+					final int newSelectedIdx = (selectedIdx == ingredientTable.getItems().size() - 1) ? selectedIdx - 1
 							: selectedIdx;
 
-					ingredientsList.getItems().remove(selectedIdx);
-					ingredientsList.getSelectionModel().select(newSelectedIdx);
+					ingredientTable.getItems().remove(selectedIdx);
+					ingredientTable.getSelectionModel().select(newSelectedIdx);
 				} else {
 					final int lastItem = size - 1;
-					ingredientsList.getItems().remove(lastItem);
+					ingredientTable.getItems().remove(lastItem);
 				}
 			}
 
 		});
 	}
-	
+
 	private void setChooseFileButton() {
 		chooseFile.setOnAction(ae -> {
-			
+
 			fileChooser.setTitle("Choose Image");
 			File file = fileChooser.showOpenDialog(this.getScene().getWindow());
-			
-			image.setImage(new Image(file.toURI().toString()));
-			
-			
-		});
-	}
-	
-	private void setSubmitButton() {
-		
-		String name = recipeNameField.getText();
-		String summary = recipeSummaryField.getText();
-		ObservableList<Ingredient> ingredients = ingredientsList.getItems();
-		String instructions = instructionsField.getText();
-		
-		submitButton.setOnAction(ae -> {
 
-			if (
-			!name.isEmpty() &&
-			!summary.isEmpty() &&
-			!ingredients.isEmpty() &&
-			!instructions.isEmpty()
-			
-			) {
-				
-				//TODO
-				
-			}
-				
-				
+			image.setImage(new Image(file.toURI().toString()));
+
 		});
 	}
-	
+
+	private void setSubmitButton() {
+
+		submitButton.setOnAction(ae -> {
+			
+			String name = recipeNameField.getText();
+			String summary = recipeSummaryField.getText();
+			ObservableList<Ingredient> ingredients = ingredientTable.getItems();
+			String instructions = instructionsField.getText();
+			String user = viewController.getCurrentUser().getEmail();
+
+			if (!name.isEmpty() && !summary.isEmpty() && !ingredients.isEmpty() && !instructions.isEmpty()) {
+
+				for (int i = 0; i < ingredients.size(); i++) {
+					
+					Ingredient ingredient = ingredientList.get(i);
+					ingredient.setRecipeName(name);
+					String ingName = ingredient.getName();
+					String ingRecipeName = ingredient.getRecipeName();
+					String ingRecipeCreator = ingredient.getRecipeCreator();
+					float ingAmount = ingredient.getAmount();
+					String ingUnit = ingredient.getUnit();
+
+					viewController.addIngredient(ingName, ingRecipeName, ingRecipeCreator, ingAmount, ingUnit);
+				}
+
+				viewController.addInstruction(name, user, instructions);
+				viewController.addRecipe(name, user);
+			}
+		});
+	}
 }

@@ -10,6 +10,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.DBAccess;
+import model.Ingredient;
+import model.Recipe;
 import model.User;
 import view.login.CreateAccount;
 import view.login.LogInRoot;
@@ -77,7 +79,7 @@ public class ViewController {
         theStartPage = new StartPage(this);
         mypage = new MyPage(this);
         recipeView = new RecipeView();
-        createRecipe = new CreateRecipeView();
+        createRecipe = new CreateRecipeView(this);
         
         // Set alignment for all views going into main borderpane
         BorderPane.setAlignment( logInRoot, Pos.CENTER );
@@ -100,6 +102,8 @@ public class ViewController {
         
         // create scroll view for createRecipeView
         createRecipeScroll = new ScrollPane();
+        createRecipeScroll.setFitToHeight(true);
+        createRecipeScroll.setFitToWidth(true);
         createRecipeScroll.setContent(createRecipe);
         createRecipeScroll.setHbarPolicy(ScrollBarPolicy.NEVER);
         //createRecipeScroll.setFitToWidth( true );
@@ -226,6 +230,37 @@ public class ViewController {
     		return "User account for this email already exists!";
     	}
     	 
+    }
+    
+    /*
+     * ADD INGREDIENT
+     * wrapper over DBAccess method
+     */
+    public String addIngredient(String name, String recipeName, String recipeCreator, float amount, String unit) {
+    	
+    	return dbaccess.addIngredient(name, recipeName, recipeCreator, amount, unit);
+
+    }
+    
+    /*
+     * ADD Instruction
+     * wrapper over DBAccess method
+     */
+    public String addInstruction(String recipeName, String recipeCreator, String text) {
+    	
+    	return dbaccess.addInstruction(recipeName,recipeCreator, text);
+    	
+    }
+    
+
+    public String addRecipe(String recipeName, String creator) {
+    	
+    	Recipe temp = dbaccess.getRecipe(recipeName, creator);
+    	if (temp == null) {
+    		return dbaccess.addRecipe(recipeName, creator, 0, 0);
+    	} else {
+    		return "recipe already exitsts";
+    	}
     }
     
     /**

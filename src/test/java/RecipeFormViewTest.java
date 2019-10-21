@@ -15,6 +15,7 @@ public class RecipeFormViewTest extends Application {
 	private ScrollPane scroll;
     private BorderPane window;
     private CreateRecipeView view;
+    
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -22,11 +23,13 @@ public class RecipeFormViewTest extends Application {
 		primaryStage.setTitle("Recipe Form Test");
 		window = new BorderPane();
 		scroll = new ScrollPane();
-		view = new CreateRecipeView();
+		view = new CreateRecipeView(null);
 		
 		window.setCenter(view);
 		scroll.setContent(window);
-		scroll.setHbarPolicy(ScrollBarPolicy.NEVER);
+		scroll.setFitToHeight(true);
+		scroll.setFitToWidth(true);
+		//scroll.setHbarPolicy(ScrollBarPolicy.NEVER);
 		Scene scene = new Scene( scroll, 1000, 600 );
         
         primaryStage.setScene(scene);
