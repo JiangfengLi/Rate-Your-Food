@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import view.HUD;
 import view.RecipeView;
+import view.ViewController;
 
 public class RecipeViewTest extends Application {
 	private BorderPane theWindow;
@@ -27,7 +28,7 @@ public class RecipeViewTest extends Application {
         // Create views
         HUD theHUD = new HUD(null);
         //StartPage theStartPage = new StartPage();
-        RecipeView recipeView = new RecipeView();
+        RecipeView recipeView = new RecipeView(new ViewController());
 
         // Set alignment
         BorderPane.setAlignment( theHUD, Pos.CENTER );

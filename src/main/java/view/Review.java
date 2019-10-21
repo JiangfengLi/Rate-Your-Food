@@ -36,6 +36,7 @@ public class Review extends VBox{
     private Label textAreaTitle;
     private ChoiceBox<Integer> rateSelection;
     private ChoiceBox<Integer> difficultySelection;
+    private static String returnSite;
 
 	
 	public Review(ViewController viewController2) {
@@ -112,7 +113,12 @@ public class Review extends VBox{
 	 */
 	protected class SetBackHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			viewController.moveToMyPage();
+			if(returnSite != null) {
+				if(returnSite.equals("MyPage"))
+					viewController.moveToMyPage();
+				else
+					viewController.moveToRecipe();
+			}
 		}
 	}
 
@@ -122,8 +128,18 @@ public class Review extends VBox{
 	 */
 	protected class SetSubmitHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			viewController.moveToMyPage();
+			if(returnSite != null) {
+				if(returnSite.equals("MyPage"))
+					viewController.moveToMyPage();
+				else
+					viewController.moveToRecipe();
+			}
 		}
+	}
+
+	public void setReturnPoint(String view) {
+		// TODO Auto-generated method stub
+		returnSite = view;
 	}
 
 }
