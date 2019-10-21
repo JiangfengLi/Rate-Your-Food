@@ -72,7 +72,11 @@ public class MyPage extends HBox {
 		myReviews = new Label("My Reviews");
 		createRecipe = new Button("Create Recipe");
 		createReview = new Button("Create Review");
-		createReview.setOnAction(new SetReviewDialogHandler());
+		
+		//set createReview button to move to Review
+		createReview.setOnAction(ae -> {
+			viewController.moveToReview();
+		});
 		
 		// set up style of label
 		myRecipes.setStyle( "-fx-font-size: 30px;\n" +
@@ -136,10 +140,11 @@ public class MyPage extends HBox {
 		
 	}
 	
+	
 	/**
 	 * BACK HANDLER
 	 * inside class to navigate back to log in root
-	 */
+	 
 	protected class SetReviewDialogHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
 			// create a pop up dialog
@@ -223,7 +228,7 @@ public class MyPage extends HBox {
 	        dialog.setScene(dialogScene);
 	        dialog.show();		
 	     }
-	}
+	}*/
 	
 
 }

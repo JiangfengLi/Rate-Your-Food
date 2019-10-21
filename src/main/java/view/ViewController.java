@@ -40,6 +40,7 @@ public class ViewController {
     private HUD theHUD;
     private StartPage theStartPage;
     private MyPage mypage;
+    private Review review;
     private RecipeView recipeView;
     private CreateRecipeView createRecipe;
     
@@ -76,6 +77,7 @@ public class ViewController {
         theHUD = new HUD(this);
         theStartPage = new StartPage(this);
         mypage = new MyPage(this);
+        review = new Review(this);
         recipeView = new RecipeView();
         createRecipe = new CreateRecipeView();
         
@@ -207,7 +209,17 @@ public class ViewController {
 	     theWindow.setRight(null);
 	     theWindow.setBottom(null);		
 	}
-    
+
+	public void moveToReview() {
+		// TODO Auto-generated method stub
+		theWindow.setTop( theHUD );
+	     theWindow.setCenter( review );
+	     theWindow.setLeft(null);
+	     theWindow.setRight(null);
+	     theWindow.setBottom(null);		
+		
+	}
+	
     
     // ******************************** INTERFACE FOR VIEWS ACCESSING THE MODEL ****************************
     /**
@@ -268,5 +280,6 @@ public class ViewController {
     {
         return theHUD;
     }
+
     
 }
