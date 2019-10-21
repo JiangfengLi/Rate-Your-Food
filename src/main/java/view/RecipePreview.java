@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 
 public class RecipePreview extends VBox
 {
-    public RecipePreview( ViewController vc, String aTitle, String aImagePath, String aDescription )
+    public RecipePreview( ViewController vc, String aTitle, String aImagePath, String tags )
     {
         // Create title
         Label theTitle = new Label( aTitle );
@@ -35,7 +35,7 @@ public class RecipePreview extends VBox
         }
 
         // Create description
-        Label theDescription = new Label( aDescription );
+        Label theDescription = new Label( tags );
         theDescription.setStyle( "-fx-font-size: 12px;\n" +
                 "    -fx-text-fill: #333333;\n" +
                 "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );" );
