@@ -5,17 +5,11 @@ import java.io.IOException;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -23,10 +17,6 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 
 /**
@@ -41,15 +31,15 @@ public class MyPage extends HBox {
 	private Label myRecipes;
 	private Label myReviews;
 	private Button createRecipe;
-	private Button createReview;
+//	private Button createReview;
 	
 	private VBox recipeColum;
 	private VBox reviewColum;
 	
 	private ObservableList<RecipePreview> recipeObList;
-	private ObservableList<String> reviewObList;
+	private ObservableList<ReviewPreview> reviewObList;
 	private ListView<RecipePreview> recipeListView;
-	private ListView<String> reviewListView;
+	private ListView<ReviewPreview> reviewListView;
 
 	public MyPage(ViewController viewController2) {
 		setAlignment(Pos.CENTER);
@@ -71,8 +61,13 @@ public class MyPage extends HBox {
 		myRecipes = new Label("My Recipes");
 		myReviews = new Label("My Reviews");
 		createRecipe = new Button("Create Recipe");
-		createReview = new Button("Create Review");
-		createReview.setOnAction(new SetReviewDialogHandler());
+		// createReview = new Button("Create Review");
+		
+		/*set createReview button to move to Review
+		createReview.setOnAction(ae -> {
+			viewController.moveToReview("MyPage");
+		});
+		*/
 		
 		// set up style of label
 		myRecipes.setStyle( "-fx-font-size: 30px;\n" +
@@ -95,7 +90,7 @@ public class MyPage extends HBox {
 		recipeListView = new ListView<RecipePreview>();
 		
 		reviewObList = FXCollections.observableArrayList();
-		reviewListView = new ListView<String>();
+		reviewListView = new ListView<ReviewPreview>();
 		
         for ( int i = 0; i < 10; i++ )
         {
@@ -104,11 +99,19 @@ public class MyPage extends HBox {
                     "This is a title",
                     "src/main/resources/images/preview.png",
                     "A pretty fairly long description to test how long a description can be without looking weird." ) );
-        	reviewObList.add("This is review " + (i + 1));
+        	reviewObList.add(    			
+        			new ReviewPreview(
+                			viewController,
+                			"This is review " + (i + 1),
+                            "src/main/resources/images/preview.png",
+                            "David",
+                            5, 5));
         }
 		
 		recipeListView.setItems(recipeObList);
 		reviewListView.setItems(reviewObList);
+		
+		reviewListView.minHeight(recipeListView.getHeight() + 15);
 		
 		//set the alignments and spacing of components;
 		myRecipes.setAlignment(Pos.CENTER);
@@ -117,15 +120,15 @@ public class MyPage extends HBox {
 		myReviews.setLineSpacing(5);
 		createRecipe.setAlignment(Pos.CENTER);
 		createRecipe.setLineSpacing(5);
-		createReview.setAlignment(Pos.CENTER);
-		createReview.setLineSpacing(5);
+		//createReview.setAlignment(Pos.CENTER);
+		//createReview.setLineSpacing(5);
 		recipeColum.setAlignment(Pos.CENTER);
 		recipeColum.setSpacing(10);
 		reviewColum.setAlignment(Pos.CENTER);
 		reviewColum.setSpacing(10);
 		
 		recipeColum.getChildren().addAll(myRecipes, createRecipe, recipeListView);
-		reviewColum.getChildren().addAll(myReviews, createReview, reviewListView);
+		reviewColum.getChildren().addAll(myReviews, reviewListView);
 		
 		this.getChildren().addAll(recipeColum, reviewColum);
 		
@@ -135,11 +138,18 @@ public class MyPage extends HBox {
 		});
 		
 	}
+
+	public void upDateReviewLV() {
+		for ( int i = 0; i < 10; i++ )
+			reviewObList.get(i).updateAuthor(viewController);
+		reviewListView.setItems(reviewObList);
+	}
+	
 	
 	/**
 	 * BACK HANDLER
 	 * inside class to navigate back to log in root
-	 */
+	 
 	protected class SetReviewDialogHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
 			// create a pop up dialog
@@ -223,7 +233,7 @@ public class MyPage extends HBox {
 	        dialog.setScene(dialogScene);
 	        dialog.show();		
 	     }
-	}
+	}*/
 	
 
 }

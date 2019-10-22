@@ -126,6 +126,7 @@ public class HUD extends FlowPane
         cartBtn.setText( "Cart" );
         cartBtn.setPrefSize( 150, 50 );
         setButtonStyle( cartBtn );
+        cartBtn.setOnAction( new MyCartHandler() );
         return cartBtn;
     }
 
@@ -176,6 +177,13 @@ public class HUD extends FlowPane
 	private class AccountHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
 			viewController.moveToAccountView();
+		}
+	}
+
+	// CREATE CART HANDLER
+	private class MyCartHandler implements EventHandler<ActionEvent> {
+		public void handle(ActionEvent e) {
+			viewController.moveToCartPage();
 		}
 	}
 

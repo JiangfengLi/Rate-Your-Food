@@ -42,9 +42,11 @@ public class ViewController {
     private HUD theHUD;
     private StartPage theStartPage;
     private MyPage mypage;
+    private Review review;
     private RecipeView recipeView;
     private CreateRecipeView createRecipe;
     private AccountView accountView;
+    private CartPage cartPage;
     
     // DATABASE MODEL CLASSES
     private DBAccess dbaccess;
@@ -79,9 +81,11 @@ public class ViewController {
         theHUD = new HUD(this);
         theStartPage = new StartPage(this);
         mypage = new MyPage(this);
+        accountView = new AccountView(this);
+        review = new Review(this);
         recipeView = new RecipeView(this);
         createRecipe = new CreateRecipeView(this);
-        accountView = new AccountView(this);
+        cartPage = new CartPage(this);
         
         // Set alignment for all views going into main borderpane
         BorderPane.setAlignment( logInRoot, Pos.CENTER );
@@ -193,13 +197,21 @@ public class ViewController {
         theWindow.setRight(null);
         theWindow.setBottom(null);		
 	}
+
+    /**
+     * UPDATE MYPAGE
+     * moves us to 'MyPage' page
+     */   	
+	public void updateMyPage() {
+		mypage.upDateReviewLV();
+		
+	}
 	
 	/*
 	 * MOVE TO RECIPEVIEW
 	 * moves to the recipe view of the 
 	 * recipepreview clicked on
-	 */
-	
+	 */	
 	public void moveToRecipe() {
 		theWindow.setTop( theHUD );
 	    theWindow.setCenter( scrollForRecipe );
@@ -208,7 +220,12 @@ public class ViewController {
 	    theWindow.setBottom(null);		
 		
 	}
-	
+
+	/*
+	 * MOVE TO CREATE RECIPE
+	 * moves to the recipe view of the 
+	 * create recipe clicked on
+	 */	
 	public void moveToCreateRecipe() {
 		theWindow.setTop( theHUD );
 	    theWindow.setCenter( createRecipeScroll );
@@ -225,7 +242,37 @@ public class ViewController {
 	    theWindow.setRight(null);
 	    theWindow.setBottom(null);	
 	}
-    
+
+	/*
+	 * MOVE TO REVIEW
+	 * moves to the review view of the 
+	 * review clicked on
+	 */		
+	public void moveToReview(String view) {
+		// TODO Auto-generated method stub
+		theWindow.setTop( theHUD );
+		review.setReturnPoint(view);
+	    theWindow.setCenter( review );
+	    theWindow.setLeft(null);
+	    theWindow.setRight(null);
+	    theWindow.setBottom(null);		
+		
+	}
+
+	/*
+	 * MOVE TO CART PAGE
+	 * moves to the  view of the 
+	 * cart page clicked on
+	 */			
+	public void moveToCartPage() {
+		theWindow.setTop( theHUD );
+	    theWindow.setCenter( cartPage );
+	    theWindow.setLeft(null);
+	    theWindow.setRight(null);
+	    theWindow.setBottom(null);		
+	
+	}
+
     
     // ******************************** INTERFACE FOR VIEWS ACCESSING THE MODEL ****************************
     /**
@@ -303,6 +350,15 @@ public class ViewController {
     	return dbaccess.logIn(email, password);
     }
 
+    /**
+     * UPDATE REVIEW DB 
+     * wrapper over DBAccess method give sudo value to 'recipeName' and 'recipeCreator'
+     * returns NONE	
+     */    
+	public void updateReviewDB(Integer rating, Integer difficulty, String text) {
+		// TODO Auto-generated method stub
+		dbaccess.addReview(getCurrentUser().getEmail(), "Bla Bla", "David@hotmail.com", text, difficulty, rating);
+	}
 
     /**
      * returnStage
@@ -318,5 +374,6 @@ public class ViewController {
     {
         return theHUD;
     }
+
     
 }

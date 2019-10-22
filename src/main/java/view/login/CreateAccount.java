@@ -132,6 +132,7 @@ public class CreateAccount extends UserLogInUI {
 				if (msg == null) {
 					wipeView();
 					viewController.moveToHomePage();
+					viewController.updateMyPage();
 				} else {
 					displayError(msg);
 				}

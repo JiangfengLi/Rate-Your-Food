@@ -15,7 +15,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 public class RecipeView extends VBox {
-	
+
 	private Label creator;
 	private ImageView imageView;
 	private Label recipeName;
@@ -110,6 +110,9 @@ public class RecipeView extends VBox {
 
 	private void setAddReviewButton() {
 		addReviewButton.setText("addReview");
+		addReviewButton.setOnAction(ae -> {
+		vc.moveToReview("RcipeView");
+		});
 	}
 
 	private void setReviewLabel() {
