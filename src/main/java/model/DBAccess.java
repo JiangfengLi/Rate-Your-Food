@@ -315,7 +315,7 @@ public class DBAccess implements DatabaseInterface{
 	public Review getReview(String author, String recipeName, String recipeCreator) {
     	try {
     		Connection conn = establishConnection();
-    		PreparedStatement stmt = conn.prepareStatement(GET_RECIPE);
+    		PreparedStatement stmt = conn.prepareStatement(GET_REVIEW);
     		stmt.setString(1, author);
     		stmt.setString(2, recipeName);
     		stmt.setString(3, recipeCreator);
@@ -449,7 +449,7 @@ public class DBAccess implements DatabaseInterface{
 	public Ingredient getIngredient(String name, String recipeName, String recipeCreator) {
     	try {
     		Connection conn = establishConnection();
-    		PreparedStatement stmt = conn.prepareStatement(GET_RECIPE);
+    		PreparedStatement stmt = conn.prepareStatement(GET_INGREDIENT);
     		stmt.setString(1, name);
     		stmt.setString(2, recipeName);
     		stmt.setString(3, recipeCreator);
@@ -540,7 +540,7 @@ public class DBAccess implements DatabaseInterface{
 	public Instruction getInstruction(int ID, String recipeName, String recipeCreator) {
     	try {
     		Connection conn = establishConnection();
-    		PreparedStatement stmt = conn.prepareStatement(GET_RECIPE);
+    		PreparedStatement stmt = conn.prepareStatement(GET_INSTRUCTION);
     		stmt.setInt(1, ID);
     		stmt.setString(2, recipeName);
     		stmt.setString(3, recipeCreator);
@@ -592,7 +592,7 @@ public class DBAccess implements DatabaseInterface{
 	public List<Instruction> getAllInstructionsForRecipe(String recipeName, String recipeCreator) {
 		try {
     		Connection conn = establishConnection();
-    		PreparedStatement stmt = conn.prepareStatement(GET_RECIPE);
+    		PreparedStatement stmt = conn.prepareStatement(GET_ALL_INSTRUCTIONS_FOR_RECIPE);
     		stmt.setString(1, recipeName);
     		stmt.setString(2, recipeCreator);
     		ResultSet rs = stmt.executeQuery();
