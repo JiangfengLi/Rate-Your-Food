@@ -3,6 +3,7 @@ package view;
 import javafx.scene.shape.*;
 import model.Ingredient;
 import model.Instruction;
+import model.Recipe;
 import javafx.scene.image.*;
 import javafx.geometry.*;
 import javafx.scene.control.*;
@@ -54,13 +55,10 @@ public class RecipeView extends VBox {
 	private HBox reviewAndButton;	
 	
 	private ViewController vc;
-	
 
 	//stub method to call the view without any information in it
 	public RecipeView(ViewController vc) {
-		
 		this.vc = vc;
-		
 		this.setAlignment(Pos.CENTER);
 		this.setPadding(new Insets(16,16,16,16));
 		this.setSpacing(8);
@@ -82,7 +80,16 @@ public class RecipeView extends VBox {
 		setReviewList();
 		
 		setNodesToParent();
-
+	}
+	
+	public void setRecipe(Recipe recipe) {
+		creator.setText(recipe.getCreator());
+		recipeName.setText(recipe.getRecipeName());
+		rating.setText(""+recipe.getRating());
+		difficulty.setText(""+recipe.getDifficulty());
+		
+		
+		
 	}
 
 	private void setReviewList() {
