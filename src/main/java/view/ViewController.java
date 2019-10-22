@@ -278,6 +278,7 @@ public class ViewController {
     	
     	Recipe temp = dbaccess.getRecipe(recipeName, creator);
     	if (temp == null) {
+    		// default insert of ingredient
     		return dbaccess.addRecipe(recipeName, creator, 5, 1);
     	} else {
     		return "recipe already exitsts";
