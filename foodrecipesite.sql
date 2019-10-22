@@ -1,3 +1,4 @@
+DROP DATABASE foodrecipe436;
 CREATE DATABASE foodrecipe436;
 USE foodrecipe436;
 
