@@ -8,14 +8,21 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
+import model.DBAccess;
 
 public class HUD extends FlowPane
 {
 	private ViewController viewController;
+	private TextField searchArea;
+	private ImageView searchIcon;
+	private DBAccess dbAccess;
 
     public HUD(ViewController viewController ) {
     	this.viewController = viewController;
+    	this.dbAccess = new DBAccess();
 
         setOrientation( Orientation.HORIZONTAL );
         setPrefWidth( 1000 );
@@ -23,7 +30,6 @@ public class HUD extends FlowPane
         setHgap( 10 );
         setStyle( "-fx-background-color: linear-gradient(to bottom, #0087CB, #000000);" );
         setAlignment( Pos.CENTER );
-        ImageView searchIcon = null;
         try {
         	searchIcon = new ImageView( new Image( new FileInputStream( "src/main/resources/images/search.png" ) ) );
         } catch (Exception x) {
@@ -98,7 +104,7 @@ public class HUD extends FlowPane
 
     private TextField makeSearchArea( )
     {
-        TextField searchArea = new TextField();
+        searchArea = new TextField();
         searchArea.setPromptText( "Search for recipes" );
         searchArea.setPrefSize( 345, 50 );
         return searchArea;
@@ -132,6 +138,16 @@ public class HUD extends FlowPane
         style += "-fx-border-color: darkblue;";
         style += "-fx-text-fill: snow;";
         aButton.setStyle( style );
+    }
+
+    public TextField getSearchArea()
+    {
+        return searchArea;
+    }
+
+    public ImageView getSearchIcon()
+    {
+        return searchIcon;
     }
  
 	// CREATE ACCOUNT HANDLER

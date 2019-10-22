@@ -1,3 +1,4 @@
+DROP DATABASE foodrecipe436;
 CREATE DATABASE foodrecipe436;
 USE foodrecipe436;
 
@@ -125,7 +126,7 @@ INSERT INTO Review VALUES ('elizasmith@yahoo.com','orange slices for camp','hots
 INSERT INTO Review VALUES ('elizasmith@yahoo.com','hot cheez-it with cheez-wip','jack@gmail.com','I dont know where to begin.',1,1);
 INSERT INTO Review VALUES ('elizasmith@yahoo.com','joeys jonesin special','joe@gmail.com','Another triumph by our well-known curator of the culinary, Monsieur Joey.',3,5);
 
-INSERT INTO Review VALUES ('hotsoccermomma@hotmail.com','southwestern brunch omelette','eliza@yahoo.com','A low-stress way to feed the kids on Sunday!',2,4);
+INSERT INTO Review VALUES ('hotsoccermomma@hotmail.com','southwestern brunch omelette','elizasmith@yahoo.com','A low-stress way to feed the kids on Sunday!',2,4);
 INSERT INTO Review VALUES ('hotsoccermomma@hotmail.com','joey joes doey doughs','joe@gmail.com','It IS doughy, but also delectable.',3,4);
 INSERT INTO Review VALUES ('hotsoccermomma@hotmail.com','salami salad','john@gmail.com','It sounds strange, but it aint bad.',3,3);
 INSERT INTO Review VALUES ('hotsoccermomma@hotmail.com','hot cheez-it with cheez-wip','jack@gmail.com','Disgusting.',3,1);
