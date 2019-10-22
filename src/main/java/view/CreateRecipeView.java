@@ -167,8 +167,10 @@ public class CreateRecipeView extends GridPane {
 			String unit = ingredientUnitField.getText();
 			String name = ingredientNameField.getText();
 			String user = "";
-			if (viewController != null)
+			if (viewController != null) {
 				user = viewController.getCurrentUser().getEmail();
+				//System.out.println(user);
+			}
 			else
 				user = null;
 
@@ -226,6 +228,9 @@ public class CreateRecipeView extends GridPane {
 			String user = viewController.getCurrentUser().getEmail();
 
 			if (!name.isEmpty() && !summary.isEmpty() && !ingredients.isEmpty() && !instructions.isEmpty()) {
+				
+				viewController.addRecipe(name, user);
+				viewController.addInstruction(name, user, instructions);
 
 				for (int i = 0; i < ingredients.size(); i++) {
 					
@@ -240,8 +245,6 @@ public class CreateRecipeView extends GridPane {
 					viewController.addIngredient(ingName, ingRecipeName, ingRecipeCreator, ingAmount, ingUnit);
 				}
 
-				viewController.addInstruction(name, user, instructions);
-				viewController.addRecipe(name, user);
 				viewController.moveToMyPage();
 			}
 		});
