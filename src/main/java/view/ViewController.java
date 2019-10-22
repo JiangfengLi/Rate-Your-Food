@@ -186,6 +186,15 @@ public class ViewController {
         theWindow.setRight(null);
         theWindow.setBottom(null);		
 	}
+
+    /**
+     * UPDATE MYPAGE
+     * moves us to 'MyPage' page
+     */   	
+	public void updateMyPage() {
+		mypage.upDateReviewLV();
+		
+	}
 	
 	/*
 	 * MOVE TO RECIPEVIEW
@@ -266,6 +275,15 @@ public class ViewController {
     	return dbaccess.logIn(email, password);
     }
 
+    /**
+     * UPDATE REVIEW DB 
+     * wrapper over DBAccess method give sudo value to 'recipeName' and 'recipeCreator'
+     * returns NONE	
+     */    
+	public void updateReviewDB(Integer rating, Integer difficulty, String text) {
+		// TODO Auto-generated method stub
+		dbaccess.addReview(getCurrentUser().getEmail(), "Bla Bla", "David@hotmail.com", text, difficulty, rating);
+	}
 
     /**
      * returnStage
@@ -281,6 +299,7 @@ public class ViewController {
     {
         return theHUD;
     }
+
 
     
 }

@@ -41,15 +41,15 @@ public class MyPage extends HBox {
 	private Label myRecipes;
 	private Label myReviews;
 	private Button createRecipe;
-	private Button createReview;
+//	private Button createReview;
 	
 	private VBox recipeColum;
 	private VBox reviewColum;
 	
 	private ObservableList<RecipePreview> recipeObList;
-	private ObservableList<String> reviewObList;
+	private ObservableList<ReviewPreview> reviewObList;
 	private ListView<RecipePreview> recipeListView;
-	private ListView<String> reviewListView;
+	private ListView<ReviewPreview> reviewListView;
 
 	public MyPage(ViewController viewController2) {
 		setAlignment(Pos.CENTER);
@@ -71,12 +71,13 @@ public class MyPage extends HBox {
 		myRecipes = new Label("My Recipes");
 		myReviews = new Label("My Reviews");
 		createRecipe = new Button("Create Recipe");
-		createReview = new Button("Create Review");
+		// createReview = new Button("Create Review");
 		
-		//set createReview button to move to Review
+		/*set createReview button to move to Review
 		createReview.setOnAction(ae -> {
 			viewController.moveToReview("MyPage");
 		});
+		*/
 		
 		// set up style of label
 		myRecipes.setStyle( "-fx-font-size: 30px;\n" +
@@ -99,7 +100,7 @@ public class MyPage extends HBox {
 		recipeListView = new ListView<RecipePreview>();
 		
 		reviewObList = FXCollections.observableArrayList();
-		reviewListView = new ListView<String>();
+		reviewListView = new ListView<ReviewPreview>();
 		
         for ( int i = 0; i < 10; i++ )
         {
@@ -108,11 +109,19 @@ public class MyPage extends HBox {
                     "This is a title",
                     "src/main/resources/images/preview.png",
                     "A pretty fairly long description to test how long a description can be without looking weird." ) );
-        	reviewObList.add("This is review " + (i + 1));
+        	reviewObList.add(    			
+        			new ReviewPreview(
+                			viewController,
+                			"This is review " + (i + 1),
+                            "src/main/resources/images/preview.png",
+                            "David",
+                            5, 5));
         }
 		
 		recipeListView.setItems(recipeObList);
 		reviewListView.setItems(reviewObList);
+		
+		reviewListView.minHeight(recipeListView.getHeight() + 15);
 		
 		//set the alignments and spacing of components;
 		myRecipes.setAlignment(Pos.CENTER);
@@ -121,15 +130,15 @@ public class MyPage extends HBox {
 		myReviews.setLineSpacing(5);
 		createRecipe.setAlignment(Pos.CENTER);
 		createRecipe.setLineSpacing(5);
-		createReview.setAlignment(Pos.CENTER);
-		createReview.setLineSpacing(5);
+		//createReview.setAlignment(Pos.CENTER);
+		//createReview.setLineSpacing(5);
 		recipeColum.setAlignment(Pos.CENTER);
 		recipeColum.setSpacing(10);
 		reviewColum.setAlignment(Pos.CENTER);
 		reviewColum.setSpacing(10);
 		
 		recipeColum.getChildren().addAll(myRecipes, createRecipe, recipeListView);
-		reviewColum.getChildren().addAll(myReviews, createReview, reviewListView);
+		reviewColum.getChildren().addAll(myReviews, reviewListView);
 		
 		this.getChildren().addAll(recipeColum, reviewColum);
 		
@@ -138,6 +147,12 @@ public class MyPage extends HBox {
 			viewController.moveToCreateRecipe();
 		});
 		
+	}
+
+	public void upDateReviewLV() {
+		for ( int i = 0; i < 10; i++ )
+			reviewObList.get(i).updateAuthor(viewController);
+		reviewListView.setItems(reviewObList);
 	}
 	
 	

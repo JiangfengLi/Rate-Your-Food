@@ -315,7 +315,7 @@ public class DBAccess implements DatabaseInterface{
 	public Review getReview(String author, String recipeName, String recipeCreator) {
     	try {
     		Connection conn = establishConnection();
-    		PreparedStatement stmt = conn.prepareStatement(GET_RECIPE);
+    		PreparedStatement stmt = conn.prepareStatement(GET_REVIEW);
     		stmt.setString(1, author);
     		stmt.setString(2, recipeName);
     		stmt.setString(3, recipeCreator);
