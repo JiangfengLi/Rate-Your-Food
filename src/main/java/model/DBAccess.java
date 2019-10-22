@@ -424,7 +424,7 @@ public class DBAccess implements DatabaseInterface{
 	public Ingredient getIngredient(String name, String recipeName, String recipeCreator) {
     	try {
     		Connection conn = establishConnection();
-    		PreparedStatement stmt = conn.prepareStatement(GET_RECIPE);
+    		PreparedStatement stmt = conn.prepareStatement(GET_INGREDIENT);
     		stmt.setString(1, name);
     		stmt.setString(2, recipeName);
     		stmt.setString(3, recipeCreator);
@@ -515,7 +515,7 @@ public class DBAccess implements DatabaseInterface{
 	public Instruction getInstruction(int ID, String recipeName, String recipeCreator) {
     	try {
     		Connection conn = establishConnection();
-    		PreparedStatement stmt = conn.prepareStatement(GET_RECIPE);
+    		PreparedStatement stmt = conn.prepareStatement(GET_INSTRUCTION);
     		stmt.setInt(1, ID);
     		stmt.setString(2, recipeName);
     		stmt.setString(3, recipeCreator);

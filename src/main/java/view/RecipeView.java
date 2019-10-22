@@ -1,15 +1,19 @@
 package view;
 
 import javafx.scene.shape.*;
+import model.Ingredient;
+import model.Instruction;
 import javafx.scene.image.*;
 import javafx.geometry.*;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
-public class RecipeView extends AnchorPane {
+public class RecipeView extends VBox {
 	
 	private Label creator;
 	private ImageView imageView;
@@ -23,54 +27,58 @@ public class RecipeView extends AnchorPane {
 	private Circle circle2;
 	private Label difficulty;
 	private Label ingredientsLabel;
-	private ListView ingredientsList;
-	//private TableColumn ingAmount;
-	//private TableColumn ingName;
+	private TableView<Ingredient> ingredientsList;
+	private TableColumn<Ingredient, Float> ingAmount;
+	private TableColumn<Ingredient, String> ingUnit;
+	private TableColumn<Ingredient, String> ingName;
 	private Label instructionsLabel;
-	private TextArea instructions;
+	private TableView<Instruction> instructions;
+	private TableColumn<Instruction, Integer> insNumber;
+	private TableColumn<Instruction, String> insText;
 	private Label reviewLabel;
 	private Button addReviewButton;
-	private ListView reviewList;
+	private TableView<Review> reviewList;
+	private TableColumn<Review,String> reviewAuthor;
+	private TableColumn<Review,String> reviewText;
+	private TableColumn<Review,Integer> reviewRating;
+	private TableColumn<Review,Integer> reviewDif;
+	
+	private VBox recipeSection;
+	private HBox ingredientTop;
+	private HBox ingredientBottom;
+	private VBox ingredientSection;
+	private VBox instructionSection;
+	private VBox ingredientInfo;
+	private HBox titleAndRating;
+	private HBox tagsAndDif;
+	private HBox reviewAndButton;	
+	
+	private ViewController vc;
 	
 
 	//stub method to call the view without any information in it
-	public RecipeView() {
-
+	public RecipeView(ViewController vc) {
+		
+		this.vc = vc;
+		
+		this.setAlignment(Pos.CENTER);
+		this.setPadding(new Insets(16,16,16,16));
+		this.setSpacing(8);
 		inititializeAllNodes();
-
-		setMaxHeight(USE_PREF_SIZE);
-		setMaxWidth(USE_PREF_SIZE);
-		setMinHeight(USE_PREF_SIZE);
-		setMinWidth(USE_PREF_SIZE);
-		setPrefHeight(1000.0);
-		setPrefWidth(700.0);
-
+		
 		setCreatorLabel("creator");
-
 		setImage("src/main/resources/images/preview.png");
-
 		setRecipeLabel("Recipe Name");
-
 		setTags();
-
-		setSummary("Summary for all this blah blah blah  blah blah blah blah blah blah blah blah");
-
+		setSummary("Summary for all this blah blah blah blah blah blah blah blah blah blah blah");
 		setRating(0.0);
-
 		setDifficulty(0);
-
 		setIngredientLabel();
-
 		setIngredientList();
-
 		setInstructionsLabel();
-
 		setInstructions();
-
 		setReviewLabel();
-
 		setAddReviewButton();
-
 		setReviewList();
 		
 		setNodesToParent();
@@ -78,91 +86,75 @@ public class RecipeView extends AnchorPane {
 	}
 
 	private void setReviewList() {
-		AnchorPane.setBottomAnchor(reviewList, 77.0);
-		AnchorPane.setLeftAnchor(reviewList, 65.0);
-		AnchorPane.setRightAnchor(reviewList, 42.0);
-		reviewList.setLayoutX(65.0);
-		reviewList.setLayoutY(679.0);
-		reviewList.setPrefHeight(244.0);
-		reviewList.setPrefWidth(593.0);
+		reviewAuthor.setCellValueFactory(new PropertyValueFactory<>("author"));
+		reviewText.setCellValueFactory(new PropertyValueFactory<>("text"));
+		reviewRating.setCellValueFactory(new PropertyValueFactory<>("rating"));
+		reviewDif.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
+		
+		reviewList.getColumns().addAll(reviewAuthor,reviewRating,reviewDif,reviewText);
+		
+		reviewAuthor.prefWidthProperty().bind(reviewList.widthProperty().multiply(3.0 / 10.0));
+		reviewRating.prefWidthProperty().bind(reviewList.widthProperty().multiply(1.0 / 10.0));
+		reviewDif.prefWidthProperty().bind(reviewList.widthProperty().multiply(1.0 / 10.0));
+		reviewText.prefWidthProperty().bind(reviewList.widthProperty().multiply(5.0 / 10.0));
+
+		
 	}
 
 	private void setAddReviewButton() {
-		AnchorPane.setRightAnchor(addReviewButton, 52.0);
-		AnchorPane.setTopAnchor(addReviewButton, 636.0);
-		addReviewButton.setLayoutX(570.0);
-		addReviewButton.setLayoutY(630.0);
-		addReviewButton.setMnemonicParsing(false);
 		addReviewButton.setText("addReview");
 	}
 
 	private void setReviewLabel() {
-		AnchorPane.setLeftAnchor(reviewLabel, 73.0);
-		AnchorPane.setTopAnchor(reviewLabel, 636.0);
-		reviewLabel.setLayoutX(73.0);
-		reviewLabel.setLayoutY(636.0);
-		reviewLabel.setPrefHeight(27.0);
-		reviewLabel.setPrefWidth(183.0);
 		reviewLabel.setText("Reviews");
 	}
 
 	private void setInstructions() {
-		AnchorPane.setRightAnchor(instructions, 39.0);
-		AnchorPane.setTopAnchor(instructions, 376.0);
-		instructions.setLayoutX(350.0);
-		instructions.setLayoutY(376.0);
-		instructions.setPrefHeight(236.0);
-		instructions.setPrefWidth(311.0);
+		instructions.setPrefWidth(450);
+		
+		insNumber.setText("#");
+		insText.setText("instruction");
+		
+		//insNumber.setCellValueFactory(new PropertyValueFactory<>("")); // no instruction number set up still
+		insText.setCellValueFactory(new PropertyValueFactory<>("text"));
+		
+		instructions.getColumns().addAll(insNumber, insText);
+		
+		insNumber.prefWidthProperty().bind(ingredientsList.widthProperty().multiply(1.0 / 10.0));
+		insText.prefWidthProperty().bind(ingredientsList.widthProperty().multiply(9.0 / 10.0));
 	}
 
 	private void setInstructionsLabel() {
-		AnchorPane.setTopAnchor(instructionsLabel, 339.0);
-		instructionsLabel.setLayoutX(350.0);
-		instructionsLabel.setLayoutY(339.0);
-		instructionsLabel.setPrefHeight(27.0);
-		instructionsLabel.setPrefWidth(311.0);
 		instructionsLabel.setText("Instructions");
 	}
 
 	private void setIngredientList() {
-		AnchorPane.setLeftAnchor(ingredientsList, 73.0);
-		AnchorPane.setTopAnchor(ingredientsList, 376.0);
-		ingredientsList.setLayoutX(73.0);
-		ingredientsList.setLayoutY(376.0);
-		ingredientsList.setPrefHeight(226.0);
-		ingredientsList.setPrefWidth(256.0);
 
-		/*
-		ingAmount.setPrefWidth(50.0);
-		ingAmount.setText("amount");
-
-		ingName.setPrefWidth(205.0);
-		ingName.setText("ingredient");
-		*/
+		ingredientsList.setPrefWidth(450);
+		ingAmount.setText("Amount");
+		ingUnit.setText("Unit");
+		ingName.setText("Ingredient");
+		
+		ingAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+		ingUnit.setCellValueFactory(new PropertyValueFactory<>("unit"));
+		ingName.setCellValueFactory(new PropertyValueFactory<>("name"));
+		
+		ingredientsList.getColumns().addAll(ingAmount,ingUnit,ingName);
+		ingAmount.prefWidthProperty().bind(ingredientsList.widthProperty().multiply(1.0 / 10.0));
+		ingUnit.prefWidthProperty().bind(ingredientsList.widthProperty().multiply(2.0 / 10.0));
+		ingName.prefWidthProperty().bind(ingredientsList.widthProperty().multiply(7.0 / 10.0));
+		
 	}
 
 	private void setIngredientLabel() {
-		AnchorPane.setLeftAnchor(ingredientsLabel, 73.0);
-		AnchorPane.setTopAnchor(ingredientsLabel, 339.0);
-		ingredientsLabel.setLayoutX(73.0);
-		ingredientsLabel.setLayoutY(339.0);
-		ingredientsLabel.setPrefHeight(27.0);
-		ingredientsLabel.setPrefWidth(256.0);
 		ingredientsLabel.setText("Ingredients");
 	}
 
 	private void setDifficulty(int dif) {
-		AnchorPane.setRightAnchor(difficultyLayout, 52.0);
-		AnchorPane.setTopAnchor(difficultyLayout, 121.0);
-		difficultyLayout.setLayoutX(596.0);
-		difficultyLayout.setLayoutY(121.0);
-		difficultyLayout.setPrefHeight(50.0);
-		difficultyLayout.setPrefWidth(50.0);
-
-		circle2.setFill(javafx.scene.paint.Color.valueOf("#f2ff39"));
+		circle2.setFill(Color.valueOf("#f2ff39"));
 		circle2.setRadius(26.0);
-		circle2.setStroke(javafx.scene.paint.Color.TRANSPARENT);
-		circle2.setStrokeType(javafx.scene.shape.StrokeType.INSIDE);
+		circle2.setStroke(Color.TRANSPARENT);
+		circle2.setStrokeType(StrokeType.INSIDE);
 		circle2.setStrokeWidth(2.0);
 
 		difficulty.setAlignment(javafx.geometry.Pos.CENTER);
@@ -171,64 +163,34 @@ public class RecipeView extends AnchorPane {
 	}
 
 	private void setRating(double rate) {
-		AnchorPane.setRightAnchor(ratingLayout, 52.0);
-		AnchorPane.setTopAnchor(ratingLayout, 53.0);
-		ratingLayout.setLayoutX(596.0);
-		ratingLayout.setLayoutY(53.0);
-		ratingLayout.setPrefHeight(50.0);
-		ratingLayout.setPrefWidth(50.0);
 
-		circle1.setFill(javafx.scene.paint.Color.valueOf("#f2ff39"));
+		circle1.setFill(Color.valueOf("#f2ff39"));
 		circle1.setRadius(26.0);
-		circle1.setStroke(javafx.scene.paint.Color.TRANSPARENT);
-		circle1.setStrokeType(javafx.scene.shape.StrokeType.INSIDE);
+		circle1.setStroke(Color.TRANSPARENT);
+		circle1.setStrokeType(StrokeType.INSIDE);
 		circle1.setStrokeWidth(2.0);
 
-		rating.setAlignment(javafx.geometry.Pos.CENTER);
+		rating.setAlignment(Pos.CENTER);
 		rating.setText(String.format("%.02f", rate));
 		rating.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
 	}
 
 	private void setSummary(String desc) {
-		AnchorPane.setRightAnchor(summary, 39.0);
-		AnchorPane.setTopAnchor(summary, 186.0);
-		summary.setAlignment(javafx.geometry.Pos.TOP_LEFT);
-		summary.setLayoutX(350.0);
-		summary.setLayoutY(186.0);
-		summary.setPrefHeight(136.0);
-		summary.setPrefWidth(311.0);
 		summary.setText(desc);
 		summary.setWrapText(true);
 	}
 
 	private void setTags() {
-		AnchorPane.setRightAnchor(tags, 167.0);
-		AnchorPane.setTopAnchor(tags, 91.0);
-		tags.setLayoutX(350.0);
-		tags.setLayoutY(91.0);
-		tags.setPrefHeight(63.0);
-		tags.setPrefWidth(183.0);
 		tags.setText("Tags");
 	}
 
 	private void setRecipeLabel(String name) {
-		AnchorPane.setTopAnchor(recipeName, 53.0);
-		recipeName.setLayoutX(350.0);
-		recipeName.setLayoutY(53.0);
-		recipeName.setPrefHeight(27.0);
-		recipeName.setPrefWidth(183.0);
 		recipeName.setText(name);
 	}
 
 	private void setImage(String url) {
-		AnchorPane.setLeftAnchor(imageView, 73.0);
-		AnchorPane.setTopAnchor(imageView, 51.0);
-		imageView.setFitHeight(270.0);
-		imageView.setFitWidth(267.0);
-		imageView.setLayoutX(73.0);
-		imageView.setLayoutY(51.0);
-		imageView.setPickOnBounds(true);
 		imageView.setPreserveRatio(true);
+		imageView.setFitHeight(250);
 		try {
 			imageView.setImage(new Image(new FileInputStream(url)));
 		} catch (FileNotFoundException e) {
@@ -237,13 +199,10 @@ public class RecipeView extends AnchorPane {
 	}
 
 	private void setCreatorLabel(String text) {
-		AnchorPane.setRightAnchor(creator, 14.0);
-		AnchorPane.setTopAnchor(creator, 14.0);
-		creator.setAlignment(javafx.geometry.Pos.TOP_RIGHT);
-		creator.setLayoutX(286.0);
-		creator.setLayoutY(14.0);
-		creator.setPrefHeight(37.0);
-		creator.setPrefWidth(355.0);
+		HBox temp = new HBox();
+		temp.getChildren().add(creator);
+		temp.setAlignment(Pos.CENTER_RIGHT);
+		creator.setAlignment(Pos.CENTER_RIGHT);
 		creator.setPadding(new Insets(0.0, 0.0, 10.0, 0.0));
 		creator.setText(text);
 
@@ -262,36 +221,82 @@ public class RecipeView extends AnchorPane {
 		circle2 = new Circle();
 		difficulty = new Label();
 		ingredientsLabel = new Label();
-		ingredientsList = new ListView();
-		//ingAmount = new TableColumn();
-		//ingName = new TableColumn();
+		ingredientsList = new TableView<Ingredient>();
+		ingAmount = new TableColumn<Ingredient, Float>();
+		ingUnit = new TableColumn<Ingredient, String>();
+		ingName = new TableColumn<Ingredient, String>();
 		instructionsLabel = new Label();
-		instructions = new TextArea();
+		instructions = new TableView<Instruction>();
+		insNumber = new TableColumn<Instruction, Integer>();
+		insText = new TableColumn<Instruction, String>();
 		reviewLabel = new Label();
 		addReviewButton = new Button();
-		reviewList = new ListView();
+		reviewList = new TableView<Review>();
+		reviewAuthor = new TableColumn<Review,String>("Author");
+		reviewText = new TableColumn<Review,String>("Review");
+		reviewRating = new TableColumn<Review,Integer>("Rating");
+		reviewDif = new TableColumn<Review,Integer>("Dificulty");
+		
+		
+		recipeSection = new VBox(8);;
+		ingredientTop = new HBox(8);
+		ingredientBottom = new HBox(8);
+		ingredientInfo = new VBox(8);
+		ingredientSection = new VBox(4);
+		instructionSection = new VBox(4);
+		
+		titleAndRating = new HBox(8);
+		titleAndRating.setAlignment(Pos.CENTER);
+		tagsAndDif = new HBox(8);
+		tagsAndDif.setAlignment(Pos.CENTER);
+		reviewAndButton = new HBox(8);
 
 	}
 
 	private void setNodesToParent() {
-
-		getChildren().add(creator);
-		getChildren().add(imageView);
-		getChildren().add(recipeName);
-		getChildren().add(tags);
-		getChildren().add(summary);
+		
 		ratingLayout.getChildren().add(circle1);
 		ratingLayout.getChildren().add(rating);
-		getChildren().add(ratingLayout);
+		Region region1 = new Region();
+        HBox.setHgrow(region1, Priority.ALWAYS);
+
+		titleAndRating.getChildren().addAll(recipeName, region1, ratingLayout);
+		titleAndRating.setAlignment(Pos.CENTER_RIGHT);
+		
 		difficultyLayout.getChildren().add(circle2);
 		difficultyLayout.getChildren().add(difficulty);
-		getChildren().add(difficultyLayout);
-		getChildren().add(ingredientsLabel);
-		getChildren().add(ingredientsList);
-		getChildren().add(instructionsLabel);
-		getChildren().add(instructions);
-		getChildren().add(reviewLabel);
-		getChildren().add(addReviewButton);
-		getChildren().add(reviewList);
+		Region region2 = new Region();
+        HBox.setHgrow(region2, Priority.ALWAYS);
+        
+		tagsAndDif.getChildren().addAll(tags, region2, difficultyLayout);
+		
+		ingredientInfo.getChildren().addAll(titleAndRating,tagsAndDif,summary);
+		ingredientTop.getChildren().addAll(imageView,ingredientInfo);
+		
+		ingredientSection.getChildren().addAll(ingredientsLabel,ingredientsList);
+		instructionSection.getChildren().addAll(instructionsLabel,instructions);
+		ingredientBottom.getChildren().addAll(ingredientSection,instructionSection);
+		
+		GridPane recipeLayout = new GridPane();
+		recipeLayout.setAlignment(Pos.CENTER);
+		recipeLayout.setHgap(8);
+		recipeLayout.setVgap(8);
+		//recipeLayout.prefWidthProperty().bind(vc.returnStage().widthProperty());
+		recipeLayout.add(imageView, 0, 0);
+		recipeLayout.add(ingredientInfo, 1, 0);
+		recipeLayout.add(ingredientSection, 0, 1);
+		recipeLayout.add(instructionSection, 1, 1);
+		
+		Region region3 = new Region();
+        HBox.setHgrow(region3, Priority.ALWAYS);
+		reviewAndButton.getChildren().addAll(reviewLabel, region3, addReviewButton);
+		
+		
+		HBox creatorLayout = new HBox();
+		creatorLayout.getChildren().add(creator);
+		creatorLayout.setAlignment(Pos.CENTER_RIGHT);
+		
+		this.getChildren().addAll(creatorLayout, ingredientTop,recipeLayout, reviewAndButton, reviewList);
+
 	}
 }

@@ -67,7 +67,7 @@ public class HUD extends FlowPane
         theMenu.getItems().add(logoutItem);
 
         // Add event
-        accountItem.setOnAction(null); //TODO: Link to account page
+        accountItem.setOnAction(new AccountHandler() );
         logoutItem.setOnAction( new SignOutHandler() );
 
         // Create a menu bar
@@ -149,11 +149,17 @@ public class HUD extends FlowPane
 		}
 	}
 
-	
 	// CREATE MYPAGE HANDLER
 	private class MyPageHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
 			viewController.moveToMyPage();
+		}
+	}
+	
+	// CREATE ACCOUNT HANDLER
+	private class AccountHandler implements EventHandler<ActionEvent> {
+		public void handle(ActionEvent e) {
+			viewController.moveToAccountView();
 		}
 	}
 

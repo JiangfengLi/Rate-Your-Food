@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import view.HUD;
 import view.RecipeView;
+import view.RecipeView2;
 
 public class RecipeViewTest extends Application {
 	private BorderPane theWindow;

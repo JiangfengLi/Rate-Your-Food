@@ -44,6 +44,7 @@ public class ViewController {
     private MyPage mypage;
     private RecipeView recipeView;
     private CreateRecipeView createRecipe;
+    private AccountView accountView;
     
     // DATABASE MODEL CLASSES
     private DBAccess dbaccess;
@@ -78,8 +79,9 @@ public class ViewController {
         theHUD = new HUD(this);
         theStartPage = new StartPage(this);
         mypage = new MyPage(this);
-        recipeView = new RecipeView();
+        recipeView = new RecipeView(this);
         createRecipe = new CreateRecipeView(this);
+        accountView = new AccountView(this);
         
         // Set alignment for all views going into main borderpane
         BorderPane.setAlignment( logInRoot, Pos.CENTER );
@@ -88,6 +90,7 @@ public class ViewController {
         BorderPane.setAlignment( theHUD, Pos.CENTER );
         BorderPane.setAlignment( theStartPage, Pos.CENTER );
         BorderPane.setAlignment( recipeView, Pos.CENTER);
+        BorderPane.setAlignment( accountView, Pos.CENTER);
 
         // Create scroll view for home page
         mainPageHolder = new ScrollPane();
@@ -98,6 +101,8 @@ public class ViewController {
         
         // create scroll view for recipeView
         scrollForRecipe = new ScrollPane();
+        scrollForRecipe.setFitToHeight(true);
+        scrollForRecipe.setFitToWidth(true);
         scrollForRecipe.setContent(recipeView);
         
         // create scroll view for createRecipeView
@@ -189,20 +194,29 @@ public class ViewController {
 	 */
 	
 	public void moveToRecipe() {
-		 theWindow.setTop( theHUD );
-	     theWindow.setCenter( scrollForRecipe );
-	     theWindow.setLeft(null);
-	     theWindow.setRight(null);
-	     theWindow.setBottom(null);		
+		theWindow.setTop( theHUD );
+	    theWindow.setCenter( scrollForRecipe );
+	    theWindow.setLeft(null);
+	    theWindow.setRight(null);
+	    theWindow.setBottom(null);		
 		
 	}
 	
 	public void moveToCreateRecipe() {
 		theWindow.setTop( theHUD );
-	     theWindow.setCenter( createRecipeScroll );
-	     theWindow.setLeft(null);
-	     theWindow.setRight(null);
-	     theWindow.setBottom(null);		
+	    theWindow.setCenter( createRecipeScroll );
+	    theWindow.setLeft(null);
+	    theWindow.setRight(null);
+	    theWindow.setBottom(null);		
+	}
+	
+	public void moveToAccountView() {
+		accountView.setUser(getCurrentUser());
+		theWindow.setTop( theHUD );
+	    theWindow.setCenter( accountView );
+	    theWindow.setLeft(null);
+	    theWindow.setRight(null);
+	    theWindow.setBottom(null);	
 	}
     
     

@@ -242,6 +242,7 @@ public class CreateRecipeView extends GridPane {
 
 				viewController.addInstruction(name, user, instructions);
 				viewController.addRecipe(name, user);
+				viewController.moveToMyPage();
 			}
 		});
 	}
