@@ -43,6 +43,7 @@ public class ViewController {
     private Review review;
     private RecipeView recipeView;
     private CreateRecipeView createRecipe;
+    private CartPage cartPage;
     
     // DATABASE MODEL CLASSES
     private DBAccess dbaccess;
@@ -80,6 +81,7 @@ public class ViewController {
         review = new Review(this);
         recipeView = new RecipeView(this);
         createRecipe = new CreateRecipeView();
+        cartPage = new CartPage(this);
         
         // Set alignment for all views going into main borderpane
         BorderPane.setAlignment( logInRoot, Pos.CENTER );
@@ -229,7 +231,16 @@ public class ViewController {
 	    theWindow.setBottom(null);		
 		
 	}
+
+	public void moveToCartPage() {
+		theWindow.setTop( theHUD );
+	    theWindow.setCenter( cartPage );
+	    theWindow.setLeft(null);
+	    theWindow.setRight(null);
+	    theWindow.setBottom(null);		
 	
+	}
+
     
     // ******************************** INTERFACE FOR VIEWS ACCESSING THE MODEL ****************************
     /**
@@ -299,7 +310,6 @@ public class ViewController {
     {
         return theHUD;
     }
-
 
     
 }
