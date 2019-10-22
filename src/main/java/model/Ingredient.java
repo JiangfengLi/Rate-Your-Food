@@ -40,4 +40,20 @@ public class Ingredient {
 		return this.unit;
 	}
 	
+	// added portion by Joseph Corona
+	// ------------------------------------------------------------------------
+	
+	//SETTERS 
+	public void setRecipeName(String recipeName) {
+		this.recipeName = recipeName;
+	}
+	
+	public String toString() {
+		return
+			getAmount() + " " +
+			getUnit()   + " " +
+			getName();
+	}
+	// ------------------------------------------------------------------------
+	
 }

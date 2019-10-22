@@ -10,6 +10,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.DBAccess;
+import model.Ingredient;
+import model.Recipe;
 import model.User;
 import view.login.CreateAccount;
 import view.login.LogInRoot;
@@ -42,6 +44,7 @@ public class ViewController {
     private MyPage mypage;
     private RecipeView recipeView;
     private CreateRecipeView createRecipe;
+    private AccountView accountView;
     
     // DATABASE MODEL CLASSES
     private DBAccess dbaccess;
@@ -76,8 +79,9 @@ public class ViewController {
         theHUD = new HUD(this);
         theStartPage = new StartPage(this);
         mypage = new MyPage(this);
-        recipeView = new RecipeView();
-        createRecipe = new CreateRecipeView();
+        recipeView = new RecipeView(this);
+        createRecipe = new CreateRecipeView(this);
+        accountView = new AccountView(this);
         
         // Set alignment for all views going into main borderpane
         BorderPane.setAlignment( logInRoot, Pos.CENTER );
@@ -86,16 +90,21 @@ public class ViewController {
         BorderPane.setAlignment( theHUD, Pos.CENTER );
         BorderPane.setAlignment( theStartPage, Pos.CENTER );
         BorderPane.setAlignment( recipeView, Pos.CENTER);
+        BorderPane.setAlignment( accountView, Pos.CENTER);
 
         // Create scroll view for home page
         createStartPage();
         
         // create scroll view for recipeView
         scrollForRecipe = new ScrollPane();
+        scrollForRecipe.setFitToHeight(true);
+        scrollForRecipe.setFitToWidth(true);
         scrollForRecipe.setContent(recipeView);
         
         // create scroll view for createRecipeView
         createRecipeScroll = new ScrollPane();
+        createRecipeScroll.setFitToHeight(true);
+        createRecipeScroll.setFitToWidth(true);
         createRecipeScroll.setContent(createRecipe);
         createRecipeScroll.setHbarPolicy(ScrollBarPolicy.NEVER);
         //createRecipeScroll.setFitToWidth( true );
@@ -192,20 +201,29 @@ public class ViewController {
 	 */
 	
 	public void moveToRecipe() {
-		 theWindow.setTop( theHUD );
-	     theWindow.setCenter( scrollForRecipe );
-	     theWindow.setLeft(null);
-	     theWindow.setRight(null);
-	     theWindow.setBottom(null);		
+		theWindow.setTop( theHUD );
+	    theWindow.setCenter( scrollForRecipe );
+	    theWindow.setLeft(null);
+	    theWindow.setRight(null);
+	    theWindow.setBottom(null);		
 		
 	}
 	
 	public void moveToCreateRecipe() {
 		theWindow.setTop( theHUD );
-	     theWindow.setCenter( createRecipeScroll );
-	     theWindow.setLeft(null);
-	     theWindow.setRight(null);
-	     theWindow.setBottom(null);		
+	    theWindow.setCenter( createRecipeScroll );
+	    theWindow.setLeft(null);
+	    theWindow.setRight(null);
+	    theWindow.setBottom(null);		
+	}
+	
+	public void moveToAccountView() {
+		accountView.setUser(getCurrentUser());
+		theWindow.setTop( theHUD );
+	    theWindow.setCenter( accountView );
+	    theWindow.setLeft(null);
+	    theWindow.setRight(null);
+	    theWindow.setBottom(null);	
 	}
     
     
@@ -233,6 +251,37 @@ public class ViewController {
     		return "User account for this email already exists!";
     	}
     	 
+    }
+    
+    /*
+     * ADD INGREDIENT
+     * wrapper over DBAccess method
+     */
+    public String addIngredient(String name, String recipeName, String recipeCreator, float amount, String unit) {
+    	
+    	return dbaccess.addIngredient(name, recipeName, recipeCreator, amount, unit);
+
+    }
+    
+    /*
+     * ADD Instruction
+     * wrapper over DBAccess method
+     */
+    public String addInstruction(String recipeName, String recipeCreator, String text) {
+    	
+    	return dbaccess.addInstruction(recipeName,recipeCreator, text);
+    	
+    }
+    
+
+    public String addRecipe(String recipeName, String creator) {
+    	
+    	Recipe temp = dbaccess.getRecipe(recipeName, creator);
+    	if (temp == null) {
+    		return dbaccess.addRecipe(recipeName, creator, 0, 0);
+    	} else {
+    		return "recipe already exitsts";
+    	}
     }
     
     /**

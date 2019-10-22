@@ -40,4 +40,12 @@ public class User {
 		return this.password;
 	}
 	
+	// changes by Joseph Corona
+	// ------------------------------------------------------------------------
+	public String getFullName() {
+		return firstName+" "+lastName;
+	}
+	// ------------------------------------------------------------------------
+
+	
 }
