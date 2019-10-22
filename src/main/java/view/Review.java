@@ -18,6 +18,7 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -25,7 +26,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class Review extends VBox{
+public class Review extends BorderPane{
 	private ViewController viewController;
 	private Button Back;
 	private Button Submit;
@@ -81,13 +82,12 @@ public class Review extends VBox{
         dialogHbox3.setAlignment(Pos.BOTTOM_CENTER);
         dialogHbox3.setSpacing(300);
         
-        VBox dialogVbox = new VBox(title, dialogHbox1, dialogHbox2, textAreaTitle, reviewText,
-        		dialogHbox3);
+        VBox dialogVbox = new VBox(title, dialogHbox1, dialogHbox2, textAreaTitle);
         dialogVbox.setSpacing(20);
         dialogVbox.setAlignment(Pos.CENTER_LEFT);
-        this.getChildren().add(dialogVbox);
-
-        
+        this.setTop(dialogVbox);
+        this.setCenter(reviewText);
+        this.setBottom(dialogHbox3);
         
 		// set up the background image
         try
