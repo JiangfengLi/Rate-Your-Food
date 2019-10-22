@@ -202,8 +202,7 @@ public class ViewController {
 	 * MOVE TO RECIPEVIEW
 	 * moves to the recipe view of the 
 	 * recipepreview clicked on
-	 */
-	
+	 */	
 	public void moveToRecipe() {
 		 theWindow.setTop( theHUD );
 	     theWindow.setCenter( scrollForRecipe );
@@ -212,7 +211,12 @@ public class ViewController {
 	     theWindow.setBottom(null);		
 		
 	}
-	
+
+	/*
+	 * MOVE TO CREATE RECIPE
+	 * moves to the recipe view of the 
+	 * create recipe clicked on
+	 */	
 	public void moveToCreateRecipe() {
 		theWindow.setTop( theHUD );
 	     theWindow.setCenter( createRecipeScroll );
@@ -221,6 +225,11 @@ public class ViewController {
 	     theWindow.setBottom(null);		
 	}
 
+	/*
+	 * MOVE TO REVIEW
+	 * moves to the review view of the 
+	 * review clicked on
+	 */		
 	public void moveToReview(String view) {
 		// TODO Auto-generated method stub
 		theWindow.setTop( theHUD );
@@ -232,6 +241,11 @@ public class ViewController {
 		
 	}
 
+	/*
+	 * MOVE TO CART PAGE
+	 * moves to the  view of the 
+	 * cart page clicked on
+	 */			
 	public void moveToCartPage() {
 		theWindow.setTop( theHUD );
 	    theWindow.setCenter( cartPage );
