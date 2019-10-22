@@ -129,9 +129,11 @@ public class Review extends VBox{
 	protected class SetSubmitHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
 			if(returnSite != null) {
-				if(returnSite.equals("MyPage"))
+				viewController.updateReviewDB(rateSelection.getSelectionModel().getSelectedItem(), 
+						difficultySelection.getSelectionModel().getSelectedItem(), reviewText.getText());
+				if(returnSite.equals("MyPage")) 
 					viewController.moveToMyPage();
-				else
+			    else 
 					viewController.moveToRecipe();
 			}
 		}
