@@ -100,7 +100,8 @@ public class StartPage extends VBox
             		viewController,
                     recipeData.get( aRecipeIndex ).getRecipeName(),
                     "src/main/resources/images/preview.png",
-                    "Favorite " + i ) );
+                    "Favorite " + i,
+                    recipeData.get( aRecipeIndex )) );
         }
 
         aPane.setPadding( new Insets( 20, 0, 10, 0 ) );
@@ -136,7 +137,8 @@ public class StartPage extends VBox
                             viewController,
                             aRecipe.getRecipeName(),
                             "src/main/resources/images/preview.png",
-                            "tags") );
+                            "tags",
+                            aRecipe ) );
         }
 
         aPane.setPadding( new Insets( 20, 0, 10, 0 ) );
@@ -172,7 +174,8 @@ public class StartPage extends VBox
                             viewController,
                             aRecipe.getRecipeName(),
                             "src/main/resources/images/preview.png",
-                            "tags") );
+                            "tags",
+                            aRecipe ) );
         }
 
         aPane.setPadding( new Insets( 20, 0, 10, 0 ) );

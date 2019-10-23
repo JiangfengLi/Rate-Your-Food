@@ -98,7 +98,8 @@ public class MyPage extends HBox {
         			viewController,
                     "This is a title",
                     "src/main/resources/images/preview.png",
-                    "A pretty fairly long description to test how long a description can be without looking weird." ) );
+                    "A pretty fairly long description to test how long a description can be without looking weird.",
+					null) );
         	reviewObList.add(    			
         			new ReviewPreview(
                 			viewController,
