@@ -1,18 +1,29 @@
 package view;
 
-import javafx.scene.shape.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.StrokeType;
 import model.Ingredient;
 import model.Instruction;
 import model.Recipe;
-import javafx.scene.image.*;
-import javafx.geometry.*;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 
 public class RecipeView extends VBox {
 
@@ -52,25 +63,39 @@ public class RecipeView extends VBox {
 	private VBox ingredientInfo;
 	private HBox titleAndRating;
 	private HBox tagsAndDif;
-	private HBox reviewAndButton;	
+	private HBox reviewAndButton;
+
+	private Recipe theRecipe;
 	
 	private ViewController vc;
 
 	//stub method to call the view without any information in it
-	public RecipeView(ViewController vc) {
+	public RecipeView(ViewController vc, Recipe aRecipe) {
 		this.vc = vc;
+		theRecipe = aRecipe;
 		this.setAlignment(Pos.CENTER);
 		this.setPadding(new Insets(16,16,16,16));
 		this.setSpacing(8);
 		inititializeAllNodes();
-		
-		setCreatorLabel("creator");
+
+		if( theRecipe == null )
+		{
+			setCreatorLabel("creator");
+			setRecipeLabel("Recipe Name");
+			setRating(0.0);
+			setDifficulty(0);
+		}
+		else
+		{
+			setCreatorLabel(theRecipe.getCreator());
+			setRecipeLabel(theRecipe.getRecipeName());
+			setRating(theRecipe.getRating());
+			setDifficulty(theRecipe.getDifficulty());
+		}
+
 		setImage("src/main/resources/images/preview.png");
-		setRecipeLabel("Recipe Name");
 		setTags();
 		setSummary("Summary for all this blah blah blah blah blah blah blah blah blah blah blah");
-		setRating(0.0);
-		setDifficulty(0);
 		setIngredientLabel();
 		setIngredientList();
 		setInstructionsLabel();

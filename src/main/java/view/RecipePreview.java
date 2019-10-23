@@ -10,11 +10,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import model.Recipe;
 
 public class RecipePreview extends VBox
 {
-    public RecipePreview( ViewController vc, String aTitle, String aImagePath, String tags )
+    Recipe theRecipe;
+
+    public RecipePreview( ViewController vc, String aTitle, String aImagePath, String tags, Recipe aRecipe )
     {
+        theRecipe = aRecipe;
+
         // Create title
         Label theTitle = new Label( aTitle );
         theTitle.setStyle( "-fx-font-size: 12px;\n" +
@@ -54,7 +59,7 @@ public class RecipePreview extends VBox
     setOnMouseClicked(new EventHandler<MouseEvent>() {
         public void handle(MouseEvent me) {
             System.out.println("Mouse clicked!!");
-            vc.moveToRecipe();
+            vc.moveToRecipe( theRecipe );
         }
     });
     

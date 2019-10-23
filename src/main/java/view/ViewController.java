@@ -10,7 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.DBAccess;
-import model.Ingredient;
 import model.Recipe;
 import model.User;
 import view.login.CreateAccount;
@@ -83,7 +82,7 @@ public class ViewController {
         mypage = new MyPage(this);
         accountView = new AccountView(this);
         review = new Review(this);
-        recipeView = new RecipeView(this);
+        recipeView = new RecipeView(this, null);
         createRecipe = new CreateRecipeView(this);
         cartPage = new CartPage(this);
         
@@ -217,9 +216,18 @@ public class ViewController {
 	    theWindow.setCenter( scrollForRecipe );
 	    theWindow.setLeft(null);
 	    theWindow.setRight(null);
-	    theWindow.setBottom(null);		
-		
+	    theWindow.setBottom(null);
 	}
+
+    public void moveToRecipe( Recipe aRecipe ) {
+        theWindow.setTop( theHUD );
+        recipeView = new RecipeView( this, aRecipe );
+        scrollForRecipe.setContent(recipeView);
+        theWindow.setCenter( scrollForRecipe );
+        theWindow.setLeft(null);
+        theWindow.setRight(null);
+        theWindow.setBottom(null);
+    }
 
 	/*
 	 * MOVE TO CREATE RECIPE
