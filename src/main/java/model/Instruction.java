@@ -13,6 +13,8 @@ public class Instruction {
 	private String recipeCreator;
 	private String text;
 	
+	public Instruction() {}
+	
 	public Instruction(int id, String recipeName, String recipeCreator, String text) {
 		this.ID = id;
 		this.recipeName = recipeName;
