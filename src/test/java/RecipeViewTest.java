@@ -28,7 +28,7 @@ public class RecipeViewTest extends Application {
         // Create views
         HUD theHUD = new HUD(null);
         //StartPage theStartPage = new StartPage();
-        RecipeView recipeView = new RecipeView(null);
+        RecipeView recipeView = new RecipeView(null,null);
 
         // Set alignment
         BorderPane.setAlignment( theHUD, Pos.CENTER );
