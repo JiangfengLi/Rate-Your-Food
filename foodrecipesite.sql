@@ -62,6 +62,14 @@ CREATE TABLE Instruction (
 	PRIMARY KEY (ID, RecipeName, RecipeCreator)
 );
 
+CREATE TABLE Tag (
+	Name VARCHAR (50),
+	RecipeName VARCHAR (50),
+	RecipeCreator VARCHAR(30),
+	FOREIGN KEY(RecipeName, RecipeCreator) REFERENCES Recipe(RecipeName,Creator),
+	PRIMARY KEY (Name, RecipeName, RecipeCreator)
+);
+
 
 # INSERT SAMPLE DATA:
 
@@ -98,6 +106,68 @@ INSERT INTO Recipe VALUES ('southwestern brunch omelette','elizasmith@yahoo.com'
 INSERT INTO Recipe VALUES ('hot mommas hot taziki casserole','hotsoccermomma@hotmail.com',3,3);
 INSERT INTO Recipe VALUES ('orange slices for camp','hotsoccermomma@hotmail.com',4,2);
 INSERT INTO Recipe VALUES ('kitchen sink chicken dinner','hotsoccermomma@hotmail.com',2,2);
+
+
+# TAGS
+INSERT INTO Tags VALUES ('dessert','myfoods','jack@gmail.com');
+INSERT INTO Tags VALUES ('fruity','myfoods','jack@gmail.com');
+INSERT INTO Tags VALUES ('pastry','myfoods','jack@gmail.com');
+
+INSERT INTO Tags VALUES ('pastry','grandma pams potato dumplings','jack@gmail.com');
+INSERT INTO Tags VALUES ('wholesome','grandma pams potato dumplings','jack@gmail.com');
+INSERT INTO Tags VALUES ('country','grandma pams potato dumplings','jack@gmail.com');
+
+INSERT INTO Tags VALUES ('junkfood','hot cheez-it with cheez-wip','jack@gmail.com');
+INSERT INTO Tags VALUES ('cheesy','hot cheez-it with cheez-wip','jack@gmail.com');
+INSERT INTO Tags VALUES ('decadent','hot cheez-it with cheez-wip','jack@gmail.com');
+
+INSERT INTO Tags VALUES ('steak','steak with butter','john@gmail.com');
+INSERT INTO Tags VALUES ('buttery','steak with butter','john@gmail.com');
+INSERT INTO Tags VALUES ('pan-seared','steak with butter','john@gmail.com');
+
+INSERT INTO Tags VALUES ('meat-lover','meat with more meat','john@gmail.com');
+INSERT INTO Tags VALUES ('steak','meat with more meat','john@gmail.com');
+INSERT INTO Tags VALUES ('chicken','meat with more meat','john@gmail.com');
+
+INSERT INTO Tags VALUES ('appetizer','salami salad','john@gmail.com');
+INSERT INTO Tags VALUES ('salami','salami salad','john@gmail.com');
+INSERT INTO Tags VALUES ('cured meats','salami salad','john@gmail.com');
+
+INSERT INTO Tags VALUES ('burrito','joey bag o donuts','joe@gmail.com');
+INSERT INTO Tags VALUES ('filling','joey bag o donuts','joe@gmail.com');
+INSERT INTO Tags VALUES ('southwestern','joey bag o donuts','joe@gmail.com');
+
+INSERT INTO Tags VALUES ('bread','joey joes doey doughs','joe@gmail.com');
+INSERT INTO Tags VALUES ('rising','joey joes doey doughs','joe@gmail.com');
+INSERT INTO Tags VALUES ('baked','joey joes doey doughs','joe@gmail.com');
+
+INSERT INTO Tags VALUES ('greek','joeys jonesin special','joe@gmail.com');
+INSERT INTO Tags VALUES ('pastry','joeys jonesin special','joe@gmail.com');
+INSERT INTO Tags VALUES ('taziki','joeys jonesin special','joe@gmail.com');
+
+INSERT INTO Tags VALUES ('carne asada','carne asada with balsamic drizzle','elizasmith@yahoo.com');
+INSERT INTO Tags VALUES ('gourmet','carne asada with balsamic drizzle','elizasmith@yahoo.com');
+INSERT INTO Tags VALUES ('elegant','carne asada with balsamic drizzle','elizasmith@yahoo.com');
+
+INSERT INTO Tags VALUES ('mexican','calabacitas with oaxacan cheese','elizasmith@yahoo.com');
+INSERT INTO Tags VALUES ('traditional','calabacitas with oaxacan cheese','elizasmith@yahoo.com');
+INSERT INTO Tags VALUES ('squash','calabacitas with oaxacan cheese','elizasmith@yahoo.com');
+
+INSERT INTO Tags VALUES ('southwestern','southwestern brunch omelette','elizasmith@yahoo.com');
+INSERT INTO Tags VALUES ('breakfast','southwestern brunch omelette','elizasmith@yahoo.com');
+INSERT INTO Tags VALUES ('brunch','southwestern brunch omelette','elizasmith@yahoo.com');
+
+INSERT INTO Tags VALUES ('casserole','hot mommas hot taziki casserole','hotsoccermomma@hotmail.com');
+INSERT INTO Tags VALUES ('taziki','hot mommas hot taziki casserole','hotsoccermomma@hotmail.com');
+INSERT INTO Tags VALUES ('turkey','hot mommas hot taziki casserole','hotsoccermomma@hotmail.com');
+
+INSERT INTO Tags VALUES ('fruit','orange slices for camp','hotsoccermomma@hotmail.com');
+INSERT INTO Tags VALUES ('sweet','orange slices for camp','hotsoccermomma@hotmail.com');
+INSERT INTO Tags VALUES ('easy','orange slices for camp','hotsoccermomma@hotmail.com');
+
+INSERT INTO Tags VALUES ('left-overs','kitchen sink chicken dinner','hotsoccermomma@hotmail.com');
+INSERT INTO Tags VALUES ('wholesome','kitchen sink chicken dinner','hotsoccermomma@hotmail.com');
+INSERT INTO Tags VALUES ('easy','kitchen sink chicken dinner','hotsoccermomma@hotmail.com');
 
 
 

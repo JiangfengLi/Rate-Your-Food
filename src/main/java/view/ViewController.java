@@ -281,7 +281,21 @@ public class ViewController {
 	
 	}
 
+    /**
+     * returnStage
+     * 
+     * returns stage
+     */    
+	public Stage returnStage() {
+		return this.stage;
+	}
     
+
+	public HUD getHud()
+    {
+        return theHUD;
+    }
+	
     // ******************************** INTERFACE FOR VIEWS ACCESSING THE MODEL ****************************
     /**
      * GET CURRENT USER
@@ -368,20 +382,6 @@ public class ViewController {
 		dbaccess.addReview(getCurrentUser().getEmail(), "Bla Bla", "David@hotmail.com", text, difficulty, rating);
 	}
 
-    /**
-     * returnStage
-     * 
-     * returns stage
-     */    
-	public Stage returnStage() {
-		return this.stage;
-	}
-    
-
-	public HUD getHud()
-    {
-        return theHUD;
-    }
 
     
 }
