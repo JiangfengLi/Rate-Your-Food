@@ -22,7 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class Review extends BorderPane{
+public class Review extends VBox{
 	private ViewController viewController;
 	private Button Back;
 	private Button Submit;
@@ -48,6 +48,10 @@ public class Review extends BorderPane{
         // set up text Area
         reviewText = new TextArea();	   
         reviewText.setWrapText(true);
+        reviewText.setPrefHeight(100);
+        //reviewText.setPrefWidth(50);
+        reviewText.setMaxWidth(300);
+        
         
         // create labels
         title = new Label("Review ");
@@ -67,30 +71,35 @@ public class Review extends BorderPane{
         difficulty.setFont(Font.font(null, FontWeight.BOLD, 14));     
 
         HBox dialogHbox1 = new HBox(rating, rateSelection);
-        dialogHbox1.setAlignment(Pos.CENTER_LEFT);
+        dialogHbox1.setAlignment(Pos.CENTER);
         dialogHbox1.setSpacing(10);
         
         HBox dialogHbox2 = new HBox(difficulty, difficultySelection);
-        dialogHbox2.setAlignment(Pos.CENTER_LEFT);
+        dialogHbox2.setAlignment(Pos.CENTER);
         dialogHbox2.setSpacing(10);
 
         HBox dialogHbox3 = new HBox(Back, Submit);
         dialogHbox3.setAlignment(Pos.BOTTOM_CENTER);
         dialogHbox3.setSpacing(300);
         
-        VBox dialogVbox = new VBox(title, dialogHbox1, dialogHbox2, textAreaTitle);
-        dialogVbox.setSpacing(20);
-        dialogVbox.setAlignment(Pos.CENTER_LEFT);
-        this.setTop(dialogVbox);
-        this.setCenter(reviewText);
-        this.setBottom(dialogHbox3);
+        //VBox dialogVbox = new VBox(title, dialogHbox1, dialogHbox2, textAreaTitle);
+        //dialogVbox.setSpacing(20);
+       // dialogVbox.setAlignment(Pos.CENTER_LEFT);
+        
+        this.getChildren().addAll(title, dialogHbox1, dialogHbox2, textAreaTitle, reviewText, dialogHbox3);
+        this.setSpacing(20);
+        this.setAlignment(Pos.CENTER);
+        
+        //this.setTop(dialogVbox);
+        //this.setCenter(reviewText);
+        //this.setBottom(dialogHbox3);
         
 		// set up the background image
         try
         {
             Image background = new Image( new FileInputStream( "src/main/resources/images/food_review_image.jpg" ) );
             BackgroundSize aSize = new BackgroundSize( 1920, 700, true, true, true, true );
-            dialogVbox.setBackground( new Background( new BackgroundImage( background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, aSize ) ) );
+            this.setBackground( new Background( new BackgroundImage( background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, aSize ) ) );
         } catch ( IOException IOE )
         {
         	IOE.printStackTrace();
