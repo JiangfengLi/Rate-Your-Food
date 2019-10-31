@@ -1,6 +1,7 @@
 package view;
 
 import java.io.FileInputStream;
+import java.util.List;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,6 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.DBAccess;
 import model.Recipe;
+import model.Review;
 import model.User;
 import view.login.CreateAccount;
 import view.login.LogInRoot;
@@ -81,7 +83,7 @@ public class ViewController {
         theStartPage = new StartPage(this);
         mypage = new MyPage(this);
         accountView = new AccountView(this);
-        recipeView = new RecipeView(this, null);
+//        recipeView = new RecipeView(this, null);
         createRecipe = new CreateRecipeView(this);
         cartPage = new CartPage(this);
         
