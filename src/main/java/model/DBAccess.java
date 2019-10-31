@@ -144,10 +144,14 @@ public class DBAccess implements DatabaseInterface{
 	/**
 	 * ADD USER 
 	 * creates the new User, adds a user to database, logs them in
-	 * 		assumes that you have already validated that the user doesn't already exist before
+	 * 		validates that the user doesn't already exist before
 	 * returns null if successful, or error message if otherwise
 	 */
 	public String addUser(String email, String firstName, String lastName, String password) {
+    	User existingUser = getUser(email);
+    	if (existingUser != null) {
+    		return "User account for this email already exists!";
+    	}
 		// add user to the DB
 		try {
 			Connection conn = establishConnection();
@@ -236,8 +240,6 @@ public class DBAccess implements DatabaseInterface{
 		
 	}
 	
-	//	private static final String UPDATE_USER = "UPDATE User SET FirstName=? AND LastName=? AND Password=? WHERE Email=?;";
-
 	/**
 	 * UPDATE USER
 	 * allows you to update firstname, lastname, or password - then updates currentUser to reflect change
@@ -404,8 +406,7 @@ public class DBAccess implements DatabaseInterface{
 	}
 	
 	/**
-	 * SEARCH RECIPES HELPER
-	 * handles common logic for searchRecipes
+	 * SEARCH RECIPES
 	 * @param searchKey
 	 * @return
 	 */
@@ -487,7 +488,6 @@ public class DBAccess implements DatabaseInterface{
 		return null;
 	}
 	
-	// 	private static final String UPDATE_RECIPE = "UPDATE Recipe SET RecipeName=?, Difficulty=?, Rating=? WHERE RecipeName=? AND Creator=?;";
 	/**
 	 * UPDATE RECIPE
 	 * allows you to update recipename, difficulty, and rating for a recipe
@@ -1011,7 +1011,6 @@ public class DBAccess implements DatabaseInterface{
 	// **********************************************************************
 	// ************************** INSTRUCTION INTERFACE *********************
 	
-	//	private static final String GET_INSTRUCTIONS_BY_TEXT = "SELECT * FROM Instruction WHERE RecipeName=? AND RecipeCreator=? AND Text=?;";
 	/**
 	 * GET INSTRUCTION
 	 * gets an instruction based on relative position, recipe name, recipe creator, and text
