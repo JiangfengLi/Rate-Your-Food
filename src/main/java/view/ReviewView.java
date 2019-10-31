@@ -56,7 +56,7 @@ public class ReviewView extends VBox{
         reviewText.setWrapText(true);
         reviewText.setMaxHeight(150);
         //eviewText.setPrefWidth(50);
-        reviewText.setMaxWidth(600);
+        reviewText.setMaxWidth(550);
                
         // create labels
         title = new Label("Review ");
