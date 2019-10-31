@@ -1,3 +1,4 @@
+
 package model;
 
 /**
@@ -6,7 +7,7 @@ package model;
  * @author Alexander Miller
  *
  */
-public class Tag {
+public class Tag extends DataObject {
 
 	private String name;
 	private String recipeName;
@@ -16,6 +17,34 @@ public class Tag {
 		this.name=name;
 		this.recipeName=recipeName;
 		this.recipeCreator=recipeCreator;
+	}
+	
+	/**
+	 * EQUALS
+	 * returns true if both non-null Review instances with all of the instance fields the same, false otherwise
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj instanceof Tag) {
+			Tag tag = (Tag) obj;
+			
+			// compare authors
+			boolean namesSame = compareTwoStrings(this.name,tag.getName());
+			
+			// compare recipeNames
+			boolean recipeNamesSame = compareTwoStrings(this.recipeName,tag.getRecipeName());
+			
+			// compare recipeCreators
+			boolean recipeCreatorsSame = compareTwoStrings(this.recipeCreator,tag.getRecipeCreator());
+			
+			return namesSame && recipeNamesSame && recipeCreatorsSame;
+			
+		} else {
+			return false;
+		}
 	}
 	
 	// GETTERS

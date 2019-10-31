@@ -310,7 +310,7 @@ public class CreateRecipeView extends GridPane {
 
 			if (!name.isEmpty() && !ingredients.isEmpty() && !instructions.isEmpty() && tags.length > 0) {
 				
-				viewController.addRecipe(name, user);
+				//viewController.addRecipe(name, user);
 				
 				for (int i = 0; i < ingredients.size(); i++) {
 					
