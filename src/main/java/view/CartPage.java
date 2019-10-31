@@ -9,14 +9,20 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import model.Ingredient;
 
 /**
@@ -26,7 +32,7 @@ import model.Ingredient;
  * @author Jiangfeng Li, Eric Thomas
  */
 
-public class CartPage extends HBox
+public class CartPage extends BorderPane
 {
 	private ViewController viewController;
 	private Button increaseQuantity;
@@ -38,8 +44,6 @@ public class CartPage extends HBox
 
 
 	public CartPage(ViewController viewController) {
-		setAlignment(Pos.CENTER);
-		setSpacing( 10 );
 		this.viewController = viewController;
 
 		// set up the background image
@@ -67,11 +71,12 @@ public class CartPage extends HBox
 
 		ScrollPane scrollPane = new ScrollPane(  );
 		scrollPane.setMaxHeight( 750 );
-		scrollPane.setFitToHeight(true);
-		scrollPane.prefWidth( 500 );
-
+		scrollPane.setFitToHeight( true );
+		scrollPane.setFitToWidth( true );
+		scrollPane.setHbarPolicy( ScrollPane.ScrollBarPolicy.NEVER );
 
 		TableView tableView = new TableView();
+		tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
 		TableColumn<String, Ingredient> column1 = new TableColumn<>("Ingredient");
 		column1.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -102,8 +107,25 @@ public class CartPage extends HBox
 		changeQuantityBox.setSpacing(20);
 		changeQuantityBox.setAlignment( Pos.CENTER_LEFT );
 
+		HBox cartBox = new HBox(  );
+		cartBox.setAlignment( Pos.CENTER );
+		cartBox.setSpacing( 10 );
+		cartBox.getChildren().addAll( scrollPane, changeQuantityBox );
 
-		getChildren().addAll( scrollPane, changeQuantityBox );
+		InnerShadow is = new InnerShadow();
+		is.setOffsetX(4.0f);
+		is.setOffsetY(4.0f);
+
+		Text header = new Text();
+		header.setEffect(is);
+		header.setText("Your Cart");
+		header.setFill( Color.GOLD);
+		header.setFont( Font.font( "DecoType Naskh", FontWeight.BOLD, 100));
+
+		setTop( header );
+		setCenter( cartBox );
+
+		setAlignment( header, Pos.CENTER );
 		
 		//set createRecipe button to move to CreateTRecipeView
 		//createRecipe.setOnAction(ae -> {
