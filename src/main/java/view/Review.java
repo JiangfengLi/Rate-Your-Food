@@ -39,9 +39,6 @@ public class Review extends VBox{
 	public Review(ViewController viewController2) {
 		this.viewController = viewController2;
 		
-	    // create a pop up dialog
-        //final Stage dialog = new Stage();
-        //dialog.setTitle("Review");
         Back = new Button("Back");
         Submit = new Button("Submit");
         
