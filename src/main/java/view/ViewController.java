@@ -41,7 +41,7 @@ public class ViewController {
     private HUD theHUD;
     private StartPage theStartPage;
     private MyPage mypage;
-    private Review review;
+    private ReviewView reviewView;
     private RecipeView recipeView;
     private CreateRecipeView createRecipe;
     private AccountView accountView;
@@ -81,7 +81,6 @@ public class ViewController {
         theStartPage = new StartPage(this);
         mypage = new MyPage(this);
         accountView = new AccountView(this);
-        review = new Review(this);
         recipeView = new RecipeView(this, null);
         createRecipe = new CreateRecipeView(this);
         cartPage = new CartPage(this);
@@ -211,14 +210,6 @@ public class ViewController {
 	 * moves to the recipe view of the 
 	 * recipepreview clicked on
 	 */	
-	public void moveToRecipe() {
-		theWindow.setTop( theHUD );
-	    theWindow.setCenter( scrollForRecipe );
-	    theWindow.setLeft(null);
-	    theWindow.setRight(null);
-	    theWindow.setBottom(null);
-	}
-
     public void moveToRecipe( Recipe aRecipe ) {
         theWindow.setTop( theHUD );
         recipeView = new RecipeView( this, aRecipe );
@@ -256,11 +247,12 @@ public class ViewController {
 	 * moves to the review view of the 
 	 * review clicked on
 	 */		
-	public void moveToReview(String view) {
+	public void moveToReview(String backVeiw, Recipe theRecipe) {
 		// TODO Auto-generated method stub
+        reviewView = new ReviewView(this, theRecipe);
 		theWindow.setTop( theHUD );
-		review.setReturnPoint(view);
-	    theWindow.setCenter( review );
+		reviewView.setReturnPoint(backVeiw);
+	    theWindow.setCenter( reviewView );
 	    theWindow.setLeft(null);
 	    theWindow.setRight(null);
 	    theWindow.setBottom(null);		
@@ -376,10 +368,12 @@ public class ViewController {
      * UPDATE REVIEW DB 
      * wrapper over DBAccess method give sudo value to 'recipeName' and 'recipeCreator'
      * returns NONE	
+     * @param string2 
+     * @param string 
      */    
-	public void updateReviewDB(Integer rating, Integer difficulty, String text) {
+	public void updateReviewDB(String RecipeName, String Creator, Integer rating, Integer difficulty, String text) {
 		// TODO Auto-generated method stub
-		dbaccess.addReview(getCurrentUser().getEmail(), "Bla Bla", "David@hotmail.com", text, difficulty, rating);
+		dbaccess.addReview(getCurrentUser().getEmail(), RecipeName, Creator, text, difficulty, rating);
 	}
 
 
