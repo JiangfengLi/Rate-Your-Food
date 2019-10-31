@@ -1,6 +1,7 @@
 package view;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
@@ -11,6 +12,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -21,69 +23,123 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import model.Recipe;
 
-public class Review extends VBox{
+public class ReviewView extends VBox{
 	private ViewController viewController;
 	private Button Back;
 	private Button Submit;
 	private TextArea reviewText;
+	private ImageView foodImg;
 	private Label title;
+	private Label Author;
+	private Label RecipeName;
+	private Label RecipeCreator;
 	private Label rating;
     private Label difficulty;
     private Label textAreaTitle;
     private ChoiceBox<Integer> rateSelection;
     private ChoiceBox<Integer> difficultySelection;
     private static String returnSite;
+    private Recipe reviewRecipe;
 
 	
-	public Review(ViewController viewController2) {
+	public ReviewView(ViewController viewController2, Recipe theRecipe) {
 		this.viewController = viewController2;
-		
+		this.reviewRecipe = theRecipe;
+				
         Back = new Button("Back");
         Submit = new Button("Submit");
         
         // set up text Area
         reviewText = new TextArea();	   
         reviewText.setWrapText(true);
-        reviewText.setPrefHeight(100);
-        //reviewText.setPrefWidth(50);
-        reviewText.setMaxWidth(300);
-        
-        
+        reviewText.setMaxHeight(150);
+        //eviewText.setPrefWidth(50);
+        reviewText.setMaxWidth(600);
+               
         // create labels
         title = new Label("Review ");
+        title.setAlignment(Pos.TOP_CENTER);     
+        title.setStyle( "-fx-font-size: 20px;\n" + "    -fx-font-weight: bold;\n" +
+                "    -fx-text-fill: #ffff00;\n" +
+                "    -fx-effect: dropshadow( gaussian , rgba(255,255,0,0.5) , 0,0,0,1 );\n" +
+                "    -fx-underline: false;" );        
+        
+        Author = new Label("Author: " + viewController.getCurrentUser().getEmail());
+        Author.setStyle( "-fx-font-size: 14px;\n" + "    -fx-font-weight: bold;\n" +
+                "    -fx-text-fill: #ffff00;\n" +
+                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
+                "    -fx-underline: false;" );    
+        
+        RecipeName = new Label("RecipeName: " + reviewRecipe.getRecipeName());
+        RecipeName.setStyle( "-fx-font-size: 14px;\n" + "    -fx-font-weight: bold;\n" +
+                "    -fx-text-fill: #ffff00;\n" +
+                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
+                "    -fx-underline: false;" );
+        
+        RecipeCreator = new Label("RecipeCreator: " + reviewRecipe.getCreator());
+        RecipeCreator.setStyle( "-fx-font-size: 14px;\n" + "    -fx-font-weight: bold;\n" +
+                "    -fx-text-fill: #ffff00;\n" +
+                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
+                "    -fx-underline: false;" );
+        
         rating = new Label("Rating: ");
+        rating.setStyle( "-fx-font-size: 14px;\n" + "    -fx-font-weight: bold;\n" +
+                "    -fx-text-fill: #ffff00;\n" +
+                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
+                "    -fx-underline: false;" );        
+        
         difficulty = new Label("Difficulty: ");
-        textAreaTitle = new Label("Text ");
+        difficulty.setStyle( "-fx-font-size: 14px;\n" + "    -fx-font-weight: bold;\n" +
+                "    -fx-text-fill: #ffff00;\n" +
+                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
+                "    -fx-underline: false;" );    
+        
+        textAreaTitle = new Label("Text");
+        textAreaTitle.setStyle( "-fx-font-size: 14px;\n" +
+                "    -fx-font-weight: bold;\n" +
+                "    -fx-text-fill: #ffff00;\n" +
+                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
+                "    -fx-underline: false;" );
+        textAreaTitle.setAlignment(Pos.CENTER_LEFT);
+        
+        foodImg = setImage("src/main/resources/images/preview.png");
         
         //set up choice box
         rateSelection = new ChoiceBox<>();
-        difficultySelection = new ChoiceBox<>();	
+        rateSelection.getItems().addAll(1, 2, 3, 4, 5);       
+        rateSelection.getSelectionModel().select(reviewRecipe.getRating() - 1 );
         
-        rateSelection.getItems().addAll(1, 2, 3, 4, 5);
+        difficultySelection = new ChoiceBox<>();       
         difficultySelection.getItems().addAll(1, 2, 3, 4, 5);
-        
-        title.setFont(Font.font(null, FontWeight.BOLD, 30));
-        rating.setFont(Font.font(null, FontWeight.BOLD, 14));
-        difficulty.setFont(Font.font(null, FontWeight.BOLD, 14));     
+        difficultySelection.getSelectionModel().select(reviewRecipe.getRating() - 1 );        
 
         HBox dialogHbox1 = new HBox(rating, rateSelection);
-        dialogHbox1.setAlignment(Pos.CENTER);
+//        dialogHbox1.setAlignment(Pos.CENTER);
         dialogHbox1.setSpacing(10);
         
         HBox dialogHbox2 = new HBox(difficulty, difficultySelection);
-        dialogHbox2.setAlignment(Pos.CENTER);
+//        dialogHbox2.setAlignment(Pos.CENTER);
         dialogHbox2.setSpacing(10);
 
         HBox dialogHbox3 = new HBox(Back, Submit);
         dialogHbox3.setAlignment(Pos.BOTTOM_CENTER);
         dialogHbox3.setSpacing(300);
         
-        //VBox dialogVbox = new VBox(title, dialogHbox1, dialogHbox2, textAreaTitle);
-        //dialogVbox.setSpacing(20);
-       // dialogVbox.setAlignment(Pos.CENTER_LEFT);
+        VBox dialogVbox = new VBox(Author, RecipeName, RecipeCreator, dialogHbox1, dialogHbox2, textAreaTitle);
+        dialogVbox.setSpacing(20);
+        dialogVbox.setAlignment(Pos.CENTER_LEFT);
         
-        this.getChildren().addAll(title, dialogHbox1, dialogHbox2, textAreaTitle, reviewText, dialogHbox3);
+        HBox inFoAndImg = new HBox(dialogVbox, foodImg);
+        inFoAndImg.setSpacing(20);
+        inFoAndImg.setAlignment(Pos.CENTER);
+        
+        VBox commentArea = new VBox(inFoAndImg, reviewText);
+        commentArea.setSpacing(10);
+        commentArea.setAlignment(Pos.CENTER);
+       
+        this.getChildren().addAll(title, commentArea, dialogHbox3);
         this.setSpacing(20);
         this.setAlignment(Pos.CENTER);
         
@@ -109,6 +165,18 @@ public class Review extends VBox{
 		
 	}
 
+	private ImageView setImage(String url) {
+		ImageView imageView = new ImageView();
+		imageView.setPreserveRatio(true);
+		imageView.setFitHeight(250);
+		try {
+			imageView.setImage(new Image(new FileInputStream(url)));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return imageView;
+	}
+
 	/**
 	 * BACK HANDLER
 	 * inside class to navigate back to log in root
@@ -119,7 +187,7 @@ public class Review extends VBox{
 				if(returnSite.equals("MyPage"))
 					viewController.moveToMyPage();
 				else
-					viewController.moveToRecipe();
+					viewController.moveToRecipe(reviewRecipe);
 			}
 		}
 	}
@@ -131,19 +199,20 @@ public class Review extends VBox{
 	protected class SetSubmitHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
 			if(returnSite != null) {
-				viewController.updateReviewDB(rateSelection.getSelectionModel().getSelectedItem(), 
-						difficultySelection.getSelectionModel().getSelectedItem(), reviewText.getText());
+				viewController.updateReviewDB(reviewRecipe.getRecipeName(), reviewRecipe.getCreator(), 
+						rateSelection.getValue(), difficultySelection.getValue(), reviewText.getText());
+				System.out.println("Review sent to database successfully");
 				if(returnSite.equals("MyPage")) 
 					viewController.moveToMyPage();
 			    else 
-					viewController.moveToRecipe();
+					viewController.moveToRecipe(reviewRecipe);
 			}
 		}
 	}
 
-	public void setReturnPoint(String view) {
+	public void setReturnPoint(String backVeiw) {
 		// TODO Auto-generated method stub
-		returnSite = view;
+		returnSite = backVeiw;
 	}
 
 }
