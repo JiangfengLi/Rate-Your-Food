@@ -27,7 +27,7 @@ public interface DatabaseInterface {
 	public List<Recipe> getAllRecipesByTag(String name);
 	public List<Recipe> searchRecipes(String searchKey);
 	public String deleteRecipe(String recipeName, String creator);
-	public String updateRecipe(String recipeName, String creator, int difficulty, int rating);
+	public String updateRecipe(String oldRecipeName, String creator, String newRecipeName, int difficulty, int rating);
 	
 	// MANAGING REVIEWS
 	public Review getReview(String author, String recipeName, String recipeCreator);
@@ -36,23 +36,24 @@ public interface DatabaseInterface {
 	public List<Review> getAllReviewsByAuthor(String author);
 	public List<Review> getAllReviews();
 	public String deleteReview(String author, String recipeName, String recipeCreator);
-	public String updateReview(String author, String recipeName, String recipeCreator, String text, int difficulty, int rating);
+	public String updateReview(String author, String oldRecipeName, String oldRecipeCreator, 
+			String newRecipeName, String newRecipeCreator, String text, int difficulty, int rating);
 	
 	// MANAGING INGREDIENTS
 	public Ingredient getIngredient(String name, String recipeName, String recipeCreator);
 	public String addIngredient(String name, String recipeName, String recipeCreator, float amount, String unit);
 	public List<Ingredient> getAllIngredientsForRecipe(String recipeName, String recipeCreator);
 	public String deleteIngredient(String name, String recipeName, String recipeCreator);
-	public String updateIngredient(String name, String recipeName, String recipeCreator, float amount, String unit);
+	public String updateIngredient(String oldName, String recipeName, String recipeCreator, String newName, float amount, String unit);
 	
 	// MANAGING INSTRUCTIONS
 	public Instruction getInstruction(Integer relativePosition, String recipeName, String recipeCreator, String text);
 	public String addInstruction(String recipeName, String recipeCreator, String text);
 	public List<Instruction> getAllInstructionsForRecipe(String recipeName, String recipeCreator);
 	public String deleteInstruction(Integer relativePosition, String recipeName, String recipeCreator, String text);
-	public String updateInstruction(Integer relativePosition, String recipeName, String recipeCreator, String text);
+	public String updateInstruction(Integer relativePosition, String recipeName, String recipeCreator, String oldText, String newText);
 	
-	// MANAGING TAGSg
+	// MANAGING TAGS
 	public Tag getTag(String name, String recipeName, String recipeCreator);
 	public String addTag(String name, String recipeName, String recipeCreator);
 	public List<Tag> getAllTagsByName(String name);
