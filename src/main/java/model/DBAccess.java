@@ -27,7 +27,7 @@ public class DBAccess implements DatabaseInterface{
 	private static final String GET_USER_BY_EMAIL = "SELECT * FROM User WHERE Email=?;";
 	private static final String ADD_USER = "INSERT INTO User(Email, FirstName, LastName, Password) VALUES(?,?,?,?);";
 	private static final String DELETE_USER = "DELETE FROM User WHERE Email = ?;";
-	private static final String UPDATE_USER = "UPDATE User SET FirstName=? AND LastName=? AND Password=? WHERE Email=?;";
+	private static final String UPDATE_USER = "UPDATE User SET FirstName=?, LastName=?, Password=? WHERE Email=?;";
 	
 	// Recipe Queries
 	private static final String GET_RECIPE = "SELECT * FROM Recipe WHERE RecipeName=? AND Creator=?;";
@@ -39,8 +39,8 @@ public class DBAccess implements DatabaseInterface{
 	private static final String SEARCH_RECIPES = "SELECT * FROM Recipe WHERE RecipeName LIKE ?;";
 	private static final String DELETE_RECIPE = "DELETE FROM Recipe WHERE RecipeName=? AND Creator=?;";
 	private static final String DELETE_ALL_RECIPES_FOR_USER = "DELETE FROM Recipe WHERE Creator=?;";
-	private static final String UPDATE_RECIPE = "UPDATE Recipe SET RecipeName=? AND Difficulty=? AND Rating=? WHERE RecipeName=? AND Creator=?;";
-	 
+	private static final String UPDATE_RECIPE = "UPDATE Recipe SET RecipeName=?, Difficulty=?, Rating=? WHERE RecipeName=? AND Creator=?;";
+
 	// Review Queries
 	private static final String GET_REVIEW = "SELECT * FROM Review WHERE Author=? AND RecipeName=? AND RecipeCreator=?;";
 	private static final String ADD_REVIEW = "INSERT INTO Review(Author, RecipeName, RecipeCreator, Text, Difficulty, Rating) VALUES(?,?,?,?,?,?);";
@@ -50,8 +50,9 @@ public class DBAccess implements DatabaseInterface{
 	private static final String DELETE_REVIEW = "DELETE FROM Review WHERE Author = ? AND RecipeName = ? AND RecipeCreator = ?;";
 	private static final String DELETE_ALL_REVIEWS_FOR_USER = "DELETE FROM Review WHERE Author = ? OR RecipeCreator = ?;";
 	private static final String DELETE_ALL_REVIEWS_FOR_RECIPE = "DELETE FROM Review WHERE RecipeName = ? AND RecipeCreator = ?;";
-	private static final String UPDATE_REVIEW = "UPDATE Review SET RecipeName=? AND RecipeCreator=? AND Text=? AND Difficulty=? AND Rating=? WHERE Author=? AND RecipeName=? AND RecipeCreator=?;";
-	
+	private static final String UPDATE_REVIEW = "UPDATE Review SET RecipeName=?, RecipeCreator=?, Text=?, Difficulty=?, Rating=? WHERE Author=? AND RecipeName=? AND RecipeCreator=?;";
+	private static final String UPDATE_ALL_REVIEWS_FOR_RECIPE = "UPDATE Review SET RecipeName=? WHERE RecipeName=? AND RecipeCreator=?;";
+
 	// Ingredient Queries
 	private static final String GET_INGREDIENT = "SELECT * FROM Ingredient WHERE Name=? AND RecipeName=? AND RecipeCreator=?;";
 	private static final String ADD_INGREDIENT = "INSERT INTO Ingredient(Name, RecipeName, RecipeCreator, Amount, Unit) VALUES(?,?,?,?,?);";
@@ -59,8 +60,9 @@ public class DBAccess implements DatabaseInterface{
 	private static final String DELETE_INGREDIENT = "DELETE FROM Ingredient WHERE Name=? AND RecipeName=? AND RecipeCreator=?;";
 	private static final String DELETE_ALL_INGREDIENTS_FOR_RECIPE = "DELETE FROM Ingredient WHERE RecipeName=? AND RecipeCreator=?;";
 	private static final String DELETE_ALL_INGREDIENTS_FOR_USER = "DELETE FROM Ingredient WHERE RecipeCreator=?;";
-	private static final String UPDATE_INGREDIENT = "UPDATE Ingredient SET Name=? AND Amount=? AND Unit=? WHERE Name=? AND RecipeName=? AND RecipeCreator=?;";
-	
+	private static final String UPDATE_INGREDIENT = "UPDATE Ingredient SET Name=?, Amount=?, Unit=? WHERE Name=? AND RecipeName=? AND RecipeCreator=?;";
+	private static final String UPDATE_ALL_INGREDIENTS_FOR_RECIPE = "UPDATE Ingredient SET RecipeName=? WHERE RecipeName=? AND RecipeCreator=?;";
+
 	// Instruction Queries
 	private static final String GET_INSTRUCTIONS_BY_TEXT = "SELECT * FROM Instruction WHERE RecipeName=? AND RecipeCreator=? AND Text=?;";
 	private static final String ADD_INSTRUCTION = "INSERT INTO Instruction(RecipeName, RecipeCreator, Text) VALUES (?,?,?);";
@@ -69,7 +71,9 @@ public class DBAccess implements DatabaseInterface{
 	private static final String DELETE_ALL_INSTRUCTIONS_FOR_RECIPE = "DELETE FROM Instruction WHERE RecipeName=? AND RecipeCreator=?;";
 	private static final String DELETE_ALL_INSTRUCTIONS_FOR_USER = "DELETE FROM Instruction WHERE RecipeCreator=?;";
 	private static final String UPDATE_INSTRUCTION = "UPDATE Instruction SET Text=? WHERE ID=? AND RecipeName=? AND RecipeCreator=?;";
+	private static final String UPDATE_ALL_INSTRUCTIONS_FOR_RECIPE = "UPDATE Instruction SET RecipeName=? WHERE RecipeName=? AND RecipeCreator=?;";
 
+	
 	// TAG QUERIES
 	private static final String GET_TAG = "SELECT * FROM Tag WHERE Name=? AND RecipeName=? AND RecipeCreator=?;";
 	private static final String ADD_TAG = "INSERT INTO Tag(Name, RecipeName, RecipeCreator) VALUES(?,?,?);";
@@ -78,6 +82,7 @@ public class DBAccess implements DatabaseInterface{
 	private static final String DELETE_TAG = "DELETE FROM Tag WHERE Name=? AND RecipeName=? AND RecipeCreator=?;";
 	private static final String DELETE_ALL_TAGS_FOR_USER = "DELETE FROM Tag WHERE RecipeCreator=?;";
 	private static final String DELETE_ALL_TAGS_FOR_RECIPE = "DELETE FROM Tag WHERE RecipeName=? AND RecipeCreator=?;";
+	private static final String UPDATE_ALL_TAGS_FOR_RECIPE = "UPDATE Tag SET RecipeName=? WHERE RecipeName=? AND RecipeCreator=?;";
 
 	// current user (who's logged in?)
 	private User currentUser;
@@ -231,6 +236,8 @@ public class DBAccess implements DatabaseInterface{
 		
 	}
 	
+	//	private static final String UPDATE_USER = "UPDATE User SET FirstName=? AND LastName=? AND Password=? WHERE Email=?;";
+
 	/**
 	 * UPDATE USER
 	 * allows you to update firstname, lastname, or password - then updates currentUser to reflect change
@@ -480,25 +487,59 @@ public class DBAccess implements DatabaseInterface{
 		return null;
 	}
 	
-	
+	// 	private static final String UPDATE_RECIPE = "UPDATE Recipe SET RecipeName=?, Difficulty=?, Rating=? WHERE RecipeName=? AND Creator=?;";
 	/**
 	 * UPDATE RECIPE
 	 * allows you to update recipename, difficulty, and rating for a recipe
+	 * 		if recipename changes, also updates related reviews, ingredients, instructions, and tags to correspond
 	 * please provide all params
 	 * returns null or error msg if problem
 	 */
-	public String updateRecipe(String recipeName, String creator, int difficulty, int rating) {
-		if (recipeName == null || creator == null || difficulty == 0 || rating == 0) {
-			return "please provide recipename, creator, non-zero difficulty, and non-zero rating";
+	public String updateRecipe(String oldRecipeName, String creator, String newRecipeName, int difficulty, int rating) {
+		if (oldRecipeName == null || creator == null || newRecipeName == null || difficulty == 0 || rating == 0) {
+			return "please provide old recipename, creator, new recipename, non-zero difficulty, and non-zero rating";
 		}
 		try {
 			Connection conn = establishConnection();
 			PreparedStatement stmt = conn.prepareStatement(UPDATE_RECIPE);
-			stmt.setString(1, recipeName);
+			stmt.setString(1, newRecipeName);
 			stmt.setInt(2, difficulty);
 			stmt.setInt(3, rating);
-			stmt.setString(4, recipeName);
+			stmt.setString(4, oldRecipeName);
 			stmt.setString(5, creator);
+			stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+		} catch (Exception x) {
+			x.printStackTrace();
+			return "ERROR with database encountered. Please try again.";
+		}
+		// if name changed, need to also update related reviews, ingredients, instructions, and tags
+		if (!oldRecipeName.equals(newRecipeName)) {
+			updateRecipeHelper(oldRecipeName,creator,newRecipeName,UPDATE_ALL_REVIEWS_FOR_RECIPE);
+			updateRecipeHelper(oldRecipeName,creator,newRecipeName,UPDATE_ALL_INGREDIENTS_FOR_RECIPE);
+			updateRecipeHelper(oldRecipeName,creator,newRecipeName,UPDATE_ALL_INSTRUCTIONS_FOR_RECIPE);
+			updateRecipeHelper(oldRecipeName,creator,newRecipeName,UPDATE_ALL_TAGS_FOR_RECIPE);
+		}
+		return null;
+	}
+	
+	/**
+	 * UPDATE RECIPE HELPER
+	 * allows you to update all reviews, ingredients, instructions, and tags for recipe if name of recipe is changed
+	 * @param oldRecipeName
+	 * @param creator
+	 * @param newRecipeName
+	 * @param queryString
+	 * @return
+	 */
+	private String updateRecipeHelper(String oldRecipeName, String creator, String newRecipeName, String queryString) {
+		try {
+			Connection conn = establishConnection();
+			PreparedStatement stmt = conn.prepareStatement(queryString);
+			stmt.setString(1, newRecipeName);
+			stmt.setString(2, oldRecipeName);
+			stmt.setString(3, creator);
 			stmt.executeUpdate();
 			stmt.close();
 			conn.close();
@@ -508,6 +549,7 @@ public class DBAccess implements DatabaseInterface{
 		}
 		return null;
 	}
+	
 	
 	
 	// *****************************************************************
@@ -735,21 +777,23 @@ public class DBAccess implements DatabaseInterface{
 	 * please provide all params regardless
 	 * returns null or error msg if problem
 	 */
-	public String updateReview(String author, String recipeName, String recipeCreator, String text, int difficulty, int rating) {
-		if (author == null || recipeName == null || recipeCreator == null || text == null || difficulty == 0 || rating == 0) {
-			return "please provide author, recipename, recipecreator, text, non-zero difficulty, non-zero rating.";
+	public String updateReview(String author, String oldRecipeName, String oldRecipeCreator, 
+			String newRecipeName, String newRecipeCreator, String text, int difficulty, int rating) {
+		if (author == null || oldRecipeName == null || oldRecipeCreator == null || 
+				newRecipeName == null || newRecipeCreator == null || text == null || difficulty == 0 || rating == 0) {
+			return "please provide author, old recipename, old recipeCreator, new recipename, new recipecreator, text, non-zero difficulty, non-zero rating.";
 		}
 		try {
 			Connection conn = establishConnection();
 			PreparedStatement stmt = conn.prepareStatement(UPDATE_REVIEW);
-			stmt.setString(1, recipeName);
-			stmt.setString(2, recipeCreator);
+			stmt.setString(1, newRecipeName);
+			stmt.setString(2, newRecipeCreator);
 			stmt.setString(3, text);
 			stmt.setInt(4, difficulty);
 			stmt.setInt(5, rating);
 			stmt.setString(6, author);
-			stmt.setString(7, recipeName);
-			stmt.setString(8, recipeCreator);
+			stmt.setString(7, oldRecipeName);
+			stmt.setString(8, oldRecipeCreator);
 			stmt.executeUpdate();
 			stmt.close();
 			conn.close();
@@ -939,17 +983,17 @@ public class DBAccess implements DatabaseInterface{
 	 * please provide all fields
 	 * returns null or error msg if problem
 	 */
-	public String updateIngredient(String name, String recipeName, String recipeCreator, float amount, String unit) {
-		if (name == null || recipeName == null || recipeCreator == null || amount == 0 || unit == null) {
-			return "please provide name, recipename, recipe creator, non-zero amount, and unit";
+	public String updateIngredient(String oldName, String recipeName, String recipeCreator, String newName, float amount, String unit) {
+		if (oldName == null || recipeName == null || recipeCreator == null || newName == null || amount == 0 || unit == null) {
+			return "please provide oldname, recipename, recipe creator, newname, non-zero amount, and unit";
 		}
 		try {
 			Connection conn = establishConnection();
 			PreparedStatement stmt = conn.prepareStatement(UPDATE_INGREDIENT);
-			stmt.setString(1, name);
+			stmt.setString(1, newName);
 			stmt.setFloat(2, amount);
 			stmt.setString(3, unit);
-			stmt.setString(4, name);
+			stmt.setString(4, oldName);
 			stmt.setString(5, recipeName);
 			stmt.setString(6, recipeCreator);
 			stmt.executeUpdate();
@@ -989,7 +1033,7 @@ public class DBAccess implements DatabaseInterface{
     		stmt.setString(3, text);
     		ResultSet rs = stmt.executeQuery();
     		// need to extract a particular one
-    		Instruction returnInst = new Instruction();
+    		Instruction returnInst = null;
     		if (relativePosition != null) {
         		List<Instruction> instructions = new LinkedList<Instruction>();
         		while (rs.next()) {
@@ -1066,7 +1110,6 @@ public class DBAccess implements DatabaseInterface{
     	}
 	}
 	
-	
 	/**
 	 * DELETE INSTRUCTION
 	 * deletes instruction based on relative position to other instructions of same text
@@ -1078,8 +1121,6 @@ public class DBAccess implements DatabaseInterface{
     		Connection conn = establishConnection();
     		PreparedStatement stmt = conn.prepareStatement(DELETE_INSTRUCTION);
     		stmt.setInt(1, inst.getID());
-    		stmt.setString(2, recipeName);
-    		stmt.setString(3, recipeCreator);
     		int rowsDeleted = stmt.executeUpdate();
     		stmt.close();
     		conn.close();
@@ -1155,11 +1196,11 @@ public class DBAccess implements DatabaseInterface{
 	 * 		if instruction text unique, let relativePosition == null, otherwise provide relative position starting at 0
 	 * returns null or error msg if problem
 	 */
-	public String updateInstruction(Integer relativePosition, String recipeName, String recipeCreator, String text) {
-		if (recipeName == null || recipeCreator == null || text == null) {
-			return "please provide recipename, recipecreator, and text";
+	public String updateInstruction(Integer relativePosition, String recipeName, String recipeCreator, String oldText, String newText) {
+		if (recipeName == null || recipeCreator == null || oldText == null || newText == null) {
+			return "please provide recipename, recipecreator, oldtext, and newtext";
 		}
-		Instruction inst = getInstruction(relativePosition, recipeName, recipeCreator, text);
+		Instruction inst = getInstruction(relativePosition, recipeName, recipeCreator, oldText);
 		// if we cldn't find instruction go ahead and return msg
 		if (inst == null) {
 			return "couldn't find such an instruction to update";
@@ -1168,8 +1209,8 @@ public class DBAccess implements DatabaseInterface{
 		
 		try {
 			Connection conn = establishConnection();
-			PreparedStatement stmt = conn.prepareStatement(ADD_INSTRUCTION);
-			stmt.setString(1, text);
+			PreparedStatement stmt = conn.prepareStatement(UPDATE_INSTRUCTION);
+			stmt.setString(1, newText);
 			stmt.setInt(2, ID);
 			stmt.setString(3, recipeName);
 			stmt.setString(4, recipeCreator);
