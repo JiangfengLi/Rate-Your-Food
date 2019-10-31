@@ -5,7 +5,7 @@ package model;
  * @author Alexander Miller
  *
  */
-public class User {
+public class User extends DataObject {
 	
 	// INSTANCE VARIABLES
 	private String email;
@@ -24,6 +24,36 @@ public class User {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.password = password;
+	}
+	
+	/**
+	 * EQUALS
+	 * returns true if both non-null User instances with all of the instance fields the same, false otherwise
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj instanceof User) {
+			User userObj = (User) obj;
+			
+			// compare emails
+			boolean emailsSame = compareTwoStrings(this.email,userObj.getEmail());
+			
+			// compare first names
+			boolean firstNamesSame = compareTwoStrings(this.firstName,userObj.getFirstName());
+			
+			// compare last names
+			boolean lastNamesSame = compareTwoStrings(this.lastName,userObj.getLastName());
+			
+			// compare passwords
+			boolean passwordsSame = compareTwoStrings(this.password,userObj.getPassword());
+			
+			return emailsSame && firstNamesSame && lastNamesSame && passwordsSame;
+		} else {
+			return false;
+		}
 	}
 	
 	// ***************************** GETTERS *************************

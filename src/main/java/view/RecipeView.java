@@ -49,11 +49,11 @@ public class RecipeView extends VBox {
 	private TableColumn<Instruction, String> insText;
 	private Label reviewLabel;
 	private Button addReviewButton;
-	private TableView<Review> reviewList;
-	private TableColumn<Review,String> reviewAuthor;
-	private TableColumn<Review,String> reviewText;
-	private TableColumn<Review,Integer> reviewRating;
-	private TableColumn<Review,Integer> reviewDif;
+	private TableView<ReviewView> reviewList;
+	private TableColumn<ReviewView,String> reviewAuthor;
+	private TableColumn<ReviewView,String> reviewText;
+	private TableColumn<ReviewView,Integer> reviewRating;
+	private TableColumn<ReviewView,Integer> reviewDif;
 	
 	private VBox recipeSection;
 	private HBox ingredientTop;
@@ -133,10 +133,13 @@ public class RecipeView extends VBox {
 		
 	}
 
+	/**
+	 *  Button to take the users into review view and create new review
+	 */
 	private void setAddReviewButton() {
 		addReviewButton.setText("addReview");
 		addReviewButton.setOnAction(ae -> {
-		vc.moveToReview("RcipeView");
+		vc.moveToReview("RcipeView", theRecipe);
 		});
 	}
 
@@ -266,11 +269,11 @@ public class RecipeView extends VBox {
 		insText = new TableColumn<Instruction, String>();
 		reviewLabel = new Label();
 		addReviewButton = new Button();
-		reviewList = new TableView<Review>();
-		reviewAuthor = new TableColumn<Review,String>("Author");
-		reviewText = new TableColumn<Review,String>("Review");
-		reviewRating = new TableColumn<Review,Integer>("Rating");
-		reviewDif = new TableColumn<Review,Integer>("Dificulty");
+		reviewList = new TableView<ReviewView>();
+		reviewAuthor = new TableColumn<ReviewView,String>("Author");
+		reviewText = new TableColumn<ReviewView,String>("Review");
+		reviewRating = new TableColumn<ReviewView,Integer>("Rating");
+		reviewDif = new TableColumn<ReviewView,Integer>("Dificulty");
 		
 		
 		recipeSection = new VBox(8);;

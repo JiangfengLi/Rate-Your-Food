@@ -6,7 +6,7 @@ package model;
  * @author Alexander Miller
  *
  */
-public class Review {
+public class Review extends DataObject {
 
 	private String author;
 	private String recipeName;
@@ -22,6 +22,43 @@ public class Review {
 		this.text=text;
 		this.difficulty=difficulty;
 		this.rating=rating;
+	}
+	
+	/**
+	 * EQUALS
+	 * returns true if both non-null Review instances with all of the instance fields the same, false otherwise
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj instanceof Review) {
+			Review rev = (Review) obj;
+			
+			// compare authors
+			boolean authorsSame = compareTwoStrings(this.author,rev.getAuthor());
+			
+			// compare recipeNames
+			boolean recipeNamesSame = compareTwoStrings(this.recipeName,rev.getRecipeName());
+			
+			// compare recipeCreators
+			boolean recipeCreatorsSame = compareTwoStrings(this.recipeCreator,rev.getRecipeCreator());
+			
+			// compare text
+			boolean textsSame = compareTwoStrings(this.text,rev.getText());
+			
+			// compare amounts
+			boolean difficultiesSame = this.difficulty == rev.getDifficulty();
+			
+			// compare units
+			boolean ratingsSame = this.rating == rev.getRating();
+			
+			return authorsSame && recipeNamesSame && recipeCreatorsSame && textsSame && difficultiesSame && ratingsSame;
+			
+		} else {
+			return false;
+		}
 	}
 	
 	// GETTERS

@@ -6,7 +6,7 @@ package model;
  * @author Alexander Miller
  *
  */
-public class Recipe {
+public class Recipe extends DataObject {
 
 	private String recipeName;
 	private String creator;
@@ -18,6 +18,37 @@ public class Recipe {
 		this.creator = creator;
 		this.difficulty=difficulty;
 		this.rating=rating;
+	}
+	
+	/**
+	 * EQUALS
+	 * returns true if both non-null Recipe instances with all of the instance fields the same, false otherwise
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj instanceof Recipe) {
+			Recipe rec = (Recipe) obj;
+			
+			// compare recipeNames
+			boolean recipeNamesSame = compareTwoStrings(this.recipeName,rec.getRecipeName());
+			
+			// compare recipeCreators
+			boolean recipeCreatorsSame = compareTwoStrings(this.creator,rec.getCreator());
+			
+			// compare amounts
+			boolean difficultiesSame = this.difficulty == rec.getDifficulty();
+			
+			// compare units
+			boolean ratingsSame = this.rating == rec.getRating();
+			
+			return recipeNamesSame && recipeCreatorsSame && difficultiesSame && ratingsSame;
+			
+		} else {
+			return false;
+		}
 	}
 	
 	// GETTERS
