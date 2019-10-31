@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import model.Recipe;
 
 public class ReviewPreview extends VBox{
 	private Label authorLabel;
@@ -58,7 +59,7 @@ public class ReviewPreview extends VBox{
     setOnMouseClicked(new EventHandler<MouseEvent>() {
         public void handle(MouseEvent me) {
             System.out.println("Mouse clicked review!!");
-            vc.moveToReview("MyPage");
+            vc.moveToReview("MyPage", new Recipe(recipeName, recipeCreator, difficulty, rating));
         }
     });
     
