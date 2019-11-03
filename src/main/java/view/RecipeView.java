@@ -172,10 +172,18 @@ public class RecipeView extends VBox {
 		readReviewButton.setOnAction(ae -> {
 			Review newReview = reviewList.getSelectionModel().getSelectedItem();
 			if (newReview == null)
-				return;			
-			ReadReview newReadReview = new ReadReview(vc, newReview);
-			newReadReview.setReturnPoint("RcipeView");
-			vc.moveToReview(newReadReview);
+				return;					
+			
+			if(newReview.getAuthor().equals(vc.getCurrentUser().getEmail())) {
+				EditReview newReviewSubClass = new EditReview(vc, newReview);
+				newReviewSubClass.setReturnPoint("RcipeView");
+				vc.moveToReview(newReviewSubClass);
+			} else {
+				ReadReview newReviewSubClass = new ReadReview(vc, newReview);
+				newReviewSubClass.setReturnPoint("RcipeView");
+				vc.moveToReview(newReviewSubClass);
+			}
+
 		});
 	}	
 	
