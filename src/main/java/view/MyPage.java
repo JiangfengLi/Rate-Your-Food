@@ -148,7 +148,7 @@ public class MyPage extends HBox {
         			reviewData.get(i).getRecipeName(),
                     "src/main/resources/images/preview.png",
                     reviewData.get(i).getRecipeCreator(),
-                    reviewData.get(i).getRating(), reviewData.get(i).getDifficulty());
+                    reviewData.get(i).getRating(), reviewData.get(i).getDifficulty(), "MyPage");
         	newReviewPreview.updateAuthor();
         	reviewObList.add(newReviewPreview);
         			

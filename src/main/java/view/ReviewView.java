@@ -27,7 +27,7 @@ import model.Recipe;
 
 public class ReviewView extends VBox{
 	private ViewController viewController;
-	private Button Back;
+	protected Button Back;
 	private Button Submit;
 	protected TextArea reviewText;
 	protected ImageView foodImg;

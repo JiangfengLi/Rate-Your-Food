@@ -16,10 +16,22 @@ public class ReadReview extends ReviewView{
 		super(viewController2, new Recipe(theReview2.getRecipeName(), theReview2.getRecipeCreator(),
 				theReview2.getDifficulty(), theReview2.getRating()));
         Label rating_Label = new Label("rating: " + theReview2.getRating());
-       
+        rating_Label.setStyle( "-fx-font-size: 14px;\n" + "    -fx-font-weight: bold;\n" +
+                "    -fx-text-fill: #ffff00;\n" +
+                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
+                "    -fx-underline: false;" ); 
+        
         Label difficulty_Label = new Label("difficulty: " + theReview2.getDifficulty());      
-
+        difficulty_Label.setStyle( "-fx-font-size: 14px;\n" + "    -fx-font-weight: bold;\n" +
+                "    -fx-text-fill: #ffff00;\n" +
+                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
+                "    -fx-underline: false;" ); 
+        
         Label textContent = new Label(theReview2.getText());
+        textContent.setStyle( "-fx-font-size: 12px;\n" + "    -fx-font-weight: bold;\n" +
+                "    -fx-text-fill: #ffff00;\n" +
+                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
+                "    -fx-underline: false;" );
 
         VBox dialogVbox = new VBox(Author, RecipeName, RecipeCreator, rating_Label, difficulty_Label, textAreaTitle);
         dialogVbox.setSpacing(20);
@@ -33,9 +45,10 @@ public class ReadReview extends ReviewView{
         commentArea.setSpacing(10);
         commentArea.setAlignment(Pos.CENTER);
         
-		super.getChildren().remove(1);
+		//super.getChildren().remove(1);
+		super.getChildren().remove(1, 3);
 		super.getChildren().add(1, commentArea);
-		
+		super.getChildren().add(2, Back);
 	}
 
 }
