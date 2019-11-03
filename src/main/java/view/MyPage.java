@@ -126,6 +126,10 @@ public class MyPage extends HBox {
 		//for ( int i = 0; i < 10; i++ )
 		//	reviewObList.get(i).updateAuthor(viewController);
 		//reviewListView.setItems(reviewObList);
+		if(!recipeObList.isEmpty())
+			recipeObList.removeAll(recipeObList);
+		if(!reviewObList.isEmpty())
+			reviewObList.removeAll(reviewObList);
 		
 		List<Recipe> recipeData = viewController.getAllRecipesForUser(viewController.getCurrentUser().getEmail());
 		List<Review> reviewData = viewController.getAllReviewsByAuthor(viewController.getCurrentUser().getEmail());
