@@ -87,7 +87,7 @@ public class ViewController implements DatabaseInterface {
         theStartPage = new StartPage(this);
         mypage = new MyPage(this);
         accountView = new AccountView(this);
-        recipeView = new RecipeView(this, null);
+//        recipeView = new RecipeView(this, null);
         createRecipe = new CreateRecipeView(this);
         cartPage = new CartPage(this);
         

@@ -2,6 +2,7 @@ package view;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +18,8 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import model.Recipe;
+import model.Review;
 
 
 /**
@@ -92,23 +95,30 @@ public class MyPage extends HBox {
 		reviewObList = FXCollections.observableArrayList();
 		reviewListView = new ListView<ReviewPreview>();
 		
-        for ( int i = 0; i < 10; i++ )
+		List<Recipe> recipeData = viewController.getAllUserRecipes();
+		List<Review> reviewData = viewController.getAllUserReview();
+
+        for ( int i = 0; i < recipeData.size(); i++ )
         {
         	recipeObList.add( new RecipePreview(
         			viewController,
-                    "This is a title",
+        			recipeData.get(i).getRecipeName(),
                     "src/main/resources/images/preview.png",
-                    "A pretty fairly long description to test how long a description can be without looking weird.",
-					null) );
+                    recipeData.get(i).toString(),
+                    recipeData.get(i)) );
+        }  
+	
+        for ( int i = 0; i < reviewData.size(); i++ )
+        {
         	reviewObList.add(    			
         			new ReviewPreview(
                 			viewController,
-                			"This is review " + (i + 1),
+                			reviewData.get(i).getRecipeName(),
                             "src/main/resources/images/preview.png",
-                            "David",
-                            5, 5));
-        }
-		
+                            viewController.getCurrentUser().getEmail(),
+                            reviewData.get(i).getRating(), reviewData.get(i).getDifficulty()));
+        }         
+        
 		recipeListView.setItems(recipeObList);
 		reviewListView.setItems(reviewObList);
 		
@@ -121,8 +131,6 @@ public class MyPage extends HBox {
 		myReviews.setLineSpacing(5);
 		createRecipe.setAlignment(Pos.CENTER);
 		createRecipe.setLineSpacing(5);
-		//createReview.setAlignment(Pos.CENTER);
-		//createReview.setLineSpacing(5);
 		recipeColum.setAlignment(Pos.CENTER);
 		recipeColum.setSpacing(10);
 		reviewColum.setAlignment(Pos.CENTER);

@@ -58,7 +58,7 @@ public class ReviewPreview extends VBox{
         
     setOnMouseClicked(new EventHandler<MouseEvent>() {
         public void handle(MouseEvent me) {
-            System.out.println("Mouse clicked review!!");
+            System.out.println("Mouse clicked review!! to MyPage");
             vc.moveToReview("MyPage", new Recipe(recipeName, recipeCreator, difficulty, rating));
         }
     });
