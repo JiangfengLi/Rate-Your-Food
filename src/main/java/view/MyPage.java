@@ -146,13 +146,15 @@ public class MyPage extends HBox {
 	
         for ( int i = 0; i < reviewData.size(); i++ )
         {
-        	reviewObList.add(    			
-        			new ReviewPreview(
-                			viewController,
-                			reviewData.get(i).getRecipeName(),
-                            "src/main/resources/images/preview.png",
-                            viewController.getCurrentUser().getEmail(),
-                            reviewData.get(i).getRating(), reviewData.get(i).getDifficulty()));
+        	ReviewPreview newReviewPreview = new ReviewPreview(
+        			viewController,
+        			reviewData.get(i).getRecipeName(),
+                    "src/main/resources/images/preview.png",
+                    reviewData.get(i).getRecipeCreator(),
+                    reviewData.get(i).getRating(), reviewData.get(i).getDifficulty());
+        	newReviewPreview.updateAuthor();
+        	reviewObList.add(newReviewPreview);
+        			
         }         
         
 		recipeListView.setItems(recipeObList);

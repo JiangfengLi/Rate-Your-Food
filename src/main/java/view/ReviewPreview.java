@@ -11,12 +11,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import model.Recipe;
+import model.Review;
 
 public class ReviewPreview extends VBox{
 	private Label authorLabel;
+	private ViewController vc;
 	
-    public ReviewPreview( ViewController vc, String recipeName, String aImagePath, String recipeCreator,
+    public ReviewPreview( ViewController vc2, String recipeName, String aImagePath, String recipeCreator,
     		Integer rating, Integer difficulty ){
+    	this.vc = vc2;
+    	
         // Create title
         Label theTitle = new Label( recipeName );
         theTitle.setStyle( "-fx-font-size: 12px;\n" +
@@ -59,15 +63,19 @@ public class ReviewPreview extends VBox{
     setOnMouseClicked(new EventHandler<MouseEvent>() {
         public void handle(MouseEvent me) {
             System.out.println("Mouse clicked review!! to MyPage");
-            vc.moveToReview("MyPage", new Recipe(recipeName, recipeCreator, difficulty, rating));
+            Review input_review = vc.getReview(vc.getCurrentUser().getEmail(), recipeName, recipeCreator);
+            if(input_review == null)
+            	System.out.println("review is null !!!!");
+            else
+                vc.moveToEditReview("MyPage", input_review);
         }
     });
     
     }
     
-    public void updateAuthor(ViewController vc2) {
-        if(vc2.getCurrentUser() != null)
-            authorLabel.setText( "Author: " + vc2.getCurrentUser().getEmail() );
+    public void updateAuthor() {
+        if(vc.getCurrentUser() != null)
+            authorLabel.setText( "Author: " + vc.getCurrentUser().getEmail() );
     }
     
 

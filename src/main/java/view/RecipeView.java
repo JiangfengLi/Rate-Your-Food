@@ -139,7 +139,7 @@ public class RecipeView extends VBox {
 	private void setAddReviewButton() {
 		addReviewButton.setText("addReview");
 		addReviewButton.setOnAction(ae -> {
-		vc.moveToReview("RcipeView", theRecipe);
+		    vc.moveToReview("RcipeView", theRecipe);
 		});
 	}
 

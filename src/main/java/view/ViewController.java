@@ -87,7 +87,7 @@ public class ViewController implements DatabaseInterface {
         theStartPage = new StartPage(this);
         mypage = new MyPage(this);
         accountView = new AccountView(this);
-//        recipeView = new RecipeView(this, null);
+        //recipeView = new RecipeView(this, null);
         createRecipe = new CreateRecipeView(this);
         cartPage = new CartPage(this);
         
@@ -97,7 +97,7 @@ public class ViewController implements DatabaseInterface {
         BorderPane.setAlignment( signInPage, Pos.CENTER );
         BorderPane.setAlignment( theHUD, Pos.CENTER );
         BorderPane.setAlignment( theStartPage, Pos.CENTER );
-        BorderPane.setAlignment( recipeView, Pos.CENTER);
+        //BorderPane.setAlignment( recipeView, Pos.CENTER);
         BorderPane.setAlignment( accountView, Pos.CENTER);
 
         // Create scroll view for home page
@@ -267,6 +267,23 @@ public class ViewController implements DatabaseInterface {
 	}
 
 	/*
+	 * MOVE TO EDIT REVIEW
+	 * moves to the edit review view of the 
+	 * review preview clicked on
+	 */		
+	public void moveToEditReview(String backVeiw, Review review) {
+        EditReview editReviewView = new EditReview(this, review);
+        if(editReviewView == null)
+        	System.out.println("editReviewView is null");
+		theWindow.setTop( theHUD );
+		editReviewView.setReturnPoint(backVeiw);
+	    theWindow.setCenter( editReviewView );
+	    theWindow.setLeft(null);
+	    theWindow.setRight(null);
+	    theWindow.setBottom(null);		
+	}
+
+	/*
 	 * MOVE TO CART PAGE
 	 * moves to the  view of the 
 	 * cart page clicked on
@@ -300,7 +317,11 @@ public class ViewController implements DatabaseInterface {
      */    
 	public void updateReviewDB(String RecipeName, String Creator, Integer rating, Integer difficulty, String text) {
 		// TODO Auto-generated method stub
-		dbaccess.addReview(getCurrentUser().getEmail(), RecipeName, Creator, text, difficulty, rating);
+		String add_review_res = dbaccess.addReview(getCurrentUser().getEmail(), RecipeName, Creator, text, difficulty, rating);
+		if(add_review_res != null) {
+			System.out.print(add_review_res);
+		    dbaccess.updateReview(getCurrentUser().getEmail(), RecipeName, Creator, RecipeName, Creator, text, difficulty, rating);
+		}
 	}
 	
     // ******************************** DATABASE INTERFACE ****************************
@@ -646,6 +667,7 @@ public class ViewController implements DatabaseInterface {
 	public String deleteTag(String name, String recipeName, String recipeCreator) {
 		return dbaccess.deleteTag(name, recipeName, recipeCreator);
 	}
+
 
 
     
