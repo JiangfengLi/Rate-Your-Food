@@ -60,12 +60,12 @@ public class RecipeView extends VBox {
 	private Button addReviewButton;
 	private Button readReviewButton;
 	
-	private TableView<ReviewPreview> reviewList;
-	private TableColumn<ReviewPreview,String> reviewAuthor;
-	private TableColumn<ReviewPreview,String> reviewText;
-	private TableColumn<ReviewPreview,Integer> reviewRating;
-	private TableColumn<ReviewPreview,Integer> reviewDif;
-	private ObservableList<ReviewPreview> reviewObList;
+	private TableView<Review> reviewList;
+	private TableColumn<Review,String> reviewAuthor;
+	private TableColumn<Review,String> reviewText;
+	private TableColumn<Review,Integer> reviewRating;
+	private TableColumn<Review,Integer> reviewDif;
+//	private ObservableList<Review> reviewObList;
 	
 	private VBox recipeSection;
 	private HBox ingredientTop;
@@ -89,8 +89,6 @@ public class RecipeView extends VBox {
 		this.setPadding(new Insets(16,16,16,16));
 		this.setSpacing(8);
 		inititializeAllNodes();
-
-		reviewObList = FXCollections.observableArrayList();
 		
 		if( theRecipe == null )
 		{
@@ -133,7 +131,7 @@ public class RecipeView extends VBox {
 	}
 
 	private void setReviewList() {
-		/*
+		
 		reviewAuthor.setCellValueFactory(new PropertyValueFactory<>("author"));
 		reviewText.setCellValueFactory(new PropertyValueFactory<>("text"));
 		reviewRating.setCellValueFactory(new PropertyValueFactory<>("rating"));
@@ -145,58 +143,13 @@ public class RecipeView extends VBox {
 		reviewRating.prefWidthProperty().bind(reviewList.widthProperty().multiply(1.0 / 10.0));
 		reviewDif.prefWidthProperty().bind(reviewList.widthProperty().multiply(1.0 / 10.0));
 		reviewText.prefWidthProperty().bind(reviewList.widthProperty().multiply(5.0 / 10.0));
-        */
-
-		if(!reviewObList.isEmpty())
-				reviewObList.removeAll(reviewObList);
 		
 		List<Review> reviewData = vc.getAllReviewsForRecipe(theRecipe.getRecipeName(), 
 				theRecipe.getCreator());
-        if(reviewData!= null && !reviewData.isEmpty()) {
-            for ( int i = 0; i < reviewData.size(); i++ )
-            {
-        	    ReviewPreview newReviewPreview = new ReviewPreview(
-        			vc,
-        			reviewData.get(i).getRecipeName(),
-                    "src/main/resources/images/preview.png",
-                    reviewData.get(i).getRecipeCreator(),
-                    reviewData.get(i).getRating(), reviewData.get(i).getDifficulty(), "RecipeView");
-        	    newReviewPreview.updateAuthor();
-        	    reviewObList.add(newReviewPreview);
-            }         
-        
-            reviewList.setItems(reviewObList);
-        
-		    // Create the columns for the TableView object
-            reviewAuthor.setCellValueFactory(new Callback<CellDataFeatures<ReviewPreview, String>, ObservableValue<String>>() {
-			    public ObservableValue<String> call(CellDataFeatures<ReviewPreview, String> newReviewPreview) {
-			    	return new ReadOnlyObjectWrapper<String>(newReviewPreview.getValue().getRviewClass().getAuthor());
-			    }
-		    });
-
-            reviewRating.setCellValueFactory(new Callback<CellDataFeatures<ReviewPreview, Integer>, ObservableValue<Integer>>() {
-			    public ObservableValue<Integer> call(CellDataFeatures<ReviewPreview, Integer> ReviewPreview) {
-			    	return new ReadOnlyObjectWrapper<Integer>(ReviewPreview.getValue().getRviewClass().getRating());
-			    }
-		    });
-
-            reviewDif.setCellValueFactory(new Callback<CellDataFeatures<ReviewPreview, Integer>, ObservableValue<Integer>>() {
-			    public ObservableValue<Integer> call(CellDataFeatures<ReviewPreview, Integer> ReviewPreview) {
-				    return new ReadOnlyObjectWrapper<Integer>(ReviewPreview.getValue().getRviewClass().getDifficulty());
-			    }
-		    });
-
-            reviewText.setCellValueFactory(new Callback<CellDataFeatures<ReviewPreview, String>, ObservableValue<String>>() {
-			    public ObservableValue<String> call(CellDataFeatures<ReviewPreview, String> newReviewPreview) {
-				    return new ReadOnlyObjectWrapper<String>(newReviewPreview.getValue().getRviewClass().getText());
-			    }
-		    });
-		
-        }
-		// set the columns for the TableView object
-        reviewList.getColumns().setAll(reviewAuthor, reviewRating, reviewDif, reviewText);
-
-		
+				
+		if(reviewData!= null && !reviewData.isEmpty())
+		     reviewList.getItems().addAll(reviewData);		
+				
 	}
 
 	/**
@@ -217,10 +170,10 @@ public class RecipeView extends VBox {
 	private void readReviewButton() {
 		readReviewButton.setText("Read Review");
 		readReviewButton.setOnAction(ae -> {
-			ReviewPreview newReviewPreview = reviewList.getSelectionModel().getSelectedItem();
-			if (newReviewPreview == null)
+			Review newReview = reviewList.getSelectionModel().getSelectedItem();
+			if (newReview == null)
 				return;			
-			ReadReview newReadReview = new ReadReview(vc, newReviewPreview.getRviewClass());
+			ReadReview newReadReview = new ReadReview(vc, newReview);
 			newReadReview.setReturnPoint("RcipeView");
 			vc.moveToReview(newReadReview);
 		});
@@ -356,11 +309,11 @@ public class RecipeView extends VBox {
 		readReviewButton = new Button();
 		
 		//set up columns for a list of reviews
-		reviewList = new TableView<ReviewPreview>();
-		reviewAuthor = new TableColumn<ReviewPreview,String>("Author");
-		reviewText = new TableColumn<ReviewPreview,String>("Review");
-		reviewRating = new TableColumn<ReviewPreview,Integer>("Rating");
-		reviewDif = new TableColumn<ReviewPreview,Integer>("Dificulty");
+		reviewList = new TableView<Review>();
+		reviewAuthor = new TableColumn<Review, String>("Author");
+		reviewText = new TableColumn<Review, String>("Review");
+		reviewRating = new TableColumn<Review, Integer>("Rating");
+		reviewDif = new TableColumn<Review, Integer>("Dificulty");
 				
 		recipeSection = new VBox(8);;
 		ingredientTop = new HBox(8);
