@@ -195,6 +195,7 @@ public class ViewController implements DatabaseInterface {
      * moves us to 'MyPage' page
      */   
 	public void moveToMyPage() {
+		mypage.upDateReviewLV();
         theWindow.setTop( theHUD );
         theWindow.setCenter( mypage );
         theWindow.setLeft(null);

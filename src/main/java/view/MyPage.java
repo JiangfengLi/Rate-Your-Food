@@ -95,32 +95,6 @@ public class MyPage extends HBox {
 		reviewObList = FXCollections.observableArrayList();
 		reviewListView = new ListView<ReviewPreview>();
 		
-		List<Recipe> recipeData = viewController.getAllUserRecipes();
-		List<Review> reviewData = viewController.getAllUserReview();
-
-        for ( int i = 0; i < recipeData.size(); i++ )
-        {
-        	recipeObList.add( new RecipePreview(
-        			viewController,
-        			recipeData.get(i).getRecipeName(),
-                    "src/main/resources/images/preview.png",
-                    recipeData.get(i).toString(),
-                    recipeData.get(i)) );
-        }  
-	
-        for ( int i = 0; i < reviewData.size(); i++ )
-        {
-        	reviewObList.add(    			
-        			new ReviewPreview(
-                			viewController,
-                			reviewData.get(i).getRecipeName(),
-                            "src/main/resources/images/preview.png",
-                            viewController.getCurrentUser().getEmail(),
-                            reviewData.get(i).getRating(), reviewData.get(i).getDifficulty()));
-        }         
-        
-		recipeListView.setItems(recipeObList);
-		reviewListView.setItems(reviewObList);
 		
 		reviewListView.minHeight(recipeListView.getHeight() + 15);
 		
@@ -149,9 +123,37 @@ public class MyPage extends HBox {
 	}
 
 	public void upDateReviewLV() {
-		for ( int i = 0; i < 10; i++ )
-			reviewObList.get(i).updateAuthor(viewController);
+		//for ( int i = 0; i < 10; i++ )
+		//	reviewObList.get(i).updateAuthor(viewController);
+		//reviewListView.setItems(reviewObList);
+		
+		List<Recipe> recipeData = viewController.getAllRecipesForUser(viewController.getCurrentUser().getEmail());
+		List<Review> reviewData = viewController.getAllReviewsByAuthor(viewController.getCurrentUser().getEmail());
+
+        for ( int i = 0; i < recipeData.size(); i++ )
+        {
+        	recipeObList.add( new RecipePreview(
+        			viewController,
+        			recipeData.get(i).getRecipeName(),
+                    "src/main/resources/images/preview.png",
+                    recipeData.get(i).toString(),
+                    recipeData.get(i)) );
+        }  
+	
+        for ( int i = 0; i < reviewData.size(); i++ )
+        {
+        	reviewObList.add(    			
+        			new ReviewPreview(
+                			viewController,
+                			reviewData.get(i).getRecipeName(),
+                            "src/main/resources/images/preview.png",
+                            viewController.getCurrentUser().getEmail(),
+                            reviewData.get(i).getRating(), reviewData.get(i).getDifficulty()));
+        }         
+        
+		recipeListView.setItems(recipeObList);
 		reviewListView.setItems(reviewObList);
+		
 	}
 	
 
