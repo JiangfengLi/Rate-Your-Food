@@ -29,7 +29,7 @@ public class ReviewView extends VBox{
 	private ViewController viewController;
 	private Button Back;
 	private Button Submit;
-	private TextArea reviewText;
+	protected TextArea reviewText;
 	private ImageView foodImg;
 	private Label title;
 	private Label Author;
@@ -38,10 +38,11 @@ public class ReviewView extends VBox{
 	private Label rating;
     private Label difficulty;
     private Label textAreaTitle;
-    private ChoiceBox<Integer> rateSelection;
-    private ChoiceBox<Integer> difficultySelection;
+    protected ChoiceBox<Integer> rateSelection;
+    protected ChoiceBox<Integer> difficultySelection;
     private static String returnSite;
     private Recipe reviewRecipe;
+    private Label errorMsgPH;
 
 	
 	public ReviewView(ViewController viewController2, Recipe theRecipe) {
@@ -50,6 +51,12 @@ public class ReviewView extends VBox{
 				
         Back = new Button("Back");
         Submit = new Button("Submit");
+		// create error message placeholder
+        errorMsgPH = new Label("");
+        errorMsgPH.setStyle( "-fx-font-size: 20px;\n" + "    -fx-font-weight: bold;\n" +
+                "    -fx-text-fill: #ff0000;\n" +
+                "    -fx-effect: dropshadow( gaussian , rgba(255,255,0,0.5) , 0,0,0,1 );\n" +
+                "    -fx-underline: false;" );        
         
         // set up text Area
         reviewText = new TextArea();	   
@@ -113,7 +120,7 @@ public class ReviewView extends VBox{
         
         difficultySelection = new ChoiceBox<>();       
         difficultySelection.getItems().addAll(1, 2, 3, 4, 5);
-        difficultySelection.getSelectionModel().select(reviewRecipe.getRating() - 1 );        
+        difficultySelection.getSelectionModel().select(reviewRecipe.getDifficulty() - 1 );        
 
         HBox dialogHbox1 = new HBox(rating, rateSelection);
 //        dialogHbox1.setAlignment(Pos.CENTER);
@@ -139,7 +146,7 @@ public class ReviewView extends VBox{
         commentArea.setSpacing(10);
         commentArea.setAlignment(Pos.CENTER);
        
-        this.getChildren().addAll(title, commentArea, dialogHbox3);
+        this.getChildren().addAll(title, commentArea, dialogHbox3, errorMsgPH);
         this.setSpacing(20);
         this.setAlignment(Pos.CENTER);
         
@@ -198,14 +205,32 @@ public class ReviewView extends VBox{
 	 */
 	protected class SetSubmitHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
-			if(returnSite != null) {
-				viewController.updateReviewDB(reviewRecipe.getRecipeName(), reviewRecipe.getCreator(), 
-						rateSelection.getValue(), difficultySelection.getValue(), reviewText.getText());
-				System.out.println("Review sent to database successfully");
-				if(returnSite.equals("MyPage")) 
-					viewController.moveToMyPage();
-			    else 
-					viewController.moveToRecipe(reviewRecipe);
+			Integer input_rating = rateSelection.getValue();  
+			Integer input_difficulty = difficultySelection.getValue();  
+			String input_text = reviewText.getText();
+			String err_msg = "";
+			if(input_rating == null) {
+				err_msg += "Invalid rating, please give a valid one\n";
+			}
+			if(input_difficulty == null) {
+				err_msg += "Invalid difficulty, please give a valid one\n";
+			}
+			if(input_text == null || input_text.isEmpty()) {
+				err_msg += "Empty text, please give a valid one\n";
+			}
+			
+			if(err_msg.isEmpty()) {
+			    if(returnSite != null) {
+				    viewController.updateReviewDB(reviewRecipe.getRecipeName(), reviewRecipe.getCreator(), 
+				    		(int)input_rating, (int)input_difficulty, input_text);
+				    System.out.println("Review sent to database successfully");
+				    if(returnSite.equals("MyPage")) 
+				        viewController.moveToMyPage();
+			        else 
+					    viewController.moveToRecipe(reviewRecipe);
+			    }
+			} else {
+				errorMsgPH.setText(err_msg);
 			}
 		}
 	}
