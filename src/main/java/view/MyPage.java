@@ -95,9 +95,6 @@ public class MyPage extends HBox {
 		reviewObList = FXCollections.observableArrayList();
 		reviewListView = new ListView<ReviewPreview>();
 		
-		
-		reviewListView.minHeight(recipeListView.getHeight() + 15);
-		
 		//set the alignments and spacing of components;
 		myRecipes.setAlignment(Pos.CENTER);
 		myRecipes.setLineSpacing(5);
@@ -159,6 +156,9 @@ public class MyPage extends HBox {
         
 		recipeListView.setItems(recipeObList);
 		reviewListView.setItems(reviewObList);
+		
+		recipeListView.setMinHeight(300);
+		reviewListView.setMinHeight(450);
 		
 	}
 	
