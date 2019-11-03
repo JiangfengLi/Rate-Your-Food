@@ -27,17 +27,17 @@ import model.Recipe;
 
 public class ReviewView extends VBox{
 	private ViewController viewController;
-	private Button Back;
+	protected Button Back;
 	private Button Submit;
 	protected TextArea reviewText;
-	private ImageView foodImg;
+	protected ImageView foodImg;
 	private Label title;
-	private Label Author;
-	private Label RecipeName;
-	private Label RecipeCreator;
+	protected Label Author;
+	protected Label RecipeName;
+	protected Label RecipeCreator;
 	private Label rating;
     private Label difficulty;
-    private Label textAreaTitle;
+    protected Label textAreaTitle;
     protected ChoiceBox<Integer> rateSelection;
     protected ChoiceBox<Integer> difficultySelection;
     private static String returnSite;

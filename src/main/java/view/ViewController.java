@@ -254,33 +254,14 @@ public class ViewController implements DatabaseInterface {
 	 * moves to the review view of the 
 	 * review clicked on
 	 */		
-	public void moveToReview(String backVeiw, Recipe theRecipe) {
+	public void moveToReview(ReviewView reviewView) {
 		// TODO Auto-generated method stub
-        reviewView = new ReviewView(this, theRecipe);
 		theWindow.setTop( theHUD );
-		reviewView.setReturnPoint(backVeiw);
 	    theWindow.setCenter( reviewView );
 	    theWindow.setLeft(null);
 	    theWindow.setRight(null);
 	    theWindow.setBottom(null);		
 		
-	}
-
-	/*
-	 * MOVE TO EDIT REVIEW
-	 * moves to the edit review view of the 
-	 * review preview clicked on
-	 */		
-	public void moveToEditReview(String backVeiw, Review review) {
-        EditReview editReviewView = new EditReview(this, review);
-        if(editReviewView == null)
-        	System.out.println("editReviewView is null");
-		theWindow.setTop( theHUD );
-		editReviewView.setReturnPoint(backVeiw);
-	    theWindow.setCenter( editReviewView );
-	    theWindow.setLeft(null);
-	    theWindow.setRight(null);
-	    theWindow.setBottom(null);		
 	}
 
 	/*

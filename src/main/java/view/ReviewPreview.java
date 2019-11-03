@@ -16,10 +16,16 @@ import model.Review;
 public class ReviewPreview extends VBox{
 	private Label authorLabel;
 	private ViewController vc;
+	private String returnSite;
+	private Review input_review;
 	
     public ReviewPreview( ViewController vc2, String recipeName, String aImagePath, String recipeCreator,
-    		Integer rating, Integer difficulty ){
+    		Integer rating, Integer difficulty, String reSite){
     	this.vc = vc2;
+    	this.returnSite = reSite;
+    	
+        input_review = vc.getReview(vc.getCurrentUser().getEmail(), recipeName, recipeCreator);
+
     	
         // Create title
         Label theTitle = new Label( recipeName );
@@ -63,14 +69,20 @@ public class ReviewPreview extends VBox{
     setOnMouseClicked(new EventHandler<MouseEvent>() {
         public void handle(MouseEvent me) {
             System.out.println("Mouse clicked review!! to MyPage");
-            Review input_review = vc.getReview(vc.getCurrentUser().getEmail(), recipeName, recipeCreator);
             if(input_review == null)
             	System.out.println("review is null !!!!");
-            else
-                vc.moveToEditReview("MyPage", input_review);
+            else {
+                EditReview editReviewView = new EditReview(vc, input_review);
+                editReviewView.setReturnPoint(returnSite);
+                vc.moveToReview(editReviewView);
+            }
         }
     });
     
+    }
+    
+    public Review getRviewClass() {
+    	return input_review;
     }
     
     public void updateAuthor() {

@@ -95,9 +95,6 @@ public class MyPage extends HBox {
 		reviewObList = FXCollections.observableArrayList();
 		reviewListView = new ListView<ReviewPreview>();
 		
-		
-		reviewListView.minHeight(recipeListView.getHeight() + 15);
-		
 		//set the alignments and spacing of components;
 		myRecipes.setAlignment(Pos.CENTER);
 		myRecipes.setLineSpacing(5);
@@ -151,7 +148,7 @@ public class MyPage extends HBox {
         			reviewData.get(i).getRecipeName(),
                     "src/main/resources/images/preview.png",
                     reviewData.get(i).getRecipeCreator(),
-                    reviewData.get(i).getRating(), reviewData.get(i).getDifficulty());
+                    reviewData.get(i).getRating(), reviewData.get(i).getDifficulty(), "MyPage");
         	newReviewPreview.updateAuthor();
         	reviewObList.add(newReviewPreview);
         			
@@ -159,6 +156,9 @@ public class MyPage extends HBox {
         
 		recipeListView.setItems(recipeObList);
 		reviewListView.setItems(reviewObList);
+		
+		recipeListView.setMinHeight(300);
+		reviewListView.setMinHeight(450);
 		
 	}
 	
