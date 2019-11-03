@@ -20,6 +20,38 @@ import model.DBAccess;
 /**
  * DATABASE TEST
  * class to test DBAccess
+ * if you want to verify deletion of test data manually use following SELECT queries:
+ * 		SELECT * FROM User WHERE Email = 'test@gmail.com';
+ * 		SELECT * FROM User WHERE Email = 'test1@testmail.com';
+ * 
+ * 		SELECT * FROM Recipe WHERE RecipeName = 'testRecipe';
+ * 		SELECT * FROM Ingredient WHERE RecipeName = 'testRecipe';
+ *		SELECT * FROM Instruction WHERE RecipeName = 'testRecipe';
+ *		SELECT * FROM Review WHERE RecipeName = 'testRecipe';
+ *		SELECT * FROM Tag WHERE RecipeName = 'testRecipe';
+ *
+ *		SELECT * FROM Recipe WHERE RecipeName = 'newRecipe';
+ * 		SELECT * FROM Ingredient WHERE RecipeName = 'newRecipe';
+ *		SELECT * FROM Instruction WHERE RecipeName = 'newRecipe';
+ *		SELECT * FROM Review WHERE RecipeName = 'newRecipe';
+ *		SELECT * FROM Tag WHERE RecipeName = 'newRecipe';
+ * 
+ * if you encounter issues, use following sql statements in order to clear out test data:
+ * 		DELETE FROM Instruction WHERE RecipeName = 'testRecipe';
+ *		DELETE FROM Ingredient WHERE RecipeName = 'testRecipe';
+ *		DELETE FROM Review WHERE RecipeName = 'testRecipe';
+ *		DELETE FROM Tag WHERE RecipeName = 'testRecipe';
+ *		DELETE FROM Recipe WHERE RecipeName = 'testRecipe';
+ *
+ *		DELETE FROM Instruction WHERE RecipeName = 'newRecipe';
+ *		DELETE FROM Ingredient WHERE RecipeName = 'newRecipe';
+ *		DELETE FROM Review WHERE RecipeName = 'newRecipe';
+ *		DELETE FROM Tag WHERE RecipeName = 'newRecipe';
+ *		DELETE FROM Recipe WHERE RecipeName = 'newRecipe';
+ *	
+ *		DELETE FROM User WHERE Email = 'test@gmail.com';
+ *		DELETE FROM User WHERE Email = 'test1@testmail.com';
+ *
  * @author Alexander Miller
  *
  */
@@ -393,68 +425,158 @@ public class DatabaseTest {
 		assertNotNull(tags);
 		assertTrue(tags.size()==1);
 		assertTrue(tags.get(0).equals(testvar2.tag));
-		
-		
 	}
 	
 	/**
 	 * TEST UPDATE
-	 * check update:
+	 * check update: updateUser, updateRecipe, updateReview, updateIngredient, updateInstruction
 	 * verify no errors thrown
 	 */
 	@Test
 	public void test3Update() {
+		// UPDATE USER
+		// swap user1 and user2 details (besides emails), check change went thru
+		assertNull(dbaccess.updateUser(testvar1.email, testvar2.firstName, testvar2.lastName, testvar2.password));
+		assertNull(dbaccess.updateUser(testvar2.email, testvar1.firstName, testvar1.lastName, testvar1.password));
+		// check user1
+		user = dbaccess.getUser(testvar1.email);
+		assertNotNull(user);
+		assertTrue(testvar2.firstName.equals(user.getFirstName()));
+		assertTrue(testvar2.lastName.equals(user.getLastName()));
+		assertTrue(testvar2.password.equals(user.getPassword()));
+		// check user2
+		user = dbaccess.getUser(testvar2.email);
+		assertNotNull(user);
+		assertTrue(testvar1.firstName.equals(user.getFirstName()));
+		assertTrue(testvar1.lastName.equals(user.getLastName()));
+		assertTrue(testvar1.password.equals(user.getPassword()));
+		
+		// UPDATE RECIPE
+		// swap user1 and user2 diff and ratings, verify change
+		assertNull(dbaccess.updateRecipe(testvar1.recipeName, testvar1.email, testvar1.recipeName, testvar2.difficulty, testvar2.rating));
+		assertNull(dbaccess.updateRecipe(testvar2.recipeName, testvar2.email, testvar2.recipeName, testvar1.difficulty, testvar1.rating));
+		// check user1
+		recipe = dbaccess.getRecipe(testvar1.recipeName, testvar1.email);
+		assertNotNull(recipe);
+		assertTrue(recipe.getDifficulty()==testvar2.difficulty);
+		assertTrue(recipe.getRating()==testvar2.rating);
+		// check user 2
+		recipe = dbaccess.getRecipe(testvar2.recipeName, testvar2.email);
+		assertNotNull(recipe);
+		assertTrue(recipe.getDifficulty()==testvar1.difficulty);
+		assertTrue(recipe.getRating()==testvar1.rating);
+		
+		// UPDATE REVIEW
+		// swap user1 and user2 review fields except author - recalling that they originally wrote reviews for other person
+		assertNull(dbaccess.updateReview(testvar1.email, testvar2.recipeName, testvar2.email, testvar1.recipeName, testvar1.email, testvar2.reviewText, testvar2.difficulty, testvar2.rating));
+		assertNull(dbaccess.updateReview(testvar2.email, testvar1.recipeName, testvar1.email, testvar2.recipeName, testvar2.email, testvar1.reviewText, testvar1.difficulty, testvar1.rating));
+		// check user1
+		review = dbaccess.getReview(testvar1.email, testvar1.recipeName, testvar1.email);
+		assertNotNull(review);
+		assertTrue(review.getText().equals(testvar2.reviewText));
+		assertTrue(review.getDifficulty()==testvar2.difficulty);
+		assertTrue(review.getRating()==testvar2.rating);
+		// check user2
+		review = dbaccess.getReview(testvar2.email, testvar2.recipeName, testvar2.email);
+		assertNotNull(review);
+		assertTrue(review.getText().equals(testvar1.reviewText));
+		assertTrue(review.getDifficulty()==testvar1.difficulty);
+		assertTrue(review.getRating()==testvar1.rating);
+		
+		// UPDATE INGREDIENT
+		// swap user1 and user2 ingredient fields - name, amt, and unit
+		assertNull(dbaccess.updateIngredient(testvar1.ingredientName, testvar1.recipeName, testvar1.email, testvar2.ingredientName, testvar2.amount, testvar2.unit));
+		assertNull(dbaccess.updateIngredient(testvar2.ingredientName, testvar2.recipeName, testvar2.email, testvar1.ingredientName, testvar1.amount, testvar1.unit));
+		// check user1
+		ingredient = dbaccess.getIngredient(testvar2.ingredientName, testvar1.recipeName, testvar1.email);
+		assertNotNull(ingredient);
+		assertTrue(ingredient.getAmount() == testvar2.amount);
+		assertTrue(testvar2.unit.equals(ingredient.getUnit()));
+		// check user2
+		ingredient = dbaccess.getIngredient(testvar1.ingredientName, testvar2.recipeName, testvar2.email);
+		assertNotNull(ingredient);
+		assertTrue(ingredient.getAmount() == testvar1.amount);
+		assertTrue(testvar1.unit.equals(ingredient.getUnit()));
+		
+		// UPDATE INSTRUCTION
+		// swap text field of user1 and user2 instructions
+		assertNull(dbaccess.updateInstruction(null, testvar1.recipeName, testvar1.email, testvar1.instructionText, testvar2.instructionText));
+		assertNull(dbaccess.updateInstruction(null, testvar2.recipeName, testvar2.email, testvar2.instructionText, testvar1.instructionText));
+		// check user 1
+		instruction = dbaccess.getInstruction(null, testvar1.recipeName, testvar1.email, testvar2.instructionText);
+		assertNotNull(instruction);
+		assertTrue(testvar2.instructionText.equals(instruction.getText()));
+		// check user2
+		instruction = dbaccess.getInstruction(null, testvar2.recipeName, testvar2.email, testvar1.instructionText);
+		assertNotNull(instruction);
+		assertTrue(testvar1.instructionText.equals(instruction.getText()));
 		
 	}
 	
 	/**
 	 * TEST DELETE
-	 * check delete:
+	 * check delete: deleteUser, deleteRecipe, deleteReview, deleteIngredient, deleteInstruction, deleteTag
 	 * verify no errors thrown
 	 */
 	@Test
 	public void test4Delete() {
-		/*
-		 * use the following queries to verify deletion in mysql, and to delete manually spam data generated if failed to delete:
-		 * 
-		 * SELECT * FROM Recipe WHERE RecipeName = 'testRecipe';
-		 * SELECT * FROM Ingredient WHERE RecipeName = 'testRecipe';
-		 * SELECT * FROM Instruction WHERE RecipeName = 'testRecipe';
-		 * SELECT * FROM Review WHERE RecipeName = 'testRecipe';
-		 * 
-			DELETE FROM Instruction WHERE RecipeName = 'testRecipe';
-			DELETE FROM Ingredient WHERE RecipeName = 'testRecipe';
-			DELETE FROM Review WHERE RecipeName = 'testRecipe';
-			DELETE FROM Tag WHERE RecipeName = 'testRecipe';
-			DELETE FROM Recipe WHERE RecipeName = 'testRecipe';
-			
-			DELETE FROM Instruction WHERE RecipeName = 'newRecipe';
-			DELETE FROM Ingredient WHERE RecipeName = 'newRecipe';
-			DELETE FROM Review WHERE RecipeName = 'newRecipe';
-			DELETE FROM Tag WHERE RecipeName = 'newRecipe';
-			DELETE FROM Recipe WHERE RecipeName = 'newRecipe';
-			
-			DELETE FROM User WHERE Email = 'test@gmail.com';
-			DELETE FROM User WHERE Email = 'test1@testmail.com';
-		 */
-	}
-	
-	/**
-	 * BASIC FUNCTIONALITY TEST
-	 * 
-	 * 
-	 * check getAll:
-	 * check update: updateUser, updateRecipe, updateIngredient, updateInstruction, updateReview
-	 * check delete: 
-	 * 
-	 */
-	@Test
-	public void basicInsertionAndRetrievalTest() {
 		
-
+		// DELETE REVIEW
+		// recall review updated in test3 - swap fields except author
+		// 	public String deleteReview(String author, String recipeName, String recipeCreator);
+		assertNull(dbaccess.deleteReview(testvar1.email, testvar1.recipeName, testvar1.email));
+		assertNull(dbaccess.deleteReview(testvar2.email, testvar2.recipeName, testvar2.email));
+		// verify deletion
+		assertNull(dbaccess.getReview(testvar1.email, testvar1.recipeName, testvar1.email));
+		assertNull(dbaccess.getReview(testvar2.email, testvar2.recipeName, testvar2.email));
+		
+		// DELETE INGREDIENT
+		// recall ingredient updated in test3 - swap name, amt, unit
+		// 	public String deleteIngredient(String name, String recipeName, String recipeCreator);
+		assertNull(dbaccess.deleteIngredient(testvar2.ingredientName, testvar1.recipeName, testvar1.email));
+		assertNull(dbaccess.deleteIngredient(testvar1.ingredientName, testvar2.recipeName, testvar2.email));
+		// confirm deletion
+		assertNull(dbaccess.getIngredient(testvar2.ingredientName, testvar1.recipeName, testvar1.email));
+		assertNull(dbaccess.getIngredient(testvar1.ingredientName, testvar2.recipeName, testvar2.email));
+		
+		// DELETE INSTRUCTION
+		// recall instruction updated in test3 - swap text field
+		// 	public String deleteInstruction(Integer relativePosition, String recipeName, String recipeCreator, String text);
+		assertNull(dbaccess.deleteInstruction(null, testvar1.recipeName, testvar1.email, testvar2.instructionText));
+		assertNull(dbaccess.deleteInstruction(null, testvar2.recipeName, testvar2.email, testvar1.instructionText));
+		// confirm deletion
+		assertNull(dbaccess.getInstruction(null, testvar1.recipeName, testvar1.email, testvar2.instructionText));
+		assertNull(dbaccess.getInstruction(null, testvar2.recipeName, testvar2.email, testvar1.instructionText));
+		
+		// DELETE TAG
+		// tag not updated in test3
+		// 	public String deleteTag(String name, String recipeName, String recipeCreator);
+		assertNull(dbaccess.deleteTag(testvar1.tagText, testvar1.recipeName, testvar1.email));
+		assertNull(dbaccess.deleteTag(testvar2.tagText, testvar2.recipeName, testvar2.email));
+		// confirm deletion
+		assertNull(dbaccess.getTag(testvar1.tagText, testvar1.recipeName, testvar1.email));
+		assertNull(dbaccess.getTag(testvar2.tagText, testvar2.recipeName, testvar2.email));
+		
+		// DELETE RECIPE
+		// recall recipe updated in test3 - swap difficulty and rating
+		// 	public String deleteRecipe(String recipeName, String creator);
+		assertNull(dbaccess.deleteRecipe(testvar1.recipeName, testvar1.email));
+		assertNull(dbaccess.deleteRecipe(testvar2.recipeName, testvar2.email));
+		// confirm deletion
+		assertNull(dbaccess.getRecipe(testvar1.recipeName, testvar1.email));
+		assertNull(dbaccess.getRecipe(testvar2.recipeName, testvar2.email));
+		
+		// DELETE USER
+		// recall user updated in test3 - swap all fields except email
+		// 	public String deleteUser(String email, String password);
+		assertNull(dbaccess.deleteUser(testvar1.email,testvar2.password));
+		assertNull(dbaccess.deleteUser(testvar2.email,testvar1.password));
+		// confirm deletion
+		assertNull(dbaccess.getUser(testvar1.email));
+		assertNull(dbaccess.getUser(testvar2.email));
+		
+		
 	}
-	
-	
 
 
 
