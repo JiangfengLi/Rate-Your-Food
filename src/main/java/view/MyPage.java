@@ -2,6 +2,7 @@ package view;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +18,8 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import model.Recipe;
+import model.Review;
 
 
 /**
@@ -92,28 +95,6 @@ public class MyPage extends HBox {
 		reviewObList = FXCollections.observableArrayList();
 		reviewListView = new ListView<ReviewPreview>();
 		
-        for ( int i = 0; i < 10; i++ )
-        {
-        	recipeObList.add( new RecipePreview(
-        			viewController,
-                    "This is a title",
-                    "src/main/resources/images/preview.png",
-                    "A pretty fairly long description to test how long a description can be without looking weird.",
-					null) );
-        	reviewObList.add(    			
-        			new ReviewPreview(
-                			viewController,
-                			"This is review " + (i + 1),
-                            "src/main/resources/images/preview.png",
-                            "David",
-                            5, 5));
-        }
-		
-		recipeListView.setItems(recipeObList);
-		reviewListView.setItems(reviewObList);
-		
-		reviewListView.minHeight(recipeListView.getHeight() + 15);
-		
 		//set the alignments and spacing of components;
 		myRecipes.setAlignment(Pos.CENTER);
 		myRecipes.setLineSpacing(5);
@@ -121,8 +102,6 @@ public class MyPage extends HBox {
 		myReviews.setLineSpacing(5);
 		createRecipe.setAlignment(Pos.CENTER);
 		createRecipe.setLineSpacing(5);
-		//createReview.setAlignment(Pos.CENTER);
-		//createReview.setLineSpacing(5);
 		recipeColum.setAlignment(Pos.CENTER);
 		recipeColum.setSpacing(10);
 		reviewColum.setAlignment(Pos.CENTER);
@@ -141,9 +120,46 @@ public class MyPage extends HBox {
 	}
 
 	public void upDateReviewLV() {
-		for ( int i = 0; i < 10; i++ )
-			reviewObList.get(i).updateAuthor(viewController);
+		//for ( int i = 0; i < 10; i++ )
+		//	reviewObList.get(i).updateAuthor(viewController);
+		//reviewListView.setItems(reviewObList);
+		if(!recipeObList.isEmpty())
+			recipeObList.removeAll(recipeObList);
+		if(!reviewObList.isEmpty())
+			reviewObList.removeAll(reviewObList);
+		
+		List<Recipe> recipeData = viewController.getAllRecipesForUser(viewController.getCurrentUser().getEmail());
+		List<Review> reviewData = viewController.getAllReviewsByAuthor(viewController.getCurrentUser().getEmail());
+
+        for ( int i = 0; i < recipeData.size(); i++ )
+        {
+        	recipeObList.add( new RecipePreview(
+        			viewController,
+        			recipeData.get(i).getRecipeName(),
+                    "src/main/resources/images/preview.png",
+                    recipeData.get(i).toString(),
+                    recipeData.get(i)) );
+        }  
+	
+        for ( int i = 0; i < reviewData.size(); i++ )
+        {
+        	ReviewPreview newReviewPreview = new ReviewPreview(
+        			viewController,
+        			reviewData.get(i).getRecipeName(),
+                    "src/main/resources/images/preview.png",
+                    reviewData.get(i).getRecipeCreator(),
+                    reviewData.get(i).getRating(), reviewData.get(i).getDifficulty(), "MyPage");
+        	newReviewPreview.updateAuthor();
+        	reviewObList.add(newReviewPreview);
+        			
+        }         
+        
+		recipeListView.setItems(recipeObList);
 		reviewListView.setItems(reviewObList);
+		
+		recipeListView.setMinHeight(300);
+		reviewListView.setMinHeight(450);
+		
 	}
 	
 

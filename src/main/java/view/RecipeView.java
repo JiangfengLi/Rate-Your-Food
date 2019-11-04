@@ -2,8 +2,10 @@ package view;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.sql.PreparedStatement;
 import java.util.List;
-
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -12,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,6 +27,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.StrokeType;
+import javafx.util.Callback;
 import model.Ingredient;
 import model.Instruction;
 import model.Recipe;
@@ -54,11 +58,14 @@ public class RecipeView extends VBox {
 	private TableColumn<Instruction, String> insText;
 	private Label reviewLabel;
 	private Button addReviewButton;
+	private Button readReviewButton;
+	
 	private TableView<Review> reviewList;
 	private TableColumn<Review,String> reviewAuthor;
 	private TableColumn<Review,String> reviewText;
 	private TableColumn<Review,Integer> reviewRating;
 	private TableColumn<Review,Integer> reviewDif;
+//	private ObservableList<Review> reviewObList;
 	
 	private VBox recipeSection;
 	private HBox ingredientTop;
@@ -82,7 +89,7 @@ public class RecipeView extends VBox {
 		this.setPadding(new Insets(16,16,16,16));
 		this.setSpacing(8);
 		inititializeAllNodes();
-
+		
 		if( theRecipe == null )
 		{
 			setCreatorLabel("creator");
@@ -128,8 +135,7 @@ public class RecipeView extends VBox {
 		setInstructionsLabel();
 		setReviewLabel();
 		setAddReviewButton();
-		//setReviewList();
-		
+		readReviewButton();
 		setNodesToParent();
 	}
 	
@@ -144,6 +150,7 @@ public class RecipeView extends VBox {
 	}
 
 	private void setReviewList() {
+		
 		reviewAuthor.setCellValueFactory(new PropertyValueFactory<>("author"));
 		reviewText.setCellValueFactory(new PropertyValueFactory<>("text"));
 		reviewRating.setCellValueFactory(new PropertyValueFactory<>("rating"));
@@ -155,8 +162,13 @@ public class RecipeView extends VBox {
 		reviewRating.prefWidthProperty().bind(reviewList.widthProperty().multiply(1.0 / 10.0));
 		reviewDif.prefWidthProperty().bind(reviewList.widthProperty().multiply(1.0 / 10.0));
 		reviewText.prefWidthProperty().bind(reviewList.widthProperty().multiply(5.0 / 10.0));
-
 		
+		List<Review> reviewData = vc.getAllReviewsForRecipe(theRecipe.getRecipeName(), 
+				theRecipe.getCreator());
+				
+		if(reviewData!= null && !reviewData.isEmpty())
+		     reviewList.getItems().addAll(reviewData);		
+				
 	}
 
 	/**
@@ -165,9 +177,35 @@ public class RecipeView extends VBox {
 	private void setAddReviewButton() {
 		addReviewButton.setText("addReview");
 		addReviewButton.setOnAction(ae -> {
-		vc.moveToReview("RcipeView", theRecipe);
+			ReviewView reviewView = new ReviewView(vc, theRecipe);
+			reviewView.setReturnPoint("RcipeView");		
+		    vc.moveToReview(reviewView);
 		});
 	}
+
+	/**
+	 *  Button to take the users into read review view and create new review
+	 */
+	private void readReviewButton() {
+		readReviewButton.setText("Read Review");
+		readReviewButton.setOnAction(ae -> {
+			Review newReview = reviewList.getSelectionModel().getSelectedItem();
+			if (newReview == null)
+				return;					
+			
+			if(newReview.getAuthor().equals(vc.getCurrentUser().getEmail())) {
+				EditReview newReviewSubClass = new EditReview(vc, newReview);
+				newReviewSubClass.setReturnPoint("RcipeView");
+				vc.moveToReview(newReviewSubClass);
+			} else {
+				ReadReview newReviewSubClass = new ReadReview(vc, newReview);
+				newReviewSubClass.setReturnPoint("RcipeView");
+				vc.moveToReview(newReviewSubClass);
+			}
+
+		});
+	}	
+	
 
 	private void setReviewLabel() {
 		reviewLabel.setText("Reviews");
@@ -310,13 +348,15 @@ public class RecipeView extends VBox {
 		insText = new TableColumn<Instruction, String>();
 		reviewLabel = new Label();
 		addReviewButton = new Button();
+		readReviewButton = new Button();
+		
+		//set up columns for a list of reviews
 		reviewList = new TableView<Review>();
-		reviewAuthor = new TableColumn<Review,String>("Author");
-		reviewText = new TableColumn<Review,String>("Review");
-		reviewRating = new TableColumn<Review,Integer>("Rating");
-		reviewDif = new TableColumn<Review,Integer>("Dificulty");
-		
-		
+		reviewAuthor = new TableColumn<Review, String>("Author");
+		reviewText = new TableColumn<Review, String>("Review");
+		reviewRating = new TableColumn<Review, Integer>("Rating");
+		reviewDif = new TableColumn<Review, Integer>("Dificulty");
+				
 		recipeSection = new VBox(8);;
 		ingredientTop = new HBox(8);
 		ingredientBottom = new HBox(8);
@@ -368,7 +408,7 @@ public class RecipeView extends VBox {
 		
 		Region region3 = new Region();
         HBox.setHgrow(region3, Priority.ALWAYS);
-		reviewAndButton.getChildren().addAll(reviewLabel, region3, addReviewButton);
+		reviewAndButton.getChildren().addAll(reviewLabel, region3, readReviewButton, addReviewButton);
 		
 		
 		HBox creatorLayout = new HBox();

@@ -353,6 +353,7 @@ public class CreateRecipeView extends GridPane {
 					instructionsTable.setStyle(noMark);
 				
 				return;
+
 			}
 			
 			List<Recipe> userRecipes = database.getAllRecipesForUser(user);
