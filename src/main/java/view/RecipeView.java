@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.sql.PreparedStatement;
 import java.util.List;
-
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -33,13 +32,14 @@ import model.Ingredient;
 import model.Instruction;
 import model.Recipe;
 import model.Review;
+import model.Tag;
 
 public class RecipeView extends VBox {
 
 	private Label creator;
 	private ImageView imageView;
 	private Label recipeName;
-	private Label tags;
+	private Label tagLabel;
 	private Label summary;
 	private StackPane ratingLayout;
 	private Circle circle1;
@@ -48,7 +48,7 @@ public class RecipeView extends VBox {
 	private Circle circle2;
 	private Label difficulty;
 	private Label ingredientsLabel;
-	private TableView<Ingredient> ingredientsList;
+	private TableView<Ingredient> ingredientsTable;
 	private TableColumn<Ingredient, Float> ingAmount;
 	private TableColumn<Ingredient, String> ingUnit;
 	private TableColumn<Ingredient, String> ingName;
@@ -99,24 +99,43 @@ public class RecipeView extends VBox {
 		}
 		else
 		{
+			String recipeName = theRecipe.getRecipeName();
+			String recipeCreator = theRecipe.getCreator();
+			
+			List<Tag> recipeTags = this.vc.getAllTagsForRecipe(recipeName, recipeCreator);
+			List<Ingredient> ingredientsList = this.vc.getAllIngredientsForRecipe(recipeName, recipeCreator);
+			List<Instruction> instructionsList = this.vc.getAllInstructionsForRecipe(recipeName, recipeCreator);
+			List<Review> reviewList = this.vc.getAllReviewsForRecipe(recipeName, recipeCreator);
+			
+			ObservableList<Ingredient> ingredientsObsList  = FXCollections.observableArrayList(ingredientsList);
+			ObservableList<Instruction> instructionsObsList = FXCollections.observableArrayList(instructionsList);
+			ObservableList<Review> reviewObsList = FXCollections.observableArrayList(reviewList);
+
+
+			
 			setCreatorLabel(theRecipe.getCreator());
 			setRecipeLabel(theRecipe.getRecipeName());
 			setRating(theRecipe.getRating());
 			setDifficulty(theRecipe.getDifficulty());
+			setTags(recipeTags);
+			setIngredientTable();
+			ingredientsTable.setItems(ingredientsObsList);
+			setInstructions();
+			instructions.setItems(instructionsObsList);;
+			setReviewList();
+			this.reviewList.setItems(reviewObsList);
+			
+			
 		}
 
 		setImage("src/main/resources/images/preview.png");
-		setTags();
-		setSummary("Summary for all this blah blah blah blah blah blah blah blah blah blah blah");
+		//setTags();
+		//setSummary("Summary for all this blah blah blah blah blah blah blah blah blah blah blah");
 		setIngredientLabel();
-		setIngredientList();
 		setInstructionsLabel();
-		setInstructions();
 		setReviewLabel();
 		setAddReviewButton();
 		readReviewButton();
-		setReviewList();
-		
 		setNodesToParent();
 	}
 	
@@ -200,20 +219,23 @@ public class RecipeView extends VBox {
 		
 		//insNumber.setCellValueFactory(new PropertyValueFactory<>("")); // no instruction number set up still
 		insText.setCellValueFactory(new PropertyValueFactory<>("text"));
+		insNumber.setCellValueFactory(new PropertyValueFactory<>("iD"));
 		
 		instructions.getColumns().addAll(insNumber, insText);
 		
-		insNumber.prefWidthProperty().bind(ingredientsList.widthProperty().multiply(1.0 / 10.0));
-		insText.prefWidthProperty().bind(ingredientsList.widthProperty().multiply(9.0 / 10.0));
+		insNumber.prefWidthProperty().bind(ingredientsTable.widthProperty().multiply(1.0 / 10.0));
+		insText.prefWidthProperty().bind(ingredientsTable.widthProperty().multiply(9.0 / 10.0));
 	}
+	
+	
 
 	private void setInstructionsLabel() {
 		instructionsLabel.setText("Instructions");
 	}
 
-	private void setIngredientList() {
+	private void setIngredientTable() {
 
-		ingredientsList.setPrefWidth(450);
+		ingredientsTable.setPrefWidth(450);
 		ingAmount.setText("Amount");
 		ingUnit.setText("Unit");
 		ingName.setText("Ingredient");
@@ -222,10 +244,10 @@ public class RecipeView extends VBox {
 		ingUnit.setCellValueFactory(new PropertyValueFactory<>("unit"));
 		ingName.setCellValueFactory(new PropertyValueFactory<>("name"));
 		
-		ingredientsList.getColumns().addAll(ingAmount,ingUnit,ingName);
-		ingAmount.prefWidthProperty().bind(ingredientsList.widthProperty().multiply(1.0 / 10.0));
-		ingUnit.prefWidthProperty().bind(ingredientsList.widthProperty().multiply(2.0 / 10.0));
-		ingName.prefWidthProperty().bind(ingredientsList.widthProperty().multiply(7.0 / 10.0));
+		ingredientsTable.getColumns().addAll(ingAmount,ingUnit,ingName);
+		ingAmount.prefWidthProperty().bind(ingredientsTable.widthProperty().multiply(1.0 / 10.0));
+		ingUnit.prefWidthProperty().bind(ingredientsTable.widthProperty().multiply(2.0 / 10.0));
+		ingName.prefWidthProperty().bind(ingredientsTable.widthProperty().multiply(7.0 / 10.0));
 		
 	}
 
@@ -263,8 +285,20 @@ public class RecipeView extends VBox {
 		summary.setWrapText(true);
 	}
 
-	private void setTags() {
-		tags.setText("Tags");
+	private void setTags(List<Tag> tags) {
+		if (tags == null || tags.size() == 0 ) {
+			tagLabel.setText("No tags in this recipe");
+		
+		} else {
+			
+			String result = "";
+			for (int i = 0; i < tags.size(); i++) {
+				if (i > 0)
+					result += " ";
+				result += tags.get(i).getName();
+			}
+			tagLabel.setText(result);
+		}
 	}
 
 	private void setRecipeLabel(String name) {
@@ -295,7 +329,7 @@ public class RecipeView extends VBox {
 		creator = new Label();
 		imageView = new ImageView();
 		recipeName = new Label();
-		tags = new Label();
+		tagLabel = new Label();
 		summary = new Label();
 		ratingLayout = new StackPane();
 		circle1 = new Circle();
@@ -304,7 +338,7 @@ public class RecipeView extends VBox {
 		circle2 = new Circle();
 		difficulty = new Label();
 		ingredientsLabel = new Label();
-		ingredientsList = new TableView<Ingredient>();
+		ingredientsTable = new TableView<Ingredient>();
 		ingAmount = new TableColumn<Ingredient, Float>();
 		ingUnit = new TableColumn<Ingredient, String>();
 		ingName = new TableColumn<Ingredient, String>();
@@ -353,12 +387,12 @@ public class RecipeView extends VBox {
 		Region region2 = new Region();
         HBox.setHgrow(region2, Priority.ALWAYS);
         
-		tagsAndDif.getChildren().addAll(tags, region2, difficultyLayout);
+		tagsAndDif.getChildren().addAll(tagLabel, region2, difficultyLayout);
 		
 		ingredientInfo.getChildren().addAll(titleAndRating,tagsAndDif,summary);
 		ingredientTop.getChildren().addAll(imageView,ingredientInfo);
 		
-		ingredientSection.getChildren().addAll(ingredientsLabel,ingredientsList);
+		ingredientSection.getChildren().addAll(ingredientsLabel,ingredientsTable);
 		instructionSection.getChildren().addAll(instructionsLabel,instructions);
 		ingredientBottom.getChildren().addAll(ingredientSection,instructionSection);
 		
