@@ -228,6 +228,7 @@ public class CreateRecipeView extends GridPane {
 
 				if	(ing.getName().equals(name)) {
 					System.out.println("name are the same");
+					message.setText("no repeating Ingredients");
 					return; //exit method
 				}
 
@@ -271,8 +272,11 @@ public class CreateRecipeView extends GridPane {
 				return; // fail
 			
 			for (TempInstruction ins : instructionlist) {
-				if	(ins.getStr().equals(instructionString))
+				if	(ins.getStr().equals(instructionString)) {
+					message.setText("No repeating Instructions");
 					return; //exit method
+
+				}
 			}
 								
 			TempInstruction instruction = new TempInstruction(instructionlist.size()+1,instructionString);
