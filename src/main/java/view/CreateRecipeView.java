@@ -366,7 +366,7 @@ public class CreateRecipeView extends GridPane {
 				}
 			}
 			
-			viewController.addRecipe(name, user,1,1);
+			viewController.addRecipe(name, user, 1, 1);
 			
 			for (String tag : tags.split("\\W+")) {
 				database.addTag(tag, name, user);
