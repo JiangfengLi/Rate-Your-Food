@@ -105,7 +105,7 @@ public class HUD extends FlowPane
     private TextField makeSearchArea( )
     {
         searchArea = new TextField();
-        searchArea.setPromptText( "Search for recipes" );
+        searchArea.setPromptText( "Search for recipes by name, creator, or tags" );
         searchArea.setPrefSize( 345, 50 );
         return searchArea;
     }
@@ -162,6 +162,7 @@ public class HUD extends FlowPane
 	// CREATE HOMEPAGE HANDLER
 	private class HomePageHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
+		    searchArea.clear();
 			viewController.moveToHomePage();;
 		}
 	}
@@ -169,6 +170,7 @@ public class HUD extends FlowPane
 	// CREATE MYPAGE HANDLER
 	private class MyPageHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
+            searchArea.clear();
 			viewController.moveToMyPage();
 		}
 	}
@@ -176,6 +178,7 @@ public class HUD extends FlowPane
 	// CREATE ACCOUNT HANDLER
 	private class AccountHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
+            searchArea.clear();
 			viewController.moveToAccountView();
 		}
 	}
@@ -183,6 +186,7 @@ public class HUD extends FlowPane
 	// CREATE CART HANDLER
 	private class MyCartHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
+            searchArea.clear();
 			viewController.moveToCartPage();
 		}
 	}

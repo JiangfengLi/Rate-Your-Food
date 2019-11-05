@@ -100,7 +100,7 @@ public class StartPage extends VBox
             		viewController,
                     recipeData.get( aRecipeIndex ).getRecipeName(),
                     "src/main/resources/images/preview.png",
-                    "Favorite " + i,
+                    dbAccess.findRecipeTags(recipeData.get( aRecipeIndex ).getRecipeName()),
                     recipeData.get( aRecipeIndex )) );
         }
 
@@ -137,7 +137,7 @@ public class StartPage extends VBox
                             viewController,
                             aRecipe.getRecipeName(),
                             "src/main/resources/images/preview.png",
-                            "tags",
+                            dbAccess.findRecipeTags(aRecipe.getRecipeName()),
                             aRecipe ) );
         }
 
@@ -174,7 +174,7 @@ public class StartPage extends VBox
                             viewController,
                             aRecipe.getRecipeName(),
                             "src/main/resources/images/preview.png",
-                            "tags",
+                            dbAccess.findRecipeTags(aRecipe.getRecipeName()),
                             aRecipe ) );
         }
 

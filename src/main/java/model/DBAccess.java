@@ -37,8 +37,10 @@ public class DBAccess implements DatabaseInterface{
 	private static final String GET_ALL_RECIPES = "SELECT * FROM Recipe;";
 	private static final String GET_ALL_RECIPES_BY_TAG = "SELECT DISTINCT R.RecipeName, R.Creator, R.Difficulty, R.Rating "+
 			"FROM Recipe R JOIN Tag T ON R.RecipeName = T.RecipeName AND R.Creator = T.RecipeCreator WHERE T.Name=?;";
-	private static final String SEARCH_RECIPES = "SELECT DISTINCT R.RecipeName, R.Creator, R.Difficulty, R.Rating " +
-			"FROM Recipe R JOIN Tag T ON R.RecipeName = T.RecipeName AND R.Creator = T.RecipeCreator WHERE ( T.Name LIKE ? OR R.RecipeName LIKE ? OR R.Creator LIKE ? );";
+	private static final String SEARCH_RECIPES = "SELECT DISTINCT R.RecipeName, R.Creator, R.Difficulty, R.Rating, T.Name " +
+			"FROM Recipe R JOIN Tag T ON R.RecipeName = T.RecipeName AND R.Creator = T.RecipeCreator WHERE ( T.Name LIKE ? OR R.RecipeName LIKE ? OR R.Creator LIKE ? ) GROUP BY R.RecipeName;";
+	private static final String FIND_TAGS_BY_RECIPE = "SELECT DISTINCT T.Name "+
+            "FROM Recipe R JOIN Tag T ON R.RecipeName = T.RecipeName AND R.RecipeName=?;";
 	private static final String DELETE_RECIPE = "DELETE FROM Recipe WHERE RecipeName=? AND Creator=?;";
 	private static final String DELETE_ALL_RECIPES_FOR_USER = "DELETE FROM Recipe WHERE Creator=?;";
 	private static final String UPDATE_RECIPE = "UPDATE Recipe SET RecipeName=?, Difficulty=?, Rating=? WHERE RecipeName=? AND Creator=?;";
@@ -435,6 +437,28 @@ public class DBAccess implements DatabaseInterface{
 			return null;
 		}
 	}
+
+	public String findRecipeTags(String recipeName)
+    {
+        try {
+            Connection conn = establishConnection();
+            PreparedStatement stmt;
+            stmt = conn.prepareStatement( FIND_TAGS_BY_RECIPE );
+            stmt.setString( 1, recipeName );
+            ResultSet rs = stmt.executeQuery();
+            StringBuilder tags = new StringBuilder();
+            while (rs.next()) {
+                tags.append(rs.getString(1)).append(", ");
+            }
+            tags.delete(tags.lastIndexOf(","), tags.length());
+            stmt.close();
+            conn.close();
+            return tags.toString();
+        } catch (Exception x) {
+            x.printStackTrace();
+            return null;
+        }
+    }
 	
 
 	/**
@@ -960,7 +984,7 @@ public class DBAccess implements DatabaseInterface{
 	/**
 	 * DELETE ALL INGREDIENTS FOR USER
 	 * deletes all ingredients associated with user [as an author for recipes]
-	 * @param recipeCreator
+	 * @param user
 	 * @return
 	 */
 	private String deleteAllIngredientsForUser(String user) {
