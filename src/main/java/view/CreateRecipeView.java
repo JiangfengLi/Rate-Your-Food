@@ -275,13 +275,11 @@ public class CreateRecipeView extends GridPane {
 				if	(ins.getStr().equals(instructionString)) {
 					message.setText("No repeating Instructions");
 					return; //exit method
-
 				}
 			}
 								
 			TempInstruction instruction = new TempInstruction(instructionlist.size()+1,instructionString);
 			instructionlist.add(instruction);
-
 		});
 
 		deleteInstructionButton.setOnAction(ae -> {
@@ -368,7 +366,7 @@ public class CreateRecipeView extends GridPane {
 				}
 			}
 			
-			viewController.addRecipe(name, user,0,0);
+			viewController.addRecipe(name, user,1,1);
 			
 			for (String tag : tags.split("\\W+")) {
 				database.addTag(tag, name, user);
