@@ -105,7 +105,7 @@ public class ViewController implements DatabaseInterface {
         
         // create scroll view for recipeView
         scrollForRecipe = new ScrollPane();
-        scrollForRecipe.setFitToHeight(true);
+        //scrollForRecipe.setFitToHeight(true);
         scrollForRecipe.setFitToWidth(true);
         scrollForRecipe.setContent(recipeView);
         
