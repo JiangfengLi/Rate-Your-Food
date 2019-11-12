@@ -47,7 +47,8 @@ public class StartPage extends VBox
         EventHandler searchHandler = event ->
         {
             getChildren().clear();
-            getChildren().addAll( theFeaturedRecipes, makeSearchRecipes() );
+            getChildren().addAll( makeSearchRecipes() );
+            setAlignment( Pos.TOP_CENTER );
         };
 
         theSearchIcon.setOnMousePressed( searchHandler );
