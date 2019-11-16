@@ -88,7 +88,6 @@ public class ViewController implements DatabaseInterface {
         mypage = new MyPage(this);
         accountView = new AccountView(this);
         //recipeView = new RecipeView(this, null);
-        createRecipe = new CreateRecipeView(this);
         cartPage = new CartPage(this);
         
         // Set alignment for all views going into main borderpane
@@ -113,10 +112,7 @@ public class ViewController implements DatabaseInterface {
         createRecipeScroll = new ScrollPane();
         createRecipeScroll.setFitToHeight(true);
         createRecipeScroll.setFitToWidth(true);
-        createRecipeScroll.setContent(createRecipe);
         createRecipeScroll.setHbarPolicy(ScrollBarPolicy.NEVER);
-        //createRecipeScroll.setFitToWidth( true );
-        //createRecipeScroll.setFitToHeight( true );
 
         // update dimension properties
         theHUD.prefWidthProperty().bind( theScene.widthProperty() );
@@ -234,6 +230,9 @@ public class ViewController implements DatabaseInterface {
 	 */	
 	public void moveToCreateRecipe() {
 		theWindow.setTop( theHUD );
+		
+        createRecipe = new CreateRecipeView(this);
+        createRecipeScroll.setContent(createRecipe);
 	    theWindow.setCenter( createRecipeScroll );
 	    theWindow.setLeft(null);
 	    theWindow.setRight(null);

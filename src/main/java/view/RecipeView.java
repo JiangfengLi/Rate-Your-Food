@@ -2,13 +2,9 @@ package view;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.sql.PreparedStatement;
 import java.util.LinkedList;
 import java.util.List;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -17,7 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -32,9 +27,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
-import javafx.util.Callback;
 import model.Ingredient;
 import model.Instruction;
 import model.Recipe;
@@ -44,10 +36,10 @@ import model.Tag;
 public class RecipeView extends VBox {
 
 	private Label creator;
+	private Button editRecipeButton;
 	private ImageView imageView;
 	private Label recipeName;
 	private Label tagLabel;
-	//private TextFlow tagLabel;
 	private Label summary;
 	private StackPane ratingLayout;
 	private Circle circle1;
@@ -73,11 +65,9 @@ public class RecipeView extends VBox {
 	private TableColumn<Review,String> reviewText;
 	private TableColumn<Review,Integer> reviewRating;
 	private TableColumn<Review,Integer> reviewDif;
-//	private ObservableList<Review> reviewObList;
 	
-	//private VBox recipeSection;
+	private HBox userRow;
 	private HBox ingredientTop;
-	//private HBox ingredientBottom;
 	private VBox ingredientSection;
 	private VBox instructionSection;
 	private VBox ingredientInfo;
@@ -135,14 +125,13 @@ public class RecipeView extends VBox {
 			setInstructions();
 			instructions.setItems(instructionsObsList);;
 			setReviewList();
+			setEditRecipeButton();
 			this.reviewList.setItems(reviewObsList);
 			
 			
 		}
 
 		setImage("src/main/resources/images/preview.png");
-		//setTags();
-		//setSummary("Summary for all this blah blah blah blah blah blah blah blah blah blah blah");
 		setIngredientLabel();
 		setInstructionsLabel();
 		setReviewLabel();
@@ -161,6 +150,7 @@ public class RecipeView extends VBox {
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	private void setReviewList() {
 		
 		reviewAuthor.setCellValueFactory(new PropertyValueFactory<>("author"));
@@ -223,6 +213,7 @@ public class RecipeView extends VBox {
 		reviewLabel.setText("Reviews");
 	}
 
+	@SuppressWarnings("unchecked")
 	private void setInstructions() {
 		instructions.prefWidthProperty().bind(vc.returnStage().widthProperty());
 		//instructions.setPrefWidth(450);
@@ -252,6 +243,7 @@ public class RecipeView extends VBox {
 		instructionsLabel.setText("Instructions");
 	}
 
+	@SuppressWarnings("unchecked")
 	private void setIngredientTable() {
 
 		//ingredientsTable.setPrefWidth(450);
@@ -312,13 +304,14 @@ public class RecipeView extends VBox {
 			tagLabel.setText("No tags in this recipe");
 		} else {
 			
-			String result = "";
+			//String result = "";
+			StringBuffer result = new StringBuffer();;
 			for (int i = 0; i < tags.size(); i++) {
 				if (i > 0)
-					result += ", ";
-				result += tags.get(i).getName();
+					result.append(", ");
+				result.append(tags.get(i).getName());
 			}
-			tagLabel.setText(result);
+			tagLabel.setText(result.toString());
 		}
 		
 		
@@ -340,13 +333,10 @@ public class RecipeView extends VBox {
 	}
 
 	private void setCreatorLabel(String text) {
-		HBox temp = new HBox();
-		temp.getChildren().add(creator);
-		temp.setAlignment(Pos.CENTER_RIGHT);
+		
 		creator.setAlignment(Pos.CENTER_RIGHT);
 		creator.setPadding(new Insets(0.0, 0.0, 10.0, 0.0));
 		creator.setText(text);
-		//creator.setStyle("-fx-font: italic;");
 		creator.setFont(Font.font(
                 "Serif",
                 FontPosture.ITALIC,
@@ -355,44 +345,45 @@ public class RecipeView extends VBox {
 	}
 
 	private void inititializeAllNodes() {
-		creator = new Label();
-		imageView = new ImageView();
-		recipeName = new Label();
-		tagLabel = new Label();
-		//tagLabel = new TextFlow();
-		summary = new Label();
-		ratingLayout = new StackPane();
-		circle1 = new Circle();
-		rating = new Label();
-		difficultyLayout = new StackPane();
-		circle2 = new Circle();
-		difficulty = new Label();
-		ingredientsLabel = new Label();
-		ingredientsTable = new TableView<Ingredient>();
-		ingAmount = new TableColumn<Ingredient, Float>();
-		ingUnit = new TableColumn<Ingredient, String>();
-		ingName = new TableColumn<Ingredient, String>();
-		instructionsLabel = new Label();
-		instructions = new TableView<TempInstruction>();
-		insNumber = new TableColumn<TempInstruction, Integer>();
-		insText = new TableColumn<TempInstruction, String>();
-		reviewLabel = new Label();
-		addReviewButton = new Button();
-		readReviewButton = new Button();
+		
+		creator 			= new Label();
+		editRecipeButton 	= new Button("Edit recipe");
+		
+		imageView 			= new ImageView();
+		recipeName 			= new Label();
+		tagLabel 			= new Label();
+		summary 			= new Label();
+		ratingLayout 		= new StackPane();
+		circle1 			= new Circle();
+		rating 				= new Label();
+		difficultyLayout 	= new StackPane();
+		circle2 			= new Circle();
+		difficulty 			= new Label();
+		ingredientsLabel 	= new Label();
+		ingredientsTable 	= new TableView<Ingredient>();
+		ingAmount 			= new TableColumn<Ingredient, Float>();
+		ingUnit 			= new TableColumn<Ingredient, String>();
+		ingName 			= new TableColumn<Ingredient, String>();
+		instructionsLabel 	= new Label();
+		instructions 		= new TableView<TempInstruction>();
+		insNumber 			= new TableColumn<TempInstruction, Integer>();
+		insText 			= new TableColumn<TempInstruction, String>();
+		reviewLabel 		= new Label();
+		addReviewButton 	= new Button();
+		readReviewButton 	= new Button();
 		
 		//set up columns for a list of reviews
-		reviewList = new TableView<Review>();
+		reviewList 	 = new TableView<Review>();
 		reviewAuthor = new TableColumn<Review, String>("Author");
-		reviewText = new TableColumn<Review, String>("Review");
+		reviewText 	 = new TableColumn<Review, String>("Review");
 		reviewRating = new TableColumn<Review, Integer>("Rating");
-		reviewDif = new TableColumn<Review, Integer>("Dificulty");
+		reviewDif 	 = new TableColumn<Review, Integer>("Dificulty");
 				
-		//recipeSection = new VBox(8);;
-		ingredientTop = new HBox(8);
-		//ingredientBottom = new HBox(8);
-		ingredientInfo = new VBox(8);
-		ingredientSection = new VBox(4);
-		instructionSection = new VBox(4);
+		userRow 			= new HBox(8);
+		ingredientTop 		= new HBox(8);
+		ingredientInfo 		= new VBox(8);
+		ingredientSection 	= new VBox(4);
+		instructionSection 	= new VBox(4);
 		
 		titleAndRating = new HBox(8);
 		titleAndRating.setAlignment(Pos.CENTER);
@@ -401,8 +392,21 @@ public class RecipeView extends VBox {
 		reviewAndButton = new HBox(8);
 
 	}
+	
+	private void setEditRecipeButton() {
+		editRecipeButton.setOnAction(e -> {
+	
+			//TODO: set button to move to CreateRecipe??
+	});}
 
 	private void setNodesToParent() {
+		
+		userRow.setAlignment(Pos.CENTER_RIGHT);
+		
+		if (vc.getCurrentUser().getEmail().equals(theRecipe.getCreator()))
+			userRow.getChildren().addAll(editRecipeButton,creator);
+		else
+			userRow.getChildren().add(creator);
 		
 		ratingLayout.getChildren().add(circle1);
 		ratingLayout.getChildren().add(rating);
