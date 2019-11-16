@@ -81,6 +81,11 @@ public class Ingredient extends DataObject {
 	public void setRecipeName(String recipeName) {
 		this.recipeName = recipeName;
 	}
+
+	public void setAmount( float newAmount )
+	{
+		amount = (float) (Math.round(newAmount * 10) / 10.0);
+	}
 	
 	public String toString() {
 		return
