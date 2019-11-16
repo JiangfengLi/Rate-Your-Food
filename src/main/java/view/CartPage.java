@@ -2,7 +2,11 @@ package view;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -23,6 +27,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import model.CartList;
+import model.DBAccess;
 import model.Ingredient;
 
 /**
@@ -38,13 +44,20 @@ public class CartPage extends BorderPane
 	private Button increaseQuantity;
 	private Button decreaseQuantity;
 	private Button removeItem;
-	
+
+	private DBAccess dbAccess;
 
 	private VBox changeQuantityBox;
+
+	private ObservableList<Ingredient> ingredients;
+	private CartList cartList = CartList.getCartList();
+	TableView<Ingredient> tableView;
 
 
 	public CartPage(ViewController viewController) {
 		this.viewController = viewController;
+        this.dbAccess = new DBAccess();
+        ingredients = cartList.getIngredientList();
 
 		// set up the background image
         try
@@ -75,18 +88,18 @@ public class CartPage extends BorderPane
 		scrollPane.setFitToWidth( true );
 		scrollPane.setHbarPolicy( ScrollPane.ScrollBarPolicy.NEVER );
 
-		TableView tableView = new TableView();
+		tableView = new TableView<>();
 		tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-		TableColumn<String, Ingredient> column1 = new TableColumn<>("Ingredient");
+		TableColumn<Ingredient, String> column1 = new TableColumn<>("Ingredient");
 		column1.setCellValueFactory(new PropertyValueFactory<>("name"));
 		column1.setPrefWidth( 300 );
 
-		TableColumn<String, Ingredient> column2 = new TableColumn<>("Unit");
+		TableColumn<Ingredient, String> column2 = new TableColumn<>("Unit");
 		column2.setCellValueFactory(new PropertyValueFactory<>("unit"));
 		column2.setPrefWidth( 300 );
 
-		TableColumn<String, Ingredient> column3 = new TableColumn<>("Quantity");
+		TableColumn<Ingredient, String> column3 = new TableColumn<>("Quantity");
 		column3.setCellValueFactory(new PropertyValueFactory<>("amount"));
 		column3.setPrefWidth( 300 );
 
@@ -95,10 +108,7 @@ public class CartPage extends BorderPane
 		tableView.getColumns().add(column2);
 		tableView.getColumns().add(column3);
 
-		for( int i = 0; i < 20; i++ )
-		{
-			tableView.getItems().add(new Ingredient("test " + i, "test", "test", 1, "test") );
-		}
+		tableView.setItems(ingredients);
 
 		scrollPane.setContent( tableView );
 
@@ -127,11 +137,95 @@ public class CartPage extends BorderPane
 
 		setAlignment( header, Pos.CENTER );
 		
-		//set createRecipe button to move to CreateTRecipeView
-		//createRecipe.setOnAction(ae -> {
-		//	viewController.moveToCreateRecipe();
-		//});
+		increaseQuantity.setOnAction( event -> {
+			Ingredient selectedIngredient = tableView.getSelectionModel().getSelectedItem();
+			if( selectedIngredient == null )
+			{
+				return;
+			}
+			float amount = selectedIngredient.getAmount();
+			if( amount == Math.ceil( amount ) )
+			{
+				selectedIngredient.setAmount( amount + 1 );
+			}
+			else
+			{
+				selectedIngredient.setAmount((float) (amount + .1));
+			}
+
+			int index = ingredients.indexOf( selectedIngredient );
+			ingredients.set( index, selectedIngredient );
+		} );
+
+		decreaseQuantity.setOnAction( event -> {
+			Ingredient selectedIngredient = tableView.getSelectionModel().getSelectedItem();
+			if( selectedIngredient == null )
+			{
+				return;
+			}
+			float amount = selectedIngredient.getAmount();
+			if( amount == Math.ceil( amount ) )
+			{
+				selectedIngredient.setAmount( amount - 1 );
+			}
+			else
+			{
+				selectedIngredient.setAmount((float) (amount - .1));
+			}
+
+			if( selectedIngredient.getAmount() <= 0.0 )
+			{
+				selectedIngredient = tableView.getSelectionModel().getSelectedItem();
+				ingredients.remove( selectedIngredient );
+			}
+			else
+			{
+				int index = ingredients.indexOf( selectedIngredient );
+				ingredients.set( index, selectedIngredient );
+			}
+		} );
+
+		removeItem.setOnAction( event -> {
+			Ingredient selectedIngredient = tableView.getSelectionModel().getSelectedItem();
+			ingredients.remove( selectedIngredient );
+		} );
+
 		
+	}
+//
+//	public void build()
+//    {
+//        ObservableList data = FXCollections.observableArrayList();
+//        try{
+//            String SQL = "Select * from usermaster Order By UserName";
+//            ResultSet rs = con.createStatement().executeQuery(SQL);
+//
+//            while(rs.next()){
+//                Ingredient cm = new Ingredient();
+//                cm.userId.set(rs.getInt("UserId"));
+//                Image img = new Image("tailoring/UserPhoto/User"+cm.getUserId().toString()+".jpg");
+//
+//                ImageView mv = new ImageView();
+//                mv.setImage(img);
+//                mv.setFitWidth(70);
+//                mv.setFitHeight(80);
+//                cm.userPhoto.set(mv);
+//                cm.userName.set(rs.getString("UserName"));
+//                cm.userPassword.set(rs.getString("UserPassword"));
+//                data.add(cm);
+//            }
+//            tableview.setItems(data);
+//        }
+//        catch(Exception e){
+//            e.printStackTrace();
+//            System.out.println("Error on Building Data");
+//        }
+//    }
+
+	public void updateCart()
+	{
+		ingredients = cartList.getIngredientList();
+		tableView.setItems( ingredients );
 	}
 
 }
