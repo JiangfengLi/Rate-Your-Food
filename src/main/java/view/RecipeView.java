@@ -348,7 +348,6 @@ public class RecipeView extends VBox {
 		
 		creator 			= new Label();
 		editRecipeButton 	= new Button("Edit recipe");
-		
 		imageView 			= new ImageView();
 		recipeName 			= new Label();
 		tagLabel 			= new Label();
@@ -396,7 +395,7 @@ public class RecipeView extends VBox {
 	private void setEditRecipeButton() {
 		editRecipeButton.setOnAction(e -> {
 	
-			//TODO: set button to move to CreateRecipe??
+			vc.moveToEditRecipe(theRecipe);
 	});}
 
 	private void setNodesToParent() {
@@ -444,12 +443,7 @@ public class RecipeView extends VBox {
         HBox.setHgrow(region3, Priority.ALWAYS);
 		reviewAndButton.getChildren().addAll(reviewLabel, region3, readReviewButton, addReviewButton);
 		
-		
-		HBox creatorLayout = new HBox();
-		creatorLayout.getChildren().add(creator);
-		creatorLayout.setAlignment(Pos.CENTER_RIGHT);
-		
-		this.getChildren().addAll(creatorLayout, ingredientTop,recipeLayout, reviewAndButton, reviewList);
+		this.getChildren().addAll(userRow, ingredientTop,recipeLayout, reviewAndButton, reviewList);
 
 	}
 	

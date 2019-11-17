@@ -23,13 +23,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import model.DBAccess;
 import model.Ingredient;
+import model.Instruction;
 import model.Recipe;
 
 public class CreateRecipeView extends GridPane {
 
 	private Label message;
 	private Label recipeName;
-	protected TextField recipeNameField;
 	private Label tags;
 	private TextField tagsField;
 	private HBox ingredientFields;
@@ -46,29 +46,35 @@ public class CreateRecipeView extends GridPane {
 	private Button addIngredientButton;
 	private Button deleteIngredientButton;
 	private Label ingredientLabel;
-	protected TableView<Ingredient> ingredientTable;
 	private TableColumn<Ingredient, Integer> ingAmount;
 	private TableColumn<Ingredient, String> ingUnit;
 	private TableColumn<Ingredient, String> ingName;
 	private Label instructions;
-	protected TableView<TempInstruction> instructionsTable;
 	private TableColumn<TempInstruction, Integer> insStep;
 	private TableColumn<TempInstruction, String> insString;
 	private HBox instructionButtons;
 	private Button addInstructionButton;
 	private Button deleteInstructionButton;
 	private TextField instructionField;
-	private Button submitButton;
 	private ImageView image;
 	private Button chooseFile;
 	private FileChooser fileChooser;
 	private File file;
 
 	private DBAccess database;
-	protected ViewController viewController;
+	protected Button submitButton;
 	protected final String defaultURL = "src/main/resources/images/preview.png";
-	protected ObservableList<Ingredient> ingredientList;
-	protected ObservableList<TempInstruction> instructionlist;
+	//protected ObservableList<Ingredient> ingredientList;
+	//protected ObservableList<TempInstruction> tempInstructionlist;
+	
+	protected TextField recipeNameField;	
+	protected TableView<Ingredient> ingredientTable;
+	protected TableView<TempInstruction> instructionsTable;
+	protected ObservableList<Instruction> instructionList; 
+
+	protected ViewController viewController;
+
+
 
 	public CreateRecipeView(ViewController vc) {
 
@@ -96,8 +102,8 @@ public class CreateRecipeView extends GridPane {
 	@SuppressWarnings("unchecked")
 	private void initializeAllNodes() throws FileNotFoundException {
 
-		ingredientList = FXCollections.observableArrayList();
-		instructionlist = FXCollections.observableArrayList();
+		//ingredientList = FXCollections.observableArrayList();
+		//tempInstructionlist = FXCollections.observableArrayList();
 
 		message = new Label();
 		recipeName = new Label("Recipe Name*");
@@ -158,11 +164,11 @@ public class CreateRecipeView extends GridPane {
 		ingAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
 		ingUnit.setCellValueFactory(new PropertyValueFactory<>("unit"));
 		ingName.setCellValueFactory(new PropertyValueFactory<>("name"));
-		ingredientTable.setItems(ingredientList);
+		//ingredientTable.setItems(ingredientList);
 		
 		insStep.setCellValueFactory(new PropertyValueFactory<>("index"));
 		insString.setCellValueFactory(new PropertyValueFactory<>("str"));
-		instructionsTable.setItems(instructionlist);			
+		//instructionsTable.setItems(tempInstructionlist);			
 	}
 
 	private void setNodesToParent() {
@@ -211,10 +217,11 @@ public class CreateRecipeView extends GridPane {
 				return; // exit method
 			}
 			
+			ObservableList<Ingredient> ingredientList = ingredientTable.getItems();
 			for (Ingredient ing : ingredientList) {
 
 				if	(ing.getName().equals(name)) {
-					System.out.println("name are the same");
+					System.out.println(name+" already exists");
 					message.setText("no repeating Ingredients");
 					return; //exit method
 				}
@@ -223,7 +230,7 @@ public class CreateRecipeView extends GridPane {
 			
 			Ingredient ingredient = new Ingredient(name, "", user, amountInt, unit);
 
-			ingredientList.add(ingredient);		
+			ingredientList.add(ingredient);
 
 		});
 
@@ -258,38 +265,40 @@ public class CreateRecipeView extends GridPane {
 			if (instructionString.isEmpty())
 				return; // fail
 			
-			for (TempInstruction ins : instructionlist) {
+			ObservableList<TempInstruction> tempInstructionlist = instructionsTable.getItems();
+			for (TempInstruction ins : tempInstructionlist) {
 				if	(ins.getStr().equals(instructionString)) {
 					message.setText("No repeating Instructions");
 					return; //exit method
 				}
 			}
 								
-			TempInstruction instruction = new TempInstruction(instructionlist.size()+1,instructionString);
-			instructionlist.add(instruction);
+			TempInstruction instruction = new TempInstruction(tempInstructionlist.size()+1,instructionString);
+			tempInstructionlist.add(instruction);
 		});
 
 		deleteInstructionButton.setOnAction(ae -> {
 
-			final int size = instructionlist.size();
+			ObservableList<TempInstruction> tempInstructionlist = instructionsTable.getItems();
+			final int size = tempInstructionlist.size();
 
 			if (size > 0) {
 				
 				final int selectedIdx = instructionsTable.getSelectionModel().getSelectedIndex();
 				if (selectedIdx != -1) {
 
-					final int newSelectedIdx = (selectedIdx == instructionlist.size() - 1) ? selectedIdx - 1
+					final int newSelectedIdx = (selectedIdx == tempInstructionlist.size() - 1) ? selectedIdx - 1
 							: selectedIdx;
 
 					for (int i = selectedIdx+1; i < size; i++) {
-						instructionlist.get(i).setIndex(i);
+						tempInstructionlist.get(i).setIndex(i);
 					}
-					instructionlist.remove(selectedIdx);
+					tempInstructionlist.remove(selectedIdx);
 					instructionsTable.getSelectionModel().select(newSelectedIdx);
 					
 				} else {
 					final int lastItem = size - 1;
-					instructionlist.remove(lastItem);
+					tempInstructionlist.remove(lastItem);
 				}
 			}
 		});
@@ -308,7 +317,7 @@ public class CreateRecipeView extends GridPane {
 		});
 	}
 
-	private void setSubmitButton() {
+	protected void setSubmitButton() {
 		submitButton.setOnAction(ae -> {
 			
 			String user = viewController.getCurrentUser().getEmail();
@@ -362,7 +371,7 @@ public class CreateRecipeView extends GridPane {
 				database.addTag(tag, name, user);
 			}
 			
-			for (Ingredient ingredient : ingredientList) {
+			for (Ingredient ingredient : ingredientTable.getItems()) {
 				
 				ingredient.setRecipeName(name);
 				String ingName 			= ingredient.getName();
@@ -374,7 +383,8 @@ public class CreateRecipeView extends GridPane {
 				viewController.addIngredient(ingName, ingRecipeName, ingRecipeCreator, ingAmount, ingUnit);
 			}
 			
-			for (TempInstruction instruction : instructionlist) {
+			ObservableList<TempInstruction> tempInstructionlist = instructionsTable.getItems();
+			for (TempInstruction instruction : tempInstructionlist) {
 				database.addInstruction(name, user, instruction.getStr());
 			}
 			

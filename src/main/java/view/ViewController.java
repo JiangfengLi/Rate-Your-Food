@@ -239,6 +239,17 @@ public class ViewController implements DatabaseInterface {
 	    theWindow.setBottom(null);		
 	}
 	
+	public void moveToEditRecipe(Recipe recipe) {
+		theWindow.setTop( theHUD );
+		
+        EditRecipeView editRecipe = new EditRecipeView(this, recipe);
+        createRecipeScroll.setContent(editRecipe);
+	    theWindow.setCenter( createRecipeScroll );
+	    theWindow.setLeft(null);
+	    theWindow.setRight(null);
+	    theWindow.setBottom(null);		
+	}
+	
 	public void moveToAccountView() {
 		accountView.setUser(getCurrentUser());
 		theWindow.setTop( theHUD );
