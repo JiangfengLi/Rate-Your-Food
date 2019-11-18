@@ -58,7 +58,7 @@ public class RecipePreview extends VBox
         
     setOnMouseClicked(new EventHandler<MouseEvent>() {
         public void handle(MouseEvent me) {
-            System.out.println("Mouse clicked!!");
+          //  System.out.println("Mouse clicked!!");
             vc.moveToRecipe( theRecipe );
         }
     });
