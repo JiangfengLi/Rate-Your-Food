@@ -34,7 +34,6 @@ public class MyPage extends HBox {
 	private Label myRecipes;
 	private Label myReviews;
 	private Button createRecipe;
-//	private Button createReview;
 	
 	private VBox recipeColum;
 	private VBox reviewColum;
@@ -64,13 +63,6 @@ public class MyPage extends HBox {
 		myRecipes = new Label("My Recipes");
 		myReviews = new Label("My Reviews");
 		createRecipe = new Button("Create Recipe");
-		// createReview = new Button("Create Review");
-		
-		/*set createReview button to move to Review
-		createReview.setOnAction(ae -> {
-			viewController.moveToReview("MyPage");
-		});
-		*/
 		
 		// set up style of label
 		myRecipes.setStyle( "-fx-font-size: 30px;\n" +
