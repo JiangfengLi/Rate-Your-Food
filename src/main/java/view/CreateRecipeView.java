@@ -31,7 +31,6 @@ public class CreateRecipeView extends GridPane {
 	private Label message;
 	private Label recipeName;
 	private Label tags;
-	private TextField tagsField;
 	private HBox ingredientFields;
 	private VBox ingredientAmount;
 	private VBox ingredientUnit;
@@ -67,6 +66,7 @@ public class CreateRecipeView extends GridPane {
 	//protected ObservableList<Ingredient> ingredientList;
 	//protected ObservableList<TempInstruction> tempInstructionlist;
 	
+	protected TextField tagsField;
 	protected TextField recipeNameField;	
 	protected TableView<Ingredient> ingredientTable;
 	protected TableView<TempInstruction> instructionsTable;

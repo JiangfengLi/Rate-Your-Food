@@ -556,6 +556,18 @@ public class ViewController implements DatabaseInterface {
 	public String deleteIngredient(String name, String recipeName, String recipeCreator) {
 		return dbaccess.deleteIngredient(name, recipeName, recipeCreator);
 	}
+	
+	/* TODO: change down
+	/**
+	 * DELETE ALL INGREDIENT
+	 * delete specific ingredient 
+	 * returns null or error msg if problem
+	 
+	public String deleteAllIngredientsForRecipe(String recipeName, String recipeCreator) {
+		return dbaccess.deleteAllIngredientsForRecipe(recipeName, recipeCreator);
+	}
+	*/
+	
 	/**
 	 * UPDATE INGREDIENT
 	 * allows update of name, amount and unit
