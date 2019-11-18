@@ -75,9 +75,7 @@ public class ReviewView extends VBox{
         reviewText.setMaxHeight(150);
         //eviewText.setPrefWidth(50);
         reviewText.setMaxWidth(550);
-               
-        
-         
+                      
         // create labels
         title = new Label("Review ");
         title.setAlignment(Pos.TOP_CENTER);     
@@ -200,6 +198,9 @@ public class ReviewView extends VBox{
 			Integer input_difficulty = difficultySelection.getValue();  
 			String input_text = reviewText.getText();
 			String err_msg = "";
+			String current_author = viewController.getCurrentUser().getEmail();
+			String current_recipeName = reviewRecipe.getRecipeName();
+			String current_creator = reviewRecipe.getCreator();
 			if(input_rating == null) {
 				err_msg += "Invalid rating, please give a valid one\n";
 			}
@@ -211,10 +212,14 @@ public class ReviewView extends VBox{
 			}
 			
 			if(err_msg.isEmpty()) {
+				if(viewController.getReview(current_author, current_recipeName, current_creator) != null) {
+				    viewController.addReview(current_author, current_recipeName, 
+				    		current_creator, input_text, input_difficulty, input_rating);
+				} else {
+					viewController.updateReview(current_author, current_recipeName, current_creator, current_recipeName, current_creator, 
+							input_text, input_difficulty, input_rating);
+				}
 			    if(returnSite != null) {
-				    //viewController.updateReview(reviewRecipe.getRecipeName(), reviewRecipe.getCreator(), 
-				    //		(int)input_rating, (int)input_difficulty, input_text);
-				    //System.out.println("Review sent to database successfully");
 				    if(returnSite.equals("MyPage")) 
 				        viewController.moveToMyPage();
 			        else 
