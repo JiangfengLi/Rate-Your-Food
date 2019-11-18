@@ -26,12 +26,13 @@ import javafx.scene.text.FontWeight;
 import model.Recipe;
 
 public class ReviewView extends VBox{
-	private ViewController viewController;
+	protected ViewController viewController;
 	protected Button Back;
-	private Button Submit;
+	protected Button Submit;
+	private Button delete;
 	protected TextArea reviewText;
 	protected ImageView foodImg;
-	private Label title;
+	protected Label title;
 	protected Label Author;
 	protected Label RecipeName;
 	protected Label RecipeCreator;
@@ -40,9 +41,18 @@ public class ReviewView extends VBox{
     protected Label textAreaTitle;
     protected ChoiceBox<Integer> rateSelection;
     protected ChoiceBox<Integer> difficultySelection;
-    private static String returnSite;
-    private Recipe reviewRecipe;
+    protected static String returnSite;
+    protected Recipe reviewRecipe;
     private Label errorMsgPH;
+    
+    protected final String TITLEFONT = "-fx-font-size: 20px;\n";
+    protected final String SUBTITLEFONT = "-fx-font-size: 14px;\n";
+    
+    protected final String LABELSTYLE = "    -fx-font-weight: bold;\n" +
+            "    -fx-text-fill: #ee82ee;\n" +
+            "    -fx-effect: dropshadow( gaussian , rgba(255,255,0,0.5) , 0,0,0,1 );\n" +
+            "    -fx-background-color: #f0f8ff;\n" + 
+            "    -fx-underline: false;";
 
 	
 	public ReviewView(ViewController viewController2, Recipe theRecipe) {
@@ -51,9 +61,10 @@ public class ReviewView extends VBox{
 				
         Back = new Button("Back");
         Submit = new Button("Submit");
+        delete = new Button("Delete");
 		// create error message placeholder
         errorMsgPH = new Label("");
-        errorMsgPH.setStyle( "-fx-font-size: 20px;\n" + "    -fx-font-weight: bold;\n" +
+        errorMsgPH.setStyle( SUBTITLEFONT + "    -fx-font-weight: bold;\n" +
                 "    -fx-text-fill: #ff0000;\n" +
                 "    -fx-effect: dropshadow( gaussian , rgba(255,255,0,0.5) , 0,0,0,1 );\n" +
                 "    -fx-underline: false;" );        
@@ -65,50 +76,30 @@ public class ReviewView extends VBox{
         //eviewText.setPrefWidth(50);
         reviewText.setMaxWidth(550);
                
+        
+         
         // create labels
         title = new Label("Review ");
         title.setAlignment(Pos.TOP_CENTER);     
-        title.setStyle( "-fx-font-size: 20px;\n" + "    -fx-font-weight: bold;\n" +
-                "    -fx-text-fill: #ffff00;\n" +
-                "    -fx-effect: dropshadow( gaussian , rgba(255,255,0,0.5) , 0,0,0,1 );\n" +
-                "    -fx-underline: false;" );        
+        title.setStyle(TITLEFONT + LABELSTYLE);        
         
         Author = new Label("Author: " + viewController.getCurrentUser().getEmail());
-        Author.setStyle( "-fx-font-size: 14px;\n" + "    -fx-font-weight: bold;\n" +
-                "    -fx-text-fill: #ffff00;\n" +
-                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
-                "    -fx-underline: false;" );    
+        Author.setStyle(SUBTITLEFONT + LABELSTYLE);    
         
         RecipeName = new Label("RecipeName: " + reviewRecipe.getRecipeName());
-        RecipeName.setStyle( "-fx-font-size: 14px;\n" + "    -fx-font-weight: bold;\n" +
-                "    -fx-text-fill: #ffff00;\n" +
-                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
-                "    -fx-underline: false;" );
+        RecipeName.setStyle(SUBTITLEFONT + LABELSTYLE);
         
         RecipeCreator = new Label("RecipeCreator: " + reviewRecipe.getCreator());
-        RecipeCreator.setStyle( "-fx-font-size: 14px;\n" + "    -fx-font-weight: bold;\n" +
-                "    -fx-text-fill: #ffff00;\n" +
-                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
-                "    -fx-underline: false;" );
+        RecipeCreator.setStyle(SUBTITLEFONT + LABELSTYLE);
         
         rating = new Label("Rating: ");
-        rating.setStyle( "-fx-font-size: 14px;\n" + "    -fx-font-weight: bold;\n" +
-                "    -fx-text-fill: #ffff00;\n" +
-                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
-                "    -fx-underline: false;" );        
+        rating.setStyle( SUBTITLEFONT + LABELSTYLE);        
         
         difficulty = new Label("Difficulty: ");
-        difficulty.setStyle( "-fx-font-size: 14px;\n" + "    -fx-font-weight: bold;\n" +
-                "    -fx-text-fill: #ffff00;\n" +
-                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
-                "    -fx-underline: false;" );    
+        difficulty.setStyle( SUBTITLEFONT + LABELSTYLE);    
         
         textAreaTitle = new Label("Text");
-        textAreaTitle.setStyle( "-fx-font-size: 14px;\n" +
-                "    -fx-font-weight: bold;\n" +
-                "    -fx-text-fill: #ffff00;\n" +
-                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
-                "    -fx-underline: false;" );
+        textAreaTitle.setStyle( SUBTITLEFONT + LABELSTYLE);
         textAreaTitle.setAlignment(Pos.CENTER_LEFT);
         
         foodImg = setImage("src/main/resources/images/preview.png");
@@ -130,9 +121,9 @@ public class ReviewView extends VBox{
 //        dialogHbox2.setAlignment(Pos.CENTER);
         dialogHbox2.setSpacing(10);
 
-        HBox dialogHbox3 = new HBox(Back, Submit);
+        HBox dialogHbox3 = new HBox(Back, delete, Submit);
         dialogHbox3.setAlignment(Pos.BOTTOM_CENTER);
-        dialogHbox3.setSpacing(300);
+        dialogHbox3.setSpacing(200);
         
         VBox dialogVbox = new VBox(Author, RecipeName, RecipeCreator, dialogHbox1, dialogHbox2, textAreaTitle);
         dialogVbox.setSpacing(20);
@@ -169,7 +160,7 @@ public class ReviewView extends VBox{
         // set up click event handler for button
         Back.setOnAction(new SetBackHandler());
         Submit.setOnAction(new SetSubmitHandler());
-		
+        delete.setOnAction(new SetDeletePageHandler());
 	}
 
 	private ImageView setImage(String url) {
@@ -221,9 +212,9 @@ public class ReviewView extends VBox{
 			
 			if(err_msg.isEmpty()) {
 			    if(returnSite != null) {
-				    viewController.updateReviewDB(reviewRecipe.getRecipeName(), reviewRecipe.getCreator(), 
-				    		(int)input_rating, (int)input_difficulty, input_text);
-				    System.out.println("Review sent to database successfully");
+				    //viewController.updateReview(reviewRecipe.getRecipeName(), reviewRecipe.getCreator(), 
+				    //		(int)input_rating, (int)input_difficulty, input_text);
+				    //System.out.println("Review sent to database successfully");
 				    if(returnSite.equals("MyPage")) 
 				        viewController.moveToMyPage();
 			        else 
@@ -232,6 +223,17 @@ public class ReviewView extends VBox{
 			} else {
 				errorMsgPH.setText(err_msg);
 			}
+		}
+	}
+	
+	/**
+	 * DELETE HANDLER
+	 * inside class to navigate back to log in root
+	 */
+	protected class SetDeletePageHandler implements EventHandler<ActionEvent> {
+		public void handle(ActionEvent e) {
+			viewController.moveToDeletePage(reviewRecipe, returnSite, "Review");
+		
 		}
 	}
 
