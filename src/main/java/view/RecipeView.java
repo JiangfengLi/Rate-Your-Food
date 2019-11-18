@@ -361,6 +361,7 @@ public class RecipeView extends VBox {
 	private void inititializeAllNodes() {
 
 		creator = new Label();
+		editRecipeButton = new Button("Edit recipe");
 		imageView = new ImageView();
 		recipeName = new Label();
 		tagLabel = new Label();
