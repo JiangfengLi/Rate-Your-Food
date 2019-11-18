@@ -18,22 +18,13 @@ public class ReadReview extends ReviewView{
 		this.review = theReview2;
 		
         Label rating_Label = new Label("rating: " + review.getRating());
-        rating_Label.setStyle( "-fx-font-size: 14px;\n" + "    -fx-font-weight: bold;\n" +
-                "    -fx-text-fill: #ffff00;\n" +
-                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
-                "    -fx-underline: false;" ); 
+        rating_Label.setStyle(SUBTITLEFONT + LABELSTYLE); 
         
         Label difficulty_Label = new Label("difficulty: " + review.getDifficulty());      
-        difficulty_Label.setStyle( "-fx-font-size: 14px;\n" + "    -fx-font-weight: bold;\n" +
-                "    -fx-text-fill: #ffff00;\n" +
-                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
-                "    -fx-underline: false;" ); 
+        difficulty_Label.setStyle( SUBTITLEFONT + LABELSTYLE ); 
         
         Label textContent = new Label(review.getText());
-        textContent.setStyle( "-fx-font-size: 12px;\n" + "    -fx-font-weight: bold;\n" +
-                "    -fx-text-fill: #ffff00;\n" +
-                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
-                "    -fx-underline: false;" );
+        textContent.setStyle( "-fx-font-size: 12px;\n" + LABELSTYLE );
 
         VBox dialogVbox = new VBox(Author, RecipeName, RecipeCreator, rating_Label, difficulty_Label, textAreaTitle);
         dialogVbox.setSpacing(20);
