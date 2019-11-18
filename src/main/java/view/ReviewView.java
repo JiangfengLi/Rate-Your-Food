@@ -213,11 +213,13 @@ public class ReviewView extends VBox{
 			
 			if(err_msg.isEmpty()) {
 				if(viewController.getReview(current_author, current_recipeName, current_creator) != null) {
-				    viewController.addReview(current_author, current_recipeName, 
-				    		current_creator, input_text, input_difficulty, input_rating);
-				} else {
+					//System.out.println("Update addReview!!");
 					viewController.updateReview(current_author, current_recipeName, current_creator, current_recipeName, current_creator, 
 							input_text, input_difficulty, input_rating);
+				} else {
+					//System.out.println("Add Review!!");
+				    viewController.addReview(current_author, current_recipeName, 
+				    		current_creator, input_text, input_difficulty, input_rating);
 				}
 			    if(returnSite != null) {
 				    if(returnSite.equals("MyPage")) 
