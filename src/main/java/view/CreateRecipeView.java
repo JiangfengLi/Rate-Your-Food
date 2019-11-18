@@ -104,9 +104,6 @@ public class CreateRecipeView extends GridPane {
 	@SuppressWarnings("unchecked")
 	private void initializeAllNodes() throws FileNotFoundException {
 
-		//ingredientList = FXCollections.observableArrayList();
-		//tempInstructionlist = FXCollections.observableArrayList();
-
 		message = new Label();
 		recipeName = new Label("Recipe Name*");
 		recipeNameField = new TextField();
