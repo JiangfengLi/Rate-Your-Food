@@ -280,6 +280,7 @@ public class ViewController implements DatabaseInterface {
 	 * cart page clicked on
 	 */			
 	public void moveToCartPage() {
+	    cartPage.updateCart();
 		theWindow.setTop( theHUD );
 	    theWindow.setCenter( cartPage );
 	    theWindow.setLeft(null);
