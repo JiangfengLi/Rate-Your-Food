@@ -37,7 +37,7 @@ public class CartList {
             boolean found = false;
             for (Ingredient originalIngredient : ingredientList) {
                 if (aIngredient.getName().equals(originalIngredient.getName())) {
-                    updateIngredient(originalIngredient);
+                    updateIngredient(aIngredient);
                     found = true;
                     break;
                 }
@@ -51,11 +51,14 @@ public class CartList {
 
     private void updateIngredient( Ingredient aIngredient )
     {
-        if( ingredientList.contains(aIngredient) ) {
-            int index = ingredientList.indexOf(aIngredient);
-            Ingredient originalIngredient = ingredientList.get(index);
-            originalIngredient.setAmount(originalIngredient.getAmount() + aIngredient.getAmount());
-            ingredientList.set(index, originalIngredient);
+        for (Ingredient originalIngredient : ingredientList) {
+            if (aIngredient.getName().equals(originalIngredient.getName())) {
+                int index = ingredientList.indexOf(originalIngredient);
+                Ingredient foundIngredient = ingredientList.get(index);
+                foundIngredient.setAmount(foundIngredient.getAmount() + aIngredient.getAmount());
+                ingredientList.set(index, foundIngredient);
+                break;
+            }
         }
     }
 }

@@ -289,6 +289,21 @@ public class ViewController implements DatabaseInterface {
 	
 	}
 
+	/*
+	 * MOVE TO DELETE PAGE
+	 * moves to the  view of the 
+	 * cart page clicked on
+	 */	
+	public void moveToDeletePage(Recipe reviewRecipe, String returnSite, String type) {
+		DeletePage deletePage = new DeletePage(this, reviewRecipe, type);
+		deletePage.setReturnPoint(returnSite);
+		theWindow.setTop( null );
+	    theWindow.setCenter( deletePage );
+	    theWindow.setLeft(null);
+	    theWindow.setRight(null);
+	    theWindow.setBottom(null);			
+	}
+	
     /**
      * returnStage
      * 
@@ -304,17 +319,6 @@ public class ViewController implements DatabaseInterface {
         return theHUD;
     }
 	
-    /**
-     * DEPRECATED - DELETE ASAP
-     */    
-	public void updateReviewDB(String RecipeName, String Creator, Integer rating, Integer difficulty, String text) {
-		// TODO Auto-generated method stub
-		String add_review_res = dbaccess.addReview(getCurrentUser().getEmail(), RecipeName, Creator, text, difficulty, rating);
-		if(add_review_res != null) {
-			System.out.print(add_review_res);
-		    dbaccess.updateReview(getCurrentUser().getEmail(), RecipeName, Creator, RecipeName, Creator, text, difficulty, rating);
-		}
-	}
 	
     // ******************************** DATABASE INTERFACE ****************************
 	// *************************** WRAPPER METHODS OVER DBACCESS **********************
@@ -671,8 +675,6 @@ public class ViewController implements DatabaseInterface {
 	public String deleteTag(String name, String recipeName, String recipeCreator) {
 		return dbaccess.deleteTag(name, recipeName, recipeCreator);
 	}
-
-
 
     
 }
