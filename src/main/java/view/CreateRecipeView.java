@@ -5,9 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
@@ -17,8 +17,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import model.DBAccess;
@@ -137,19 +139,24 @@ public class CreateRecipeView extends GridPane {
 		ingAmount = new TableColumn<Ingredient, Integer>("amount");
 		ingUnit = new TableColumn<Ingredient, String>("unit");
 		ingName = new TableColumn<Ingredient, String>("item");
-		ingAmount.prefWidthProperty().bind(ingredientTable.widthProperty().multiply(1.0 / 10.0));
-		ingUnit.prefWidthProperty().bind(ingredientTable.widthProperty().multiply(2.0 / 10.0));
-		ingName.prefWidthProperty().bind(ingredientTable.widthProperty().multiply(7.0 / 10.0));
-
 		ingredientTable.getColumns().addAll(ingAmount, ingUnit, ingName);
+
+		ingAmount.prefWidthProperty().bind(ingredientTable.widthProperty().multiply(0.1));
+		ingUnit.prefWidthProperty().bind(ingredientTable.widthProperty().multiply(0.2));
+		ingName.prefWidthProperty().bind(ingredientTable.widthProperty().multiply(0.69));
+		ingAmount.setResizable(false);
+        ingName.setResizable(false);
+        ingUnit.setResizable(false);
+
 
 		instructions = new Label("Instructions*");
 		instructionsTable = new TableView<TempInstruction>();
 		insStep = new TableColumn<TempInstruction, Integer>("#");
 		insString = new TableColumn<TempInstruction, String>("instruction");
-		insStep.prefWidthProperty().bind(instructionsTable.widthProperty().multiply(0.9 / 10.0));
-		insString.prefWidthProperty().bind(instructionsTable.widthProperty().multiply(9.0 / 10.0));
 		instructionsTable.getColumns().addAll(insStep, insString);
+		insStep.prefWidthProperty().bind(instructionsTable.widthProperty().multiply(0.1));
+		insString.prefWidthProperty().bind(instructionsTable.widthProperty().multiply(0.89));
+		
 		addInstructionButton = new Button("Add");
 		deleteInstructionButton = new Button("Delete");
 		instructionButtons = new HBox(8);
@@ -177,12 +184,19 @@ public class CreateRecipeView extends GridPane {
 		this.setHgap(gap);
 		this.setVgap(gap);
 		this.prefWidthProperty().bind(viewController.returnStage().widthProperty());
+		//ColumnConstraints col = new ColumnConstraints();
+		//col.setHgrow(Priority.NEVER);
+		//col.setFillWidth(false);
+		//col.setPrefWidth(400);
+		//col.prefWidthProperty().bind(col.prefWidthProperty());
+	    this.getColumnConstraints().addAll( new ColumnConstraints( 100 ));
+	    this.setAlignment(Pos.TOP_CENTER);
+
+
 		
 		this.add(recipeName, 0, 0);
 		this.add(recipeNameField, 1, 0);
 		this.add(image, 2, 1, 1, 7);
-		//this.add(recipeSummary, 0, 1);
-		//this.add(recipeSummaryField, 1, 1);
 		this.add(tags, 0, 1);
 		this.add(tagsField, 1, 1);
 		this.add(ingredientLabel,0,2);
@@ -196,6 +210,9 @@ public class CreateRecipeView extends GridPane {
 		this.add(instructionField,1,9);
 		this.add(submitButton, 0, 10);
 		this.add(message, 1,11);
+		
+
+
 	}
 
 	private void setIngredientButtonsHandler() {
@@ -225,7 +242,6 @@ public class CreateRecipeView extends GridPane {
 					message.setText("no repeating Ingredients");
 					return; //exit method
 				}
-
 			}
 			
 			Ingredient ingredient = new Ingredient(name, "", user, amountInt, unit);
