@@ -382,7 +382,7 @@ INSERT INTO Instruction(RecipeName, RecipeCreator, Text) VALUES ('southwestern b
 INSERT INTO Instruction(RecipeName, RecipeCreator, Text) VALUES ('southwestern brunch omelette','elizasmith@yahoo.com','Apply cilantro and tomatoes on top, then the sriracha drizzle.');
 INSERT INTO Instruction(RecipeName, RecipeCreator, Text) VALUES ('southwestern brunch omelette','elizasmith@yahoo.com','Enjoy.');
  
-
+ 
 INSERT INTO Instruction(RecipeName, RecipeCreator, Text) VALUES ('hot mommas hot taziki casserole','hotsoccermomma@hotmail.com','Roast turkey at 375 degrees in oven for 60 minutes.');
 INSERT INTO Instruction(RecipeName, RecipeCreator, Text) VALUES ('hot mommas hot taziki casserole','hotsoccermomma@hotmail.com','Boil rotini in water until al-dente.');
 INSERT INTO Instruction(RecipeName, RecipeCreator, Text) VALUES ('hot mommas hot taziki casserole','hotsoccermomma@hotmail.com','Dice tomatoes and carrots. Mix with peas and cream.');
