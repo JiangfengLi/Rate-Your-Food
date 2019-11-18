@@ -51,11 +51,6 @@ public class ReviewPreview extends VBox{
         Label recipeCreatorLabel = new Label( "Creator: " + recipeCreator );
         Label evaluationLabel = new Label( "Rating: " + rating + "    Difficulty: " + difficulty );
         
-        /*theDescription.setStyle( "-fx-font-size: 12px;\n" +
-                "    -fx-text-fill: #333333;\n" +
-                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );" );
-        theDescription.setMaxWidth( 150 );
-        theDescription.setWrapText( true ); */
 
         // Set up view
         getChildren().addAll( theTitle, aImage, authorLabel, recipeCreatorLabel, evaluationLabel );
@@ -68,7 +63,6 @@ public class ReviewPreview extends VBox{
         
     setOnMouseClicked(new EventHandler<MouseEvent>() {
         public void handle(MouseEvent me) {
-            System.out.println("Mouse clicked review!! to MyPage");
             if(input_review == null)
             	System.out.println("review is null !!!!");
             else {
