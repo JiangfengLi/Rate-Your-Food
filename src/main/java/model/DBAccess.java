@@ -467,6 +467,12 @@ public class DBAccess implements DatabaseInterface{
 	 * returns null or error msg if problem encountered
 	 */
 	public String deleteRecipe(String recipeName, String creator) {
+		
+		deleteAllInstructionsForRecipe(recipeName, creator);
+		deleteAllReviewsForRecipe(recipeName, creator);
+		deleteAllIngredientsForRecipe(recipeName, creator);
+		deleteAllTagsForRecipe(recipeName, creator);
+		
     	int rowsDeleted = 0;
 		try {
     		Connection conn = establishConnection();
@@ -483,10 +489,13 @@ public class DBAccess implements DatabaseInterface{
 		if (rowsDeleted == 0) {
 			return "No such recipe found to delete!";
 		} 
-		deleteAllInstructionsForRecipe(recipeName, creator);
-		deleteAllReviewsForRecipe(recipeName, creator);
-		deleteAllIngredientsForRecipe(recipeName, creator);
-		deleteAllTagsForRecipe(recipeName, creator);
+		
+		/* moving the folowing statements up as the recipe deletion cannot
+		 * be completed without deleting first all other row
+		 * referencing it
+		 * 
+		 * Joseph Corona
+		*/
 		return null;
 	}
 	

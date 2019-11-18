@@ -22,6 +22,18 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'com.google.osdetector'
+apply plugin: 'findbugs'
+
+findbugs{
+	findbugsTest.enabled=true
+}
+
+tasks.withType(FindBugs) {
+	reports {
+	xml.enabled false
+	html.enabled true
+	}
+}
 
 compileJava {
   sourceCompatibility = 1.8

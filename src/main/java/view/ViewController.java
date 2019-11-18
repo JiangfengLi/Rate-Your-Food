@@ -88,7 +88,6 @@ public class ViewController implements DatabaseInterface {
         mypage = new MyPage(this);
         accountView = new AccountView(this);
         //recipeView = new RecipeView(this, null);
-        createRecipe = new CreateRecipeView(this);
         cartPage = new CartPage(this);
         
         // Set alignment for all views going into main borderpane
@@ -113,10 +112,7 @@ public class ViewController implements DatabaseInterface {
         createRecipeScroll = new ScrollPane();
         createRecipeScroll.setFitToHeight(true);
         createRecipeScroll.setFitToWidth(true);
-        createRecipeScroll.setContent(createRecipe);
         createRecipeScroll.setHbarPolicy(ScrollBarPolicy.NEVER);
-        //createRecipeScroll.setFitToWidth( true );
-        //createRecipeScroll.setFitToHeight( true );
 
         // update dimension properties
         theHUD.prefWidthProperty().bind( theScene.widthProperty() );
@@ -234,6 +230,20 @@ public class ViewController implements DatabaseInterface {
 	 */	
 	public void moveToCreateRecipe() {
 		theWindow.setTop( theHUD );
+		
+        createRecipe = new CreateRecipeView(this);
+        createRecipeScroll.setContent(createRecipe);
+	    theWindow.setCenter( createRecipeScroll );
+	    theWindow.setLeft(null);
+	    theWindow.setRight(null);
+	    theWindow.setBottom(null);		
+	}
+	
+	public void moveToEditRecipe(Recipe recipe) {
+		theWindow.setTop( theHUD );
+		
+        EditRecipeView editRecipe = new EditRecipeView(this, recipe);
+        createRecipeScroll.setContent(editRecipe);
 	    theWindow.setCenter( createRecipeScroll );
 	    theWindow.setLeft(null);
 	    theWindow.setRight(null);
@@ -551,6 +561,18 @@ public class ViewController implements DatabaseInterface {
 	public String deleteIngredient(String name, String recipeName, String recipeCreator) {
 		return dbaccess.deleteIngredient(name, recipeName, recipeCreator);
 	}
+	
+	/* TODO: change down
+	/**
+	 * DELETE ALL INGREDIENT
+	 * delete specific ingredient 
+	 * returns null or error msg if problem
+	 
+	public String deleteAllIngredientsForRecipe(String recipeName, String recipeCreator) {
+		return dbaccess.deleteAllIngredientsForRecipe(recipeName, recipeCreator);
+	}
+	*/
+	
 	/**
 	 * UPDATE INGREDIENT
 	 * allows update of name, amount and unit
