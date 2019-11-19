@@ -125,22 +125,26 @@ public class MyPage extends HBox {
 
         for ( int i = 0; i < recipeData.size(); i++ )
         {
+        	Recipe rec = recipeData.get(i);
         	recipeObList.add( new RecipePreview(
         			viewController,
-        			recipeData.get(i).getRecipeName(),
-                    "src/main/resources/images/preview.png",
-                    recipeData.get(i).toString(),
-                    recipeData.get(i)) );
+        			rec.getRecipeName(),
+                    viewController.getMainImageForRecipe(rec),
+                    rec.toString(),
+                   rec) );
         }  
 	
         for ( int i = 0; i < reviewData.size(); i++ )
         {
+        	Review rev = reviewData.get(i);
+        	// placeholder recipe to hold recipename and creator fields in order to get image for recipe
+        	Recipe rec = new Recipe(rev.getRecipeName(),rev.getRecipeCreator(),0,0);
         	ReviewPreview newReviewPreview = new ReviewPreview(
         			viewController,
-        			reviewData.get(i).getRecipeName(),
-                    "src/main/resources/images/preview.png",
-                    reviewData.get(i).getRecipeCreator(),
-                    reviewData.get(i).getRating(), reviewData.get(i).getDifficulty(), "MyPage");
+        			rev.getRecipeName(),
+                    viewController.getMainImageForRecipe(rec),
+                    rev.getRecipeCreator(),
+                    rev.getRating(), rev.getDifficulty(), "MyPage");
         	newReviewPreview.updateAuthor();
         	reviewObList.add(newReviewPreview);
         			

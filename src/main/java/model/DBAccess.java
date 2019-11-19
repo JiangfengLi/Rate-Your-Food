@@ -1458,6 +1458,23 @@ public class DBAccess implements DatabaseInterface{
 	// ************************** IMAGE INTERFACE *****************************
 	
 	/**
+	 * GET MAIN IMAGE FOR RECIPE
+	 * returns first of the set of images, or a default image if that list is empty
+	 * @param recipe
+     * @return
+	 */
+	public String getMainImageForRecipe(Recipe rec) {
+    	// get first img path of those stored for recipe
+        String imgPath = getAllImagesForRecipe(rec.getRecipeName(), rec.getCreator()).get(0);
+        // default substitute
+        if (imgPath == null) {
+        	imgPath = "src/main/resources/images/preview.png";
+        }
+        return imgPath;
+	}
+
+	
+	/**
 	 * GET ALL IMAGES FOR RECIPE
 	 * return list of strings which are the image file paths for all images stored under that recipe
 	 * 		may return empty list
