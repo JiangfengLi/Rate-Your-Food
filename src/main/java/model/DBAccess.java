@@ -88,6 +88,11 @@ public class DBAccess implements DatabaseInterface{
 	private static final String DELETE_ALL_TAGS_FOR_RECIPE = "DELETE FROM Tag WHERE RecipeName=? AND RecipeCreator=?;";
 	private static final String UPDATE_ALL_TAGS_FOR_RECIPE = "UPDATE Tag SET RecipeName=? WHERE RecipeName=? AND RecipeCreator=?;";
 
+	
+	// IMAGE QUERIES
+	private static final String GET_ALL_IMAGES_FOR_RECIPE = "SELECT Path FROM Image WHERE RecipeName=? AND RecipeCreator=?;";
+	private static final String ADD_IMAGE_FOR_RECIPE = "INSERT INTO Image(Path, RecipeName, RecipeCreator) VALUES(?,?,?);";
+	
 	// current user (who's logged in?)
 	private User currentUser;
 	
@@ -1299,7 +1304,7 @@ public class DBAccess implements DatabaseInterface{
 	 * returns null or error msg if problem
 	 */
 	public String addTag(String name, String recipeName, String recipeCreator) {
-		// validate that there isn't already a recipe of this name for the creator
+		// validate that there isn't already a tag of this name for the creator
 		if (getTag(name, recipeName, recipeCreator) != null) {
 			return "A tag of this name already exists for this recipe!";
 		}
@@ -1446,6 +1451,64 @@ public class DBAccess implements DatabaseInterface{
     		x.printStackTrace();
     		return "ERROR with database encountered. Please try again.";
     	}
+	}
+	
+	
+	// **********************************************************************
+	// ************************** IMAGE INTERFACE *****************************
+	
+	/**
+	 * GET ALL IMAGES FOR RECIPE
+	 * return list of strings which are the image file paths for all images stored under that recipe
+	 * 		may return empty list
+	 * 		return null if error occurs
+	 */
+	public List<String> getAllImagesForRecipe(String recipeName, String recipeCreator) {
+		try {
+    		Connection conn = establishConnection();
+    		PreparedStatement stmt = conn.prepareStatement(GET_ALL_IMAGES_FOR_RECIPE);
+    		stmt.setString(1, recipeName);
+    		stmt.setString(2, recipeCreator);
+    		ResultSet rs = stmt.executeQuery();
+    		List<String> pathList = new LinkedList<String>();
+    		while (rs.next()) {
+    			String path = rs.getString(1);
+    			pathList.add(path);
+    		}
+    		stmt.close();
+    		conn.close();
+    		return pathList;
+    	} catch (Exception x) {
+    		x.printStackTrace();
+    		return null;
+    	}
+	}
+	
+	/**
+	 * ADD IMAGE FOR RECIPE
+	 * add an image path for an image associated with a recipe
+	 * 	validates that that image hasn't already been added
+	 * return null or error msg if problem occurs
+	 */
+	public String addImageForRecipe(String path, String recipeName, String recipeCreator) {
+		// validate that there isn't already an image of of this path for the recipe
+		if (getAllImagesForRecipe(recipeName, recipeCreator).contains(path)) {
+			return "An image of this path already exists for this recipe!";
+		}
+		try {
+			Connection conn = establishConnection();
+			PreparedStatement stmt = conn.prepareStatement(ADD_IMAGE_FOR_RECIPE);
+			stmt.setString(1, path);
+			stmt.setString(2, recipeName);
+			stmt.setString(3, recipeCreator);
+			stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+		} catch (Exception x) {
+			x.printStackTrace();
+			return "ERROR with database encountered. Please try again.";
+		}
+		return null;
 	}
 	
 	

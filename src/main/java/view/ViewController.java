@@ -675,6 +675,28 @@ public class ViewController implements DatabaseInterface {
 	public String deleteTag(String name, String recipeName, String recipeCreator) {
 		return dbaccess.deleteTag(name, recipeName, recipeCreator);
 	}
+	
+	
+	
+	// *************************** MANAGING INGREDIENTS **********************
+	/**
+	 * GET ALL IMAGES FOR RECIPE
+	 * return list of strings which are the image file paths for all images stored under that recipe
+	 * 		may return empty list
+	 * 		return null if error occurs
+	 */
+	public List<String> getAllImagesForRecipe(String recipeName, String recipeCreator) {
+		return dbaccess.getAllImagesForRecipe(recipeName, recipeCreator);
+	}
+	/**
+	 * ADD IMAGE FOR RECIPE
+	 * add an image path for an image associated with a recipe
+	 * 	validates that that image hasn't already been added
+	 * return null or error msg if problem occurs
+	 */
+	public String addImageForRecipe(String path, String recipeName, String recipeCreator) {
+		return dbaccess.addImageForRecipe(path, recipeName, recipeCreator);
+	}
 
     
 }
