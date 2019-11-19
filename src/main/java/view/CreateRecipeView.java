@@ -404,7 +404,7 @@ public class CreateRecipeView extends GridPane {
 			/* 
 			 * make the image file be uploaded into the database here
 			 */
-			viewController.addImageForRecipe(file.toURI().toString(), name, user);
+			viewController.addImageForRecipe(file.toPath().toString(), name, user);
 
 			viewController.moveToMyPage();
 			
