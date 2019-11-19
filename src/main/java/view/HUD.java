@@ -179,7 +179,7 @@ public class HUD extends FlowPane
 	private class AccountHandler implements EventHandler<ActionEvent> {
 		public void handle(ActionEvent e) {
             searchArea.clear();
-			viewController.moveToAccountView();
+			viewController.moveToAccountSummary();
 		}
 	}
 

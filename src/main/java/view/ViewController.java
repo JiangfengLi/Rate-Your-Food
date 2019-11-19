@@ -18,7 +18,9 @@ import model.Recipe;
 import model.Review;
 import model.Tag;
 import model.User;
+import view.login.AccountSummary;
 import view.login.CreateAccount;
+import view.login.EditAccount;
 import view.login.LogInRoot;
 import view.login.SignIn;
 
@@ -50,7 +52,8 @@ public class ViewController implements DatabaseInterface {
     private ReviewView reviewView;
     private RecipeView recipeView;
     private CreateRecipeView createRecipe;
-    private AccountView accountView;
+    private AccountSummary accountSummary;
+    private EditAccount editAccount;
     private CartPage cartPage;
     
     // DATABASE MODEL CLASSES
@@ -83,10 +86,12 @@ public class ViewController implements DatabaseInterface {
         logInRoot=new LogInRoot(this);
         signInPage = new SignIn(this);
         createAccountPage = new CreateAccount(this);
+        accountSummary = new AccountSummary(this);
+        editAccount = new EditAccount(this);
+        
         theHUD = new HUD(this);
         theStartPage = new StartPage(this);
         mypage = new MyPage(this);
-        accountView = new AccountView(this);
         //recipeView = new RecipeView(this, null);
         cartPage = new CartPage(this);
         
@@ -94,10 +99,11 @@ public class ViewController implements DatabaseInterface {
         BorderPane.setAlignment( logInRoot, Pos.CENTER );
         BorderPane.setAlignment( createAccountPage, Pos.CENTER );
         BorderPane.setAlignment( signInPage, Pos.CENTER );
+        BorderPane.setAlignment( accountSummary, Pos.CENTER);
+        BorderPane.setAlignment( editAccount, Pos.CENTER);
         BorderPane.setAlignment( theHUD, Pos.CENTER );
         BorderPane.setAlignment( theStartPage, Pos.CENTER );
         //BorderPane.setAlignment( recipeView, Pos.CENTER);
-        BorderPane.setAlignment( accountView, Pos.CENTER);
 
         // Create scroll view for home page
         createStartPage();
@@ -174,6 +180,33 @@ public class ViewController implements DatabaseInterface {
     }
     
     /**
+     * MOVE TO ACCOUNT SUMMARY
+     * moves you to summary data abt account page
+     */
+	public void moveToAccountSummary() {
+		accountSummary.populateData();
+		theWindow.setTop( theHUD );
+	    theWindow.setCenter( accountSummary );
+	    theWindow.setLeft(null);
+	    theWindow.setRight(null);
+	    theWindow.setBottom(null);	
+	}
+	
+	/**
+	 * MOVE TO EDIT ACCOUNT
+	 * moves you to page to edit account data
+	 */
+	public void moveToEditAccount() {
+		editAccount.populateData();
+		theWindow.setTop( theHUD );
+	    theWindow.setCenter( editAccount );
+	    theWindow.setLeft(null);
+	    theWindow.setRight(null);
+	    theWindow.setBottom(null);	
+	}
+	
+    
+    /**
      * MOVE TO HOME PAGE
      * moves us to home page
      */
@@ -248,15 +281,6 @@ public class ViewController implements DatabaseInterface {
 	    theWindow.setLeft(null);
 	    theWindow.setRight(null);
 	    theWindow.setBottom(null);		
-	}
-	
-	public void moveToAccountView() {
-		accountView.setUser(getCurrentUser());
-		theWindow.setTop( theHUD );
-	    theWindow.setCenter( accountView );
-	    theWindow.setLeft(null);
-	    theWindow.setRight(null);
-	    theWindow.setBottom(null);	
 	}
 
 	/*

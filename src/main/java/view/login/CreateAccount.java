@@ -16,17 +16,17 @@ import view.ViewController;
 public class CreateAccount extends UserLogInUI {
 
 	// VIEW ELEMENTS
-	private HBox firstNameRow;
-	private Label firstNameLabel;
-	private TextField firstNameField;
+	protected HBox firstNameRow;
+	protected Label firstNameLabel;
+	protected TextField firstNameField;
 	
-	private HBox lastNameRow;
-	private Label lastNameLabel;
-	private TextField lastNameField;
+	protected HBox lastNameRow;
+	protected Label lastNameLabel;
+	protected TextField lastNameField;
 	
-	private HBox confirmationRow;
-	private Label confirmationLabel;
-	private PasswordField confirmationField;
+	protected HBox confirmationRow;
+	protected Label confirmationLabel;
+	protected PasswordField confirmationField;
 	
 	/**
 	 * CONSTRUCTOR
@@ -34,6 +34,36 @@ public class CreateAccount extends UserLogInUI {
 	 * @param viewController reference to controller
 	 */
 	public CreateAccount(ViewController viewController) {
+		// set-up that is shared with inheriting classes
+		createAccountFactory(viewController);
+		
+		// add submit event handler
+		submitButton.setOnAction(new SubmitHandler());
+		
+		// put rows in a vertical structure
+		verticalStructure.getChildren().add(emailRow);
+		verticalStructure.getChildren().add(firstNameRow);
+		verticalStructure.getChildren().add(lastNameRow);
+		verticalStructure.getChildren().add(passwordRow);
+		verticalStructure.getChildren().add(confirmationRow);
+		verticalStructure.getChildren().add(buttonRow);
+		verticalStructure.getChildren().add(errorMessage);
+		
+		// put vertical structure in our hbox (so we can center it)
+		this.getChildren().add(verticalStructure);
+	}
+	
+	/**
+	 * CREATE ACCOUNT
+	 * useless constructor to satisfy compiler
+	 */
+	public CreateAccount() {}
+	
+	/**
+	 * CREATE ACCOUNT FACTORY
+	 * provides setup for inheriting classes
+	 */
+	protected void createAccountFactory(ViewController viewController) {
 		// do common grunt initialization in super
 		super.factory(viewController);
 
@@ -63,21 +93,6 @@ public class CreateAccount extends UserLogInUI {
 		confirmationField = new PasswordField();
 		confirmationRow.getChildren().add(confirmationLabel);
 		confirmationRow.getChildren().add(confirmationField);
-		
-		// add submit event handler
-		submitButton.setOnAction(new SubmitHandler());
-		
-		// put rows in a vertical structure
-		verticalStructure.getChildren().add(emailRow);
-		verticalStructure.getChildren().add(firstNameRow);
-		verticalStructure.getChildren().add(lastNameRow);
-		verticalStructure.getChildren().add(passwordRow);
-		verticalStructure.getChildren().add(confirmationRow);
-		verticalStructure.getChildren().add(buttonRow);
-		verticalStructure.getChildren().add(errorMessage);
-		
-		// put vertical structure in our hbox (so we can center it)
-		this.getChildren().add(verticalStructure);
 	}
 	
 	/**
