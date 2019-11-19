@@ -8,6 +8,9 @@ DROP TABLE Review;
 DROP TABLE Recipe;
 DROP TABLE User;
 
+# PATH VAR TO IMG DIRECTORY TO POPULATE SAMPLE DATA - SYSTEM SPECIFIC!
+# the double slashing is required to prevent escaped chars
+SET @img = "C:\\Users\\alexandermiller\\git\\starter-team-rate-your-food\\img\\";
 
 CREATE TABLE User (
 	Email VARCHAR(30) NOT NULL,
@@ -69,6 +72,14 @@ CREATE TABLE Tag (
 	FOREIGN KEY(RecipeName, RecipeCreator) REFERENCES Recipe(RecipeName,Creator),
 	PRIMARY KEY (Name, RecipeName, RecipeCreator)
 );
+
+CREATE TABLE Image (
+	Path VARCHAR (100),
+	RecipeName VARCHAR (50),
+	RecipeCreator VARCHAR(30),
+	FOREIGN KEY(RecipeName, RecipeCreator) REFERENCES Recipe(RecipeName,Creator),
+	PRIMARY KEY (Path)
+);	
 
 
 # INSERT SAMPLE DATA:
@@ -381,8 +392,8 @@ INSERT INTO Instruction(RecipeName, RecipeCreator, Text) VALUES ('southwestern b
 INSERT INTO Instruction(RecipeName, RecipeCreator, Text) VALUES ('southwestern brunch omelette','elizasmith@yahoo.com','Scramble dozen eggs with the serranos.');
 INSERT INTO Instruction(RecipeName, RecipeCreator, Text) VALUES ('southwestern brunch omelette','elizasmith@yahoo.com','Apply cilantro and tomatoes on top, then the sriracha drizzle.');
 INSERT INTO Instruction(RecipeName, RecipeCreator, Text) VALUES ('southwestern brunch omelette','elizasmith@yahoo.com','Enjoy.');
-
-
+ 
+ 
 INSERT INTO Instruction(RecipeName, RecipeCreator, Text) VALUES ('hot mommas hot taziki casserole','hotsoccermomma@hotmail.com','Roast turkey at 375 degrees in oven for 60 minutes.');
 INSERT INTO Instruction(RecipeName, RecipeCreator, Text) VALUES ('hot mommas hot taziki casserole','hotsoccermomma@hotmail.com','Boil rotini in water until al-dente.');
 INSERT INTO Instruction(RecipeName, RecipeCreator, Text) VALUES ('hot mommas hot taziki casserole','hotsoccermomma@hotmail.com','Dice tomatoes and carrots. Mix with peas and cream.');
@@ -400,3 +411,30 @@ INSERT INTO Instruction(RecipeName, RecipeCreator, Text) VALUES ('kitchen sink c
 INSERT INTO Instruction(RecipeName, RecipeCreator, Text) VALUES ('kitchen sink chicken dinner','hotsoccermomma@hotmail.com','Chop carrots, onions and parsely. Placed chopped vegetables inside chicken cavity.');
 INSERT INTO Instruction(RecipeName, RecipeCreator, Text) VALUES ('kitchen sink chicken dinner','hotsoccermomma@hotmail.com','Place broccoli in croque around the chicken.');
 INSERT INTO Instruction(RecipeName, RecipeCreator, Text) VALUES ('kitchen sink chicken dinner','hotsoccermomma@hotmail.com','Bake for 45 minutes. Broil to brown as desired.');
+
+
+# IMAGES
+INSERT INTO Image (Path, RecipeName, RecipeCreator) VALUES (CONCAT(@img,'myfoods.jpg'),'myfoods','jack@gmail.com');
+INSERT INTO Image (Path, RecipeName, RecipeCreator) VALUES (CONCAT(@img,'grandma_pams.jpg'),'grandma pams potato dumplings','jack@gmail.com');
+INSERT INTO Image (Path, RecipeName, RecipeCreator) VALUES (CONCAT(@img,'cheez_its.jpg'),'hot cheez-it with cheez-wip','jack@gmail.com');
+
+INSERT INTO Image (Path, RecipeName, RecipeCreator) VALUES (CONCAT(@img,'steak_w_butter.jpg'),'steak with butter','john@gmail.com');
+INSERT INTO Image (Path, RecipeName, RecipeCreator) VALUES (CONCAT(@img,'meat_more_meat.jpg'),'meat with more meat','john@gmail.com');
+INSERT INTO Image (Path, RecipeName, RecipeCreator) VALUES (CONCAT(@img,'salami_salad.jpg'),'salami salad','john@gmail.com');
+
+INSERT INTO Image (Path, RecipeName, RecipeCreator) VALUES (CONCAT(@img,'joey_bag.jpg'),'joey bag o donuts','joe@gmail.com');
+INSERT INTO Image (Path, RecipeName, RecipeCreator) VALUES (CONCAT(@img,'joey_joes_doughs.jpg'),'joey joes doey doughs','joe@gmail.com');
+INSERT INTO Image (Path, RecipeName, RecipeCreator) VALUES (CONCAT(@img,'joey_special.jpg'),'joeys jonesin special','joe@gmail.com');
+
+INSERT INTO Image (Path, RecipeName, RecipeCreator) VALUES (CONCAT(@img,'carne_asada.jpg'),'carne asada with balsamic drizzle','elizasmith@yahoo.com');
+INSERT INTO Image (Path, RecipeName, RecipeCreator) VALUES (CONCAT(@img,'calabacitas.jpg'),'calabacitas with oaxacan cheese','elizasmith@yahoo.com');
+INSERT INTO Image (Path, RecipeName, RecipeCreator) VALUES (CONCAT(@img,'southwestern_omelette.jpg'),'southwestern brunch omelette','elizasmith@yahoo.com');
+
+INSERT INTO Image (Path, RecipeName, RecipeCreator) VALUES (CONCAT(@img,'hot_taziki.jpg'),'hot mommas hot taziki casserole','hotsoccermomma@hotmail.com');
+INSERT INTO Image (Path, RecipeName, RecipeCreator) VALUES (CONCAT(@img,'orange_slices.jpg'),'orange slices for camp','hotsoccermomma@hotmail.com');
+INSERT INTO Image (Path, RecipeName, RecipeCreator) VALUES (CONCAT(@img,'kitchen_sink.jpg'),'kitchen sink chicken dinner','hotsoccermomma@hotmail.com');
+
+
+
+
+

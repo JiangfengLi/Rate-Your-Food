@@ -60,4 +60,9 @@ public interface DatabaseInterface {
 	public List<Tag> getAllTagsForRecipe(String recipeName, String recipeCreator);
 	public String deleteTag(String name, String recipeName, String recipeCreator);
 	
+	
+	// MANAGING IMAGES
+	public List<String> getAllImagesForRecipe(String recipeName, String recipeCreator);
+	public String addImageForRecipe(String path, String recipeName, String recipeCreator);
+	
 }
