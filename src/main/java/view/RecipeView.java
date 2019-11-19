@@ -135,7 +135,7 @@ public class RecipeView extends VBox {
 			
 		}
 
-		setImage("src/main/resources/images/preview.png");
+		setImage();
 		setIngredientLabel();
 		setInstructionsLabel();
 		setReviewLabel();
@@ -336,11 +336,19 @@ public class RecipeView extends VBox {
 		recipeName.setStyle("-fx-font: 24 arial;");
 	}
 
-	private void setImage(String url) {
+	/**
+	 * SET IMAGE
+	 * sets image from db if possible, or a default if necessary
+	 * @param url
+	 */
+	private void setImage() {
+		// grab 1st image associated with recipe if exists
+		String imgPath = vc.getMainImageForRecipe(theRecipe);
+		
 		imageView.setPreserveRatio(true);
 		imageView.setFitHeight(250);
 		try {
-			imageView.setImage(new Image(new FileInputStream(url)));
+			imageView.setImage(new Image(new FileInputStream(imgPath)));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

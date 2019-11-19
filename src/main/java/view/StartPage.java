@@ -66,22 +66,6 @@ public class StartPage extends VBox
             e.printStackTrace();
         }
     }
-
-    /**
-     * GET RECIPE PREVIEW IMAGE PATH
-     * grab the image paths for the recipes
-     * @param recipe
-     * @return
-     */
-    private String getRecipePreviewImagePath(Recipe rec) {
-    	// get first img path of those stored for recipe
-        String imgPath = viewController.getAllImagesForRecipe(rec.getRecipeName(), rec.getCreator()).get(0);
-        // default substitute
-        if (imgPath == null) {
-        	imgPath = "src/main/resources/images/preview.png";
-        }
-        return imgPath;
-    }
     
     /**
      * MAKE FEATURED RECIPES
@@ -119,7 +103,7 @@ public class StartPage extends VBox
 
             // get recipe data
             Recipe rec = recipeData.get(aRecipeIndex);
-            String imgPath = getRecipePreviewImagePath(rec);
+            String imgPath = viewController.getMainImageForRecipe(rec);
             
             // add preview
             aFeaturedRecipeHolder.getChildren().add( new RecipePreview(
@@ -166,7 +150,7 @@ public class StartPage extends VBox
                     new RecipePreview(
                             viewController,
                             aRecipe.getRecipeName(),
-                            getRecipePreviewImagePath(aRecipe),
+                            viewController.getMainImageForRecipe(aRecipe),
                             dbAccess.findRecipeTags(aRecipe.getRecipeName()),
                             aRecipe ) );
         }
@@ -207,7 +191,7 @@ public class StartPage extends VBox
                     new RecipePreview(
                             viewController,
                             aRecipe.getRecipeName(),
-                            getRecipePreviewImagePath(aRecipe),
+                            viewController.getMainImageForRecipe(aRecipe),
                             dbAccess.findRecipeTags(aRecipe.getRecipeName()),
                             aRecipe ) );
         }

@@ -704,6 +704,16 @@ public class ViewController implements DatabaseInterface {
 	
 	// *************************** MANAGING INGREDIENTS **********************
 	/**
+	 * GET MAIN IMAGE FOR RECIPE
+	 * returns first of the set of images, or a default image if that list is empty
+	 * @param recipe
+     * @return
+	 */
+	public String getMainImageForRecipe(Recipe rec) {
+    	return dbaccess.getMainImageForRecipe(rec);
+	}
+	
+	/**
 	 * GET ALL IMAGES FOR RECIPE
 	 * return list of strings which are the image file paths for all images stored under that recipe
 	 * 		may return empty list

@@ -1,10 +1,13 @@
 package view;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import model.Ingredient;
 import model.Instruction;
 import model.Recipe;
@@ -26,6 +29,13 @@ public class EditRecipeView extends CreateRecipeView {
 		String recipeUser = recipe.getCreator();
 		
 		recipeNameField.setText(recipeName);
+		try {
+			String imgPath = vc.getMainImageForRecipe(recipe);
+			image.setImage(new Image(new FileInputStream(imgPath)));
+		} catch (FileNotFoundException x) {
+			System.out.println("Default Image for Recipe in EditRecipeView not found.");
+		}
+		
 		
 		List<Tag> tagList = viewController.getAllTagsForRecipe(recipeName, recipeUser);
 		//DBTagList = new LinkedList<Tag>(tagList);

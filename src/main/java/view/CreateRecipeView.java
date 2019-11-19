@@ -57,7 +57,7 @@ public class CreateRecipeView extends GridPane {
 	private Button addInstructionButton;
 	private Button deleteInstructionButton;
 	private TextField instructionField;
-	private ImageView image;
+	protected ImageView image;
 	private Button chooseFile;
 	private FileChooser fileChooser;
 	private File file;
@@ -401,11 +401,10 @@ public class CreateRecipeView extends GridPane {
 				database.addInstruction(name, user, instruction.getStr());
 			}
 			
-			/* TODO
+			/* 
 			 * make the image file be uploaded into the database here
-			 * 
-			 * var: file
 			 */
+			viewController.addImageForRecipe(file.toURI().toString(), name, user);
 
 			viewController.moveToMyPage();
 			

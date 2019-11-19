@@ -62,6 +62,7 @@ public interface DatabaseInterface {
 	
 	
 	// MANAGING IMAGES
+	public String getMainImageForRecipe(Recipe recipe);
 	public List<String> getAllImagesForRecipe(String recipeName, String recipeCreator);
 	public String addImageForRecipe(String path, String recipeName, String recipeCreator);
 	
