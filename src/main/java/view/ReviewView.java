@@ -100,7 +100,7 @@ public class ReviewView extends VBox{
         textAreaTitle.setStyle( SUBTITLEFONT + LABELSTYLE);
         textAreaTitle.setAlignment(Pos.CENTER_LEFT);
         
-        foodImg = setImage("src/main/resources/images/preview.png");
+        foodImg = setImage(viewController.getMainImageForRecipe(theRecipe));
         
         //set up choice box
         rateSelection = new ChoiceBox<>();
