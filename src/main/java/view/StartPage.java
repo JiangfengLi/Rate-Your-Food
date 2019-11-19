@@ -67,6 +67,26 @@ public class StartPage extends VBox
         }
     }
 
+    /**
+     * GET RECIPE PREVIEW IMAGE PATH
+     * grab the image paths for the recipes
+     * @param recipe
+     * @return
+     */
+    private String getRecipePreviewImagePath(Recipe rec) {
+    	// get first img path of those stored for recipe
+        String imgPath = viewController.getAllImagesForRecipe(rec.getRecipeName(), rec.getCreator()).get(0);
+        // default substitute
+        if (imgPath == null) {
+        	imgPath = "src/main/resources/images/preview.png";
+        }
+        return imgPath;
+    }
+    
+    /**
+     * MAKE FEATURED RECIPES
+     * @return
+     */
     private VBox makeFeaturedRecipes( )
     {
         VBox aPane = new VBox();
@@ -97,10 +117,15 @@ public class StartPage extends VBox
             }
             pickedRecipes.add( aRecipeIndex );
 
+            // get recipe data
+            Recipe rec = recipeData.get(aRecipeIndex);
+            String imgPath = getRecipePreviewImagePath(rec);
+            
+            // add preview
             aFeaturedRecipeHolder.getChildren().add( new RecipePreview(
             		viewController,
-                    recipeData.get( aRecipeIndex ).getRecipeName(),
-                    "src/main/resources/images/preview.png",
+                    rec.getRecipeName(),
+                    imgPath,
                     dbAccess.findRecipeTags(recipeData.get( aRecipeIndex ).getRecipeName()),
                     recipeData.get( aRecipeIndex )) );
         }
@@ -113,6 +138,10 @@ public class StartPage extends VBox
         return aPane;
     }
 
+    /**
+     * MAKE ALL RECIPES
+     * @return
+     */
     private VBox makeAllRecipes( )
     {
         VBox aPane = new VBox();
@@ -137,7 +166,7 @@ public class StartPage extends VBox
                     new RecipePreview(
                             viewController,
                             aRecipe.getRecipeName(),
-                            "src/main/resources/images/preview.png",
+                            getRecipePreviewImagePath(aRecipe),
                             dbAccess.findRecipeTags(aRecipe.getRecipeName()),
                             aRecipe ) );
         }
@@ -150,6 +179,10 @@ public class StartPage extends VBox
         return aPane;
     }
 
+    /**
+     * MAKE SEARCH RECIPES
+     * @return
+     */
     private VBox makeSearchRecipes()
     {
         VBox aPane = new VBox();
@@ -174,7 +207,7 @@ public class StartPage extends VBox
                     new RecipePreview(
                             viewController,
                             aRecipe.getRecipeName(),
-                            "src/main/resources/images/preview.png",
+                            getRecipePreviewImagePath(aRecipe),
                             dbAccess.findRecipeTags(aRecipe.getRecipeName()),
                             aRecipe ) );
         }
