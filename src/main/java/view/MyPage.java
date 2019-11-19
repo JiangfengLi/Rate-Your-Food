@@ -154,7 +154,10 @@ public class MyPage extends HBox {
 		reviewListView.setItems(reviewObList);
 		
 		recipeListView.setMinHeight(300);
+		recipeListView.setMinWidth(350);
+		
 		reviewListView.setMinHeight(450);
+		reviewListView.setMinWidth(350);
 		
 	}
 	
