@@ -18,6 +18,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import model.DBAccess;
 import model.Recipe;
 import model.Review;
 
@@ -43,10 +44,14 @@ public class MyPage extends HBox {
 	private ListView<RecipePreview> recipeListView;
 	private ListView<ReviewPreview> reviewListView;
 
+	private DBAccess dbAccess;
+
 	public MyPage(ViewController viewController2) {
 		setAlignment(Pos.CENTER);
 		this.setSpacing(100);		
 		this.viewController = viewController2;
+
+		dbAccess = new DBAccess();
 
 		// set up the background image
         try
@@ -130,7 +135,7 @@ public class MyPage extends HBox {
         			viewController,
         			rec.getRecipeName(),
                     viewController.getMainImageForRecipe(rec),
-                    rec.toString(),
+					dbAccess.findRecipeTags(rec.getRecipeName()),
                    rec) );
         }  
 	
