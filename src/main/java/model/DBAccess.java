@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import java.sql.Statement;
 import java.util.List;
 import java.util.LinkedList;
 
@@ -35,6 +36,7 @@ public class DBAccess implements DatabaseInterface{
 	private static final String ADD_RECIPE = "INSERT INTO Recipe(RecipeName, Creator, Difficulty, Rating) VALUES(?,?,?,?);";
 	private static final String GET_ALL_RECIPES_FOR_USER = "SELECT * FROM Recipe WHERE Creator=?;";
 	private static final String GET_ALL_RECIPES = "SELECT * FROM Recipe;";
+	private static final String GET_TOP_RECIPES = "SELECT RecipeName, RecipeCreator, Difficulty, Rating FROM Review GROUP BY RecipeName ORDER BY AVG(Rating) DESC LIMIT 10;";
 	private static final String GET_ALL_RECIPES_BY_TAG = "SELECT DISTINCT R.RecipeName, R.Creator, R.Difficulty, R.Rating "+
 			"FROM Recipe R JOIN Tag T ON R.RecipeName = T.RecipeName AND R.Creator = T.RecipeCreator WHERE T.Name=?;";
 	private static final String SEARCH_RECIPES = "SELECT DISTINCT R.RecipeName, R.Creator, R.Difficulty, R.Rating, T.Name " +
@@ -388,6 +390,30 @@ public class DBAccess implements DatabaseInterface{
     		return null;
     	}
 	}
+
+    /**
+     * GET TOP RATED RECIPES
+     * returns list of recipes with highest rating, returns null if sql exception thrown
+     */
+	public List<Recipe> getTopRecipes()
+    {
+        try {
+            Connection conn = establishConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery( GET_TOP_RECIPES );
+            LinkedList<Recipe> recipeList = new LinkedList<>();
+            while (rs.next()) {
+                Recipe recipe = new Recipe(rs.getString(1),rs.getString(2),rs.getInt(3),rs.getInt(4));
+                recipeList.add(recipe);
+            }
+            stmt.close();
+            conn.close();
+            return recipeList;
+        } catch (Exception x) {
+            x.printStackTrace();
+            return null;
+        }
+    }
 
 	/**
 	 * GET ALL RECIPES BY TAG
@@ -1460,7 +1486,7 @@ public class DBAccess implements DatabaseInterface{
 	/**
 	 * GET MAIN IMAGE FOR RECIPE
 	 * returns first of the set of images, or a default image if that list is empty
-	 * @param recipe
+	 * @param rec
      * @return
 	 */
 	public String getMainImageForRecipe(Recipe rec) {

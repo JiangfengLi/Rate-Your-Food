@@ -87,12 +87,12 @@ public class StartPage extends VBox
         aFeaturedRecipeHolder.setVgap( 5 );
         aFeaturedRecipeHolder.setAlignment( Pos.CENTER );
 
-        List<Recipe> recipeData = dbAccess.getAllRecipes();
+        List<Recipe> recipeData = dbAccess.getTopRecipes();
 
         Random rand = new Random(  );
         ArrayList<Integer> pickedRecipes = new ArrayList<>(  );
 
-        for ( int i = 1; i < 6; i++ )
+        for ( int i = 0; i < 5; i++ )
         {
             int aRecipeIndex = rand.nextInt( recipeData.size() );
             while( pickedRecipes.contains( aRecipeIndex ) )
@@ -102,7 +102,7 @@ public class StartPage extends VBox
             pickedRecipes.add( aRecipeIndex );
 
             // get recipe data
-            Recipe rec = recipeData.get(aRecipeIndex);
+            Recipe rec = recipeData.get( aRecipeIndex );
             String imgPath = viewController.getMainImageForRecipe(rec);
             
             // add preview
@@ -110,8 +110,8 @@ public class StartPage extends VBox
             		viewController,
                     rec.getRecipeName(),
                     imgPath,
-                    dbAccess.findRecipeTags(recipeData.get( aRecipeIndex ).getRecipeName()),
-                    recipeData.get( aRecipeIndex )) );
+                    dbAccess.findRecipeTags( recipeData.get( aRecipeIndex ).getRecipeName() ),
+                    recipeData.get( aRecipeIndex ) ) );
         }
 
         aPane.setPadding( new Insets( 20, 0, 10, 0 ) );
