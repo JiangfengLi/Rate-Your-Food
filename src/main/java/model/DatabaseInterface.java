@@ -25,7 +25,7 @@ public interface DatabaseInterface {
 	public List<Recipe> getAllRecipesForUser(String creator);
 	public List<Recipe> getAllRecipes();
 	public List<Recipe> getAllRecipesByTag(String name);
-	public List<Recipe> searchRecipes(String searchKey);
+	public List<Recipe> searchRecipes(String searchKey, String filterKey);
 	public String deleteRecipe(String recipeName, String creator);
 	public String updateRecipe(String oldRecipeName, String creator, String newRecipeName, int difficulty, int rating);
 	

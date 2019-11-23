@@ -30,6 +30,7 @@ public class StartPage extends VBox
 	private ViewController viewController;
     private DBAccess dbAccess;
     private TextField theSearchArea;
+    private String theSearchFilter;
     private ImageView theSearchIcon;
 
     public StartPage( ViewController vc)
@@ -39,6 +40,7 @@ public class StartPage extends VBox
     	this.dbAccess = new DBAccess();
 
         theSearchArea = viewController.getHud().getSearchArea();
+        theSearchFilter = viewController.getHud().getSearchFilter();
         theSearchIcon = viewController.getHud().getSearchIcon();
 
         VBox theFeaturedRecipes = makeFeaturedRecipes();
@@ -183,7 +185,9 @@ public class StartPage extends VBox
         allRecipes.setVgap( 5 );
         allRecipes.setAlignment( Pos.CENTER );
 
-        List<Recipe> recipeData = dbAccess.searchRecipes( theSearchArea.getText() );
+        theSearchFilter = viewController.getHud().getSearchFilter();
+
+        List<Recipe> recipeData = dbAccess.searchRecipes( theSearchArea.getText(), theSearchFilter );
 
         for( Recipe aRecipe : recipeData )
         {

@@ -457,8 +457,8 @@ public class ViewController implements DatabaseInterface {
 	 * @param searchKey
 	 * @return
 	 */
-	public List<Recipe> searchRecipes(String searchKey){
-		return dbaccess.searchRecipes(searchKey);
+	public List<Recipe> searchRecipes(String searchKey, String filterKey){
+		return dbaccess.searchRecipes(searchKey, filterKey);
 	}
 	/**
 	 * DELETE RECIPE

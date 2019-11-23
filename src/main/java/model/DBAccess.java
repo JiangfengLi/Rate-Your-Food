@@ -41,6 +41,12 @@ public class DBAccess implements DatabaseInterface{
 			"FROM Recipe R JOIN Tag T ON R.RecipeName = T.RecipeName AND R.Creator = T.RecipeCreator WHERE T.Name=?;";
 	private static final String SEARCH_RECIPES = "SELECT DISTINCT R.RecipeName, R.Creator, R.Difficulty, R.Rating, T.Name " +
 			"FROM Recipe R JOIN Tag T ON R.RecipeName = T.RecipeName AND R.Creator = T.RecipeCreator WHERE ( T.Name LIKE ? OR R.RecipeName LIKE ? OR R.Creator LIKE ? ) GROUP BY R.RecipeName;";
+	private static final String SEARCH_RECIPES_BY_NAME = "SELECT DISTINCT R.RecipeName, R.Creator, R.Difficulty, R.Rating " +
+			"FROM Recipe R JOIN Tag T ON R.RecipeName = T.RecipeName AND R.Creator = T.RecipeCreator WHERE R.RecipeName LIKE ?;";
+	private static final String SEARCH_RECIPES_BY_CREATOR = "SELECT DISTINCT R.RecipeName, R.Creator, R.Difficulty, R.Rating " +
+			"FROM Recipe R JOIN Tag T ON R.RecipeName = T.RecipeName AND R.Creator = T.RecipeCreator WHERE R.Creator LIKE ?;";
+	private static final String SEARCH_RECIPES_BY_TAG = "SELECT DISTINCT R.RecipeName, R.Creator, R.Difficulty, R.Rating " +
+			"FROM Recipe R JOIN Tag T ON R.RecipeName = T.RecipeName AND R.Creator = T.RecipeCreator WHERE T.Name LIKE ?;";
 	private static final String FIND_TAGS_BY_RECIPE = "SELECT DISTINCT T.Name "+
             "FROM Recipe R JOIN Tag T ON R.RecipeName = T.RecipeName AND R.RecipeName=?;";
 	private static final String DELETE_RECIPE = "DELETE FROM Recipe WHERE RecipeName=? AND Creator=?;";
@@ -439,21 +445,40 @@ public class DBAccess implements DatabaseInterface{
     		return null;
     	}
 	}
-	
+
 	/**
 	 * SEARCH RECIPES
 	 * @param searchKey
 	 * @return
 	 */
-	public List<Recipe> searchRecipes(String searchKey) {
+	public List<Recipe> searchRecipes(String searchKey, String filterKey) {
 		try {
 			Connection conn = establishConnection();
 			PreparedStatement stmt;
-			stmt = conn.prepareStatement( SEARCH_RECIPES );
 			searchKey = "%" + searchKey + "%";
-			stmt.setString( 1, searchKey );
-			stmt.setString( 2, searchKey );
-			stmt.setString( 3, searchKey );
+
+			switch ( filterKey )
+			{
+				case "Name":
+					stmt = conn.prepareStatement( SEARCH_RECIPES_BY_NAME );
+					stmt.setString( 1, searchKey );
+					break;
+				case "Creator":
+					stmt = conn.prepareStatement( SEARCH_RECIPES_BY_CREATOR );
+					stmt.setString( 1, searchKey );
+					break;
+				case "Tags":
+					stmt = conn.prepareStatement( SEARCH_RECIPES_BY_TAG );
+					stmt.setString( 1, searchKey );
+					break;
+				default:
+					stmt = conn.prepareStatement( SEARCH_RECIPES );
+					stmt.setString( 1, searchKey );
+					stmt.setString( 2, searchKey );
+					stmt.setString( 3, searchKey );
+					break;
+			}
+
 			ResultSet rs = stmt.executeQuery();
 			LinkedList<Recipe> recipeList = new LinkedList<Recipe>();
 			while (rs.next()) {

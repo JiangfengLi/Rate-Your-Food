@@ -1,11 +1,19 @@
 package view;
 
 import java.io.FileInputStream;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -17,6 +25,7 @@ public class HUD extends FlowPane
 {
 	private ViewController viewController;
 	private TextField searchArea;
+	private ComboBox<String> searchFilter;
 	private ImageView searchIcon;
 	private DBAccess dbAccess;
 
@@ -25,7 +34,7 @@ public class HUD extends FlowPane
     	this.dbAccess = new DBAccess();
 
         setOrientation( Orientation.HORIZONTAL );
-        setPrefWidth( 1000 );
+        setPrefWidth( 1500 );
         setPrefHeight( 75 );
         setHgap( 10 );
         setStyle( "-fx-background-color: linear-gradient(to bottom, #0087CB, #000000);" );
@@ -42,9 +51,10 @@ public class HUD extends FlowPane
             searchIcon.setCache( true );
         }
 
-        FlowPane searchPane = new FlowPane( searchIcon, makeSearchArea() );
+        FlowPane searchPane = new FlowPane( searchIcon, makeSearchArea(), makeSearchFilter() );
         searchPane.setOrientation( Orientation.HORIZONTAL );
         searchPane.setAlignment(Pos.CENTER);
+        searchPane.setPrefWidth( 400 );
 
         // Create menu
         ImageView menuIcon = null;
@@ -105,9 +115,25 @@ public class HUD extends FlowPane
     private TextField makeSearchArea( )
     {
         searchArea = new TextField();
-        searchArea.setPromptText( "Search for recipes by name, creator, or tags" );
-        searchArea.setPrefSize( 345, 50 );
+        searchArea.setPromptText( "Search for recipes" );
+        searchArea.setPrefSize( 225, 50 );
         return searchArea;
+    }
+
+    private ComboBox makeSearchFilter( )
+    {
+        ObservableList<String> options =
+                FXCollections.observableArrayList(
+                        "Name",
+                        "Creator",
+                        "Tags",
+                        "All"
+                );
+        searchFilter = new ComboBox<>( options );
+        searchFilter.getSelectionModel().selectFirst();
+        searchFilter.setPrefSize( 125, 50 );
+        searchFilter.setStyle( "-fx-font-size:16; -fx-text-fill: #ffffff; -fx-background-color: #f59b42; -fx-border-color: #f57e42; -fx-border-width: 2px;" );
+        return searchFilter;
     }
 
     private Button makeAccountBtn( )
@@ -144,6 +170,11 @@ public class HUD extends FlowPane
     public TextField getSearchArea()
     {
         return searchArea;
+    }
+
+    public String getSearchFilter()
+    {
+        return searchFilter.getSelectionModel().getSelectedItem();
     }
 
     public ImageView getSearchIcon()
