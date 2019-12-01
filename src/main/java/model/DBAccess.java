@@ -16,7 +16,7 @@ import java.util.LinkedList;
  * utility class for accessing database
  * @author Alexander Miller
  *
- */
+ */ 
 public class DBAccess implements DatabaseInterface{
 
 	// JDBC driver, database URL, credentials
