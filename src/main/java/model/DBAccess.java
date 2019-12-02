@@ -16,7 +16,7 @@ import java.util.LinkedList;
  * utility class for accessing database
  * @author Alexander Miller
  *
- */
+ */ 
 public class DBAccess implements DatabaseInterface{
 
 	// JDBC driver, database URL, credentials
@@ -100,6 +100,10 @@ public class DBAccess implements DatabaseInterface{
 	// IMAGE QUERIES
 	private static final String GET_ALL_IMAGES_FOR_RECIPE = "SELECT Path FROM Image WHERE RecipeName=? AND RecipeCreator=?;";
 	private static final String ADD_IMAGE_FOR_RECIPE = "INSERT INTO Image(Path, RecipeName, RecipeCreator) VALUES(?,?,?);";
+	private static final String UPDATE_ALL_IMAGES_FOR_RECIPE = "UPDATE Image SET RecipeName=? WHERE RecipeName=? AND RecipeCreator=?;";
+	private static final String DELETE_ALL_IMAGES_FOR_RECIPE = "DELETE FROM Image WHERE RecipeName=? AND RecipeCreator=?;";
+	private static final String DELETE_ALL_IMAGES_FOR_USER = "DELETE FROM Image WHERE RecipeCreator=?;";
+
 	
 	// current user (who's logged in?)
 	private User currentUser;
@@ -236,6 +240,7 @@ public class DBAccess implements DatabaseInterface{
 		deleteAllInstructionsForUser(email);
 		deleteAllIngredientsForUser(email);
 		deleteAllTagsForUser(email);
+		deleteAllImagesForUser(email);
 		deleteAllRecipesForUser(email);
 		
     	try {
@@ -503,10 +508,10 @@ public class DBAccess implements DatabaseInterface{
             stmt.setString( 1, recipeName );
             ResultSet rs = stmt.executeQuery();
             StringBuilder tags = new StringBuilder();
+            
             while (rs.next()) {
                 tags.append(rs.getString(1)).append(", ");
             }
-            tags.delete(tags.lastIndexOf(","), tags.length());
             stmt.close();
             conn.close();
             return tags.toString();
@@ -528,6 +533,7 @@ public class DBAccess implements DatabaseInterface{
 		deleteAllReviewsForRecipe(recipeName, creator);
 		deleteAllIngredientsForRecipe(recipeName, creator);
 		deleteAllTagsForRecipe(recipeName, creator);
+		deleteAllImagesForRecipe(recipeName, creator);
 		
     	int rowsDeleted = 0;
 		try {
@@ -593,6 +599,29 @@ public class DBAccess implements DatabaseInterface{
 		if (oldRecipeName == null || creator == null || newRecipeName == null || difficulty == 0 || rating == 0) {
 			return "please provide old recipename, creator, new recipename, non-zero difficulty, and non-zero rating";
 		}
+		
+		// dependency resolution:
+		// if name changed, need to create new rec, update all dependencies, then delete; otherwise, contraints will be violated
+		boolean nameChange = !oldRecipeName.equals(newRecipeName);
+		if (nameChange) {
+			String result = addRecipe(newRecipeName,creator,difficulty,rating);
+			if (result != null) {
+				return result;
+			}
+		}
+		// always need to also update related reviews, ingredients, instructions, and tags
+		updateRecipeHelper(oldRecipeName,creator,newRecipeName,UPDATE_ALL_REVIEWS_FOR_RECIPE);
+		updateRecipeHelper(oldRecipeName,creator,newRecipeName,UPDATE_ALL_INGREDIENTS_FOR_RECIPE);
+		updateRecipeHelper(oldRecipeName,creator,newRecipeName,UPDATE_ALL_INSTRUCTIONS_FOR_RECIPE);
+		updateRecipeHelper(oldRecipeName,creator,newRecipeName,UPDATE_ALL_TAGS_FOR_RECIPE);
+		updateRecipeHelper(oldRecipeName,creator,newRecipeName,UPDATE_ALL_IMAGES_FOR_RECIPE);
+		// delete old record in event of name change
+		if (nameChange) {
+			String result = deleteRecipe(oldRecipeName,creator);
+			return result;
+		}
+
+		// update query if name was not changed
 		try {
 			Connection conn = establishConnection();
 			PreparedStatement stmt = conn.prepareStatement(UPDATE_RECIPE);
@@ -608,13 +637,7 @@ public class DBAccess implements DatabaseInterface{
 			x.printStackTrace();
 			return "ERROR with database encountered. Please try again.";
 		}
-		// if name changed, need to also update related reviews, ingredients, instructions, and tags
-		if (!oldRecipeName.equals(newRecipeName)) {
-			updateRecipeHelper(oldRecipeName,creator,newRecipeName,UPDATE_ALL_REVIEWS_FOR_RECIPE);
-			updateRecipeHelper(oldRecipeName,creator,newRecipeName,UPDATE_ALL_INGREDIENTS_FOR_RECIPE);
-			updateRecipeHelper(oldRecipeName,creator,newRecipeName,UPDATE_ALL_INSTRUCTIONS_FOR_RECIPE);
-			updateRecipeHelper(oldRecipeName,creator,newRecipeName,UPDATE_ALL_TAGS_FOR_RECIPE);
-		}
+
 		return null;
 	}
 	
@@ -1515,11 +1538,18 @@ public class DBAccess implements DatabaseInterface{
      * @return
 	 */
 	public String getMainImageForRecipe(Recipe rec) {
+		String defaultImg = "src/main/resources/images/preview.png";
     	// get first img path of those stored for recipe
-        String imgPath = getAllImagesForRecipe(rec.getRecipeName(), rec.getCreator()).get(0);
+		List<String> imgList = getAllImagesForRecipe(rec.getRecipeName(), rec.getCreator());
+		String imgPath = null;
+		if (imgList == null || imgList.isEmpty()) {
+			return defaultImg;
+		} else {
+			imgPath = imgList.get(0);
+		}
         // default substitute
         if (imgPath == null) {
-        	imgPath = "src/main/resources/images/preview.png";
+        	imgPath = defaultImg;
         }
         return imgPath;
 	}
@@ -1579,5 +1609,57 @@ public class DBAccess implements DatabaseInterface{
 		return null;
 	}
 	
+	/**
+	 * DELETE ALL IMAGES FOR RECIPE
+	 * @param recipeName
+	 * @param recipeCreator
+	 * @return
+	 */
+	private String deleteAllImagesForRecipe(String recipeName, String recipeCreator) {
+    	try {
+    		Connection conn = establishConnection();
+    		PreparedStatement stmt = conn.prepareStatement(DELETE_ALL_IMAGES_FOR_RECIPE);
+    		stmt.setString(1, recipeName);
+    		stmt.setString(2, recipeCreator);
+    		int rowsDeleted = stmt.executeUpdate();
+    		stmt.close();
+    		conn.close();
+    		if (rowsDeleted > 0) {
+    			return null;
+    		} else {
+    			return "No such images found to delete!";
+    		}
+    	} catch (Exception x) {
+    		x.printStackTrace();
+    		return "ERROR with database encountered. Please try again.";
+    	}
+	}
+	
+	/**
+	 * DELETE ALL IMAGES FOR USER
+	 * @param email
+	 * @return
+	 */
+	private String deleteAllImagesForUser(String email) {
+		try {
+    		Connection conn = establishConnection();
+    		PreparedStatement stmt = conn.prepareStatement(DELETE_ALL_IMAGES_FOR_USER);
+    		stmt.setString(1, email);
+    		int rowsDeleted = stmt.executeUpdate();
+    		stmt.close();
+    		conn.close();
+    		if (rowsDeleted > 0) {
+    			return null;
+    		} else {
+    			return "No such images found to delete!";
+    		}
+    	} catch (Exception x) {
+    		x.printStackTrace();
+    		return "ERROR with database encountered. Please try again.";
+    	}
+	}
+	
+	
 	
 }
+
