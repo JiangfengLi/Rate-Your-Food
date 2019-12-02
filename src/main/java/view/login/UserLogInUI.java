@@ -1,5 +1,8 @@
 package view.login;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -7,6 +10,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import view.ViewController;
@@ -23,7 +32,13 @@ public abstract class UserLogInUI extends HBox {
 	protected static int BUTTON_WIDTH = 90;
 	protected static int VERTICAL_SPACING = 30;
 	protected static int HORIZONTAL_SPACING = 30;
-	protected static int LABEL_WIDTH = 120;
+	protected static int LABEL_WIDTH = 360;
+	
+	protected static String headerStyle = "-fx-font-size: 30px;\n" +
+            "    -fx-font-weight: bold;\n" +
+            "    -fx-text-fill: #000000;\n" +
+            "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
+            "    -fx-underline: true;" ;
 	
 	// CONTROLLER REFERENCE
 	protected ViewController viewController;
@@ -91,6 +106,11 @@ public abstract class UserLogInUI extends HBox {
 		verticalStructure = new VBox();
 		verticalStructure.setAlignment(Pos.CENTER);
 		verticalStructure.setSpacing(VERTICAL_SPACING);
+		
+		// stylize
+		emailLabel.setStyle(UserLogInUI.headerStyle);
+		passwordLabel.setStyle(UserLogInUI.headerStyle);
+		setBackground();
 
 		// horizontal structure configs
 		this.setAlignment(Pos.CENTER);
@@ -180,5 +200,19 @@ public abstract class UserLogInUI extends HBox {
 		return null;
 	}
 	
-	
+	/**
+	 * SET BACKGROUND
+	 * stylizes background w image
+	 */
+	protected void setBackground() {
+        try
+        {
+            Image background = new Image( new FileInputStream( "src/main/resources/images/wallpaper.jpeg" ) );
+            BackgroundSize aSize = new BackgroundSize( 1920, 700, true, true, true, true );
+            setBackground( new Background( new BackgroundImage( background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, aSize ) ) );
+        } catch ( IOException e )
+        {
+            e.printStackTrace();
+        }
+	}
 }

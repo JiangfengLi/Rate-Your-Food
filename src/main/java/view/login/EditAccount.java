@@ -48,6 +48,12 @@ public class EditAccount extends CreateAccount {
 		verticalStructure.getChildren().add(buttonRow);
 		verticalStructure.getChildren().add(errorMessage);
 		
+		
+		// stylize everything
+		oldPasswordLabel.setStyle(UserLogInUI.headerStyle);
+		
+		setBackground();
+		
 		// put vertical structure in our hbox (so we can center it)
 		this.getChildren().add(verticalStructure);
 		

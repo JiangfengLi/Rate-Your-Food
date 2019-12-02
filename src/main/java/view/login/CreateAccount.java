@@ -26,7 +26,7 @@ public class CreateAccount extends UserLogInUI {
 	
 	protected HBox confirmationRow;
 	protected Label confirmationLabel;
-	protected PasswordField confirmationField;
+	protected PasswordField confirmationField; 
 	
 	/**
 	 * CONSTRUCTOR
@@ -93,6 +93,11 @@ public class CreateAccount extends UserLogInUI {
 		confirmationField = new PasswordField();
 		confirmationRow.getChildren().add(confirmationLabel);
 		confirmationRow.getChildren().add(confirmationField);
+		
+		// stylize
+		firstNameLabel.setStyle(UserLogInUI.headerStyle);
+		lastNameLabel.setStyle(UserLogInUI.headerStyle);
+		confirmationLabel.setStyle(UserLogInUI.headerStyle);
 	}
 	
 	/**
