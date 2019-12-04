@@ -66,6 +66,13 @@ public class EditRecipeView extends CreateRecipeView {
 		instructionsTable.setItems(tempInsList);
 		//DBInsList = FXCollections.observableArrayList(tempInsList);	
 		
+		try {
+			String imagePath = vc.getMainImageForRecipe(recipe);
+			image.setImage(new Image(new FileInputStream(imagePath)));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
 		Button deleteRecipeButton = new Button("Delete Recipe");
 		setDeleteRecipeButton(deleteRecipeButton);
 	}
@@ -87,19 +94,26 @@ public class EditRecipeView extends CreateRecipeView {
 		// updating recipe name if different
 		int recipeDif = recipe.getDifficulty();
 		int recipeRating = recipe.getRating();
-		//if (!recipeName.equals(OGrecipeName)) {
-		//	viewController.addRecipe(OGrecipeName, user, recipeName, dif, rating);
+		
+		///////////////////////////////////////////////////////////////////////////////////////////////////
+		/*
+		
+		viewController.updateRecipe(OGrecipeName, user, recipeName, recipeDif, recipeRating);
+		
+		//for (String tagName : tagsField.getText().split("\\W+")) {
+		//viewController.update(tagName, recipeName, user);
 		//}
 		
 		
-		List<Review> reviewList = viewController.getAllReviewsForRecipe(OGrecipeName, user);
 		
+		*/
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		List<Review> reviewList = viewController.getAllReviewsForRecipe(OGrecipeName, user);
+				
 		String delete = viewController.deleteRecipe(OGrecipeName, user);
 		String add = viewController.addRecipe(recipeName, user, recipeDif, recipeRating);		
-		
-		System.out.println("result: "+delete);
-		System.out.println("result: "+add);
-		
+						
 		for (Review review : reviewList) {
 			String author = review.getAuthor();
 			String text = review.getText();
@@ -108,29 +122,13 @@ public class EditRecipeView extends CreateRecipeView {
 			
 			viewController.addReview(author, recipeName, user, text, dif, rating);
 		}
-		// ^ need to create the new recipe and then destroy the old recipe to prevent any row from referencing the old one
-		// causing a foreign table exception
 		
-		/*
-		for (Tag tag : DBTagList) {
-			String name = tag.getName();
-			viewController.deleteTag(name, OGrecipeName, user);
-		}
-		*/
 		for (String tagName : tagsField.getText().split("\\W+")) {
 			viewController.addTag(tagName, recipeName, user);
 		}
 		
 		// Updating the new ingredients.
 		ObservableList<Ingredient> ingList = ingredientTable.getItems();
-		
-		// deleting all ingredients
-		/*
-		for (Ingredient DBing : DBIngList) {
-			String DBname = DBing.getName();
-			viewController.deleteIngredient(DBname, OGrecipeName, user);
-		}
-		*/
 		
 		// adding the new ingredients
 		for (Ingredient ing : ingList) {
@@ -143,32 +141,17 @@ public class EditRecipeView extends CreateRecipeView {
 		// updating the instructions list
 		ObservableList<TempInstruction> insList = instructionsTable.getItems();
 		
-		// deleting all old instructions
-		/*
-		for (TempInstruction DBInstruction : DBInsList) {
-			String DBtext = DBInstruction.getStr();
-			viewController.deleteInstruction(null, OGrecipeName, user, DBtext);
-		}
-		*/
 		// adding the new Instructions
 		for (TempInstruction tableInstruction : insList) {
 			String text = tableInstruction.getStr();
 			viewController.addInstruction(recipeName, user, text);			
 		}
 		
-		/*
-		List<Review> reviewList = viewController.getAllReviewsForRecipe(OGrecipeName, user);
-		for (Review review : reviewList) {
-			String author = review.getAuthor();
-			String text = review.getText();
-			int dif = review.getDifficulty();
-			int rating = review.getRating();
-			
-			viewController.addReview(author, recipeName, user, text, dif, rating);
-		}
-		*/
+		viewController.addImageForRecipe(file.toPath().toString(), recipeName, user);
 		
 		System.out.println("recipe, ingredients and instructions updated!!");
+		
+		/////////////////////////////////////////////////////////////////////////////////
 
 		viewController.moveToMyPage();
 

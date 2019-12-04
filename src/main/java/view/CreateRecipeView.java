@@ -57,10 +57,8 @@ public class CreateRecipeView extends GridPane {
 	private Button addInstructionButton;
 	private Button deleteInstructionButton;
 	private TextField instructionField;
-	protected ImageView image;
 	private Button chooseFile;
 	private FileChooser fileChooser;
-	private File file;
 
 	private DBAccess database;
 	protected Button submitButton;
@@ -68,6 +66,8 @@ public class CreateRecipeView extends GridPane {
 	//protected ObservableList<Ingredient> ingredientList;
 	//protected ObservableList<TempInstruction> tempInstructionlist;
 	
+	protected File file;
+	protected ImageView image;
 	protected TextField tagsField;
 	protected TextField recipeNameField;	
 	protected TableView<Ingredient> ingredientTable;
