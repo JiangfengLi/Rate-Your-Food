@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 
 import javafx.scene.control.TableColumn;
@@ -59,6 +60,8 @@ public class CreateRecipeView extends GridPane {
 	private TextField instructionField;
 	private Button chooseFile;
 	private FileChooser fileChooser;
+	private HBox ratingSelector;
+	private HBox difficultySelector;
 
 	private DBAccess database;
 	protected Button submitButton;
@@ -66,6 +69,8 @@ public class CreateRecipeView extends GridPane {
 	//protected ObservableList<Ingredient> ingredientList;
 	//protected ObservableList<TempInstruction> tempInstructionlist;
 	
+	protected ChoiceBox<Integer> rateSelection;
+    protected ChoiceBox<Integer> difficultySelection;
 	protected File file;
 	protected ImageView image;
 	protected TextField tagsField;
@@ -88,6 +93,7 @@ public class CreateRecipeView extends GridPane {
 		}
 		setNodesToParent();
 		setCellColumn();
+		setSelectors();
 		setIngredientButtonsHandler();
 		setInstructionButtonsHandler();
 		setChooseFileButton();
@@ -113,6 +119,7 @@ public class CreateRecipeView extends GridPane {
 		image.setImage(new Image(new FileInputStream(defaultURL)));
 		image.setFitWidth(400);
 		image.setFitHeight(500);
+		file = new File("src/main/resources/images/preview.png");
 		ingredientLabel = new Label("Ingredients");
 		ingredientFields = new HBox(2);
 		ingredientAmount = new VBox(2);
@@ -140,7 +147,7 @@ public class CreateRecipeView extends GridPane {
 
 		ingAmount.prefWidthProperty().bind(ingredientTable.widthProperty().multiply(0.1));
 		ingUnit.prefWidthProperty().bind(ingredientTable.widthProperty().multiply(0.2));
-		ingName.prefWidthProperty().bind(ingredientTable.widthProperty().multiply(0.69));
+		ingName.prefWidthProperty().bind(ingredientTable.widthProperty().multiply(0.65));
 		ingAmount.setResizable(false);
         ingName.setResizable(false);
         ingUnit.setResizable(false);
@@ -151,7 +158,7 @@ public class CreateRecipeView extends GridPane {
 		insString = new TableColumn<TempInstruction, String>("instruction");
 		instructionsTable.getColumns().addAll(insStep, insString);
 		insStep.prefWidthProperty().bind(instructionsTable.widthProperty().multiply(0.1));
-		insString.prefWidthProperty().bind(instructionsTable.widthProperty().multiply(0.89));
+		insString.prefWidthProperty().bind(instructionsTable.widthProperty().multiply(0.85));
 		
 		addInstructionButton = new Button("Add");
 		deleteInstructionButton = new Button("Delete");
@@ -161,6 +168,9 @@ public class CreateRecipeView extends GridPane {
 		submitButton = new Button("Submit");
 		chooseFile = new Button("choose file");
 		fileChooser = new FileChooser();
+		
+		ratingSelector = new HBox(5);
+		difficultySelector = new HBox(5);
 	}
 
 	private void setCellColumn() {
@@ -188,27 +198,43 @@ public class CreateRecipeView extends GridPane {
 	    this.getColumnConstraints().addAll( new ColumnConstraints( 100 ));
 	    this.setAlignment(Pos.TOP_CENTER);
 
-
-		
 		this.add(recipeName, 0, 0);
 		this.add(recipeNameField, 1, 0);
-		this.add(image, 2, 1, 1, 7);
+		this.add(image, 2, 2, 1, 4);
 		this.add(tags, 0, 1);
 		this.add(tagsField, 1, 1);
-		this.add(ingredientLabel,0,2);
-		this.add(ingredientTable, 0, 3, 2, 2);
-		this.add(ingredientFields, 1, 5);
-		this.add(ingredientButtons, 0, 5);
-		this.add(chooseFile, 2, 8);
-		this.add(instructions, 0, 6);
-		this.add(instructionsTable, 0, 7, 2, 2);
-		this.add(instructionButtons,0,9);
-		this.add(instructionField,1,9);
-		this.add(submitButton, 0, 10);
-		this.add(message, 1,11);
+		this.add(ratingSelector, 0,2);
+		this.add(difficultySelector,1,2);
+		this.add(ingredientLabel,0,3);
+		this.add(ingredientTable, 0, 4, 2, 2);
+		this.add(ingredientFields, 1, 6);
+		this.add(ingredientButtons, 0, 6);
+		this.add(chooseFile, 2, 9);
+		this.add(instructions, 0, 7);
+		this.add(instructionsTable, 0, 8, 2, 2);
+		this.add(instructionButtons,0,10);
+		this.add(instructionField,1,10);
+		this.add(submitButton, 0, 11);
+		this.add(message, 1,12);
+
+	}
+	
+	private void setSelectors() {
 		
+		Label ratingLabel = new Label("Rating");
+		Label difLabel = new Label("Difficulty");
+		
+		//set up choice box
+        rateSelection = new ChoiceBox<>();
+        rateSelection.getItems().addAll(1, 2, 3, 4, 5);     
+        rateSelection.getSelectionModel().select(0);        
+        
+        difficultySelection = new ChoiceBox<>();       
+        difficultySelection.getItems().addAll(1, 2, 3, 4, 5);
+        difficultySelection.getSelectionModel().select(0);        
 
-
+        ratingSelector.getChildren().addAll(ratingLabel, rateSelection);
+    	difficultySelector.getChildren().addAll(difLabel, difficultySelection);
 	}
 
 	private void setIngredientButtonsHandler() {
@@ -321,12 +347,15 @@ public class CreateRecipeView extends GridPane {
 		FileChooser.ExtensionFilter extFilterJPG = new FileChooser.ExtensionFilter("JPG files (*.jpg)", "*.JPG");
         FileChooser.ExtensionFilter extFilterPNG = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.PNG");
         fileChooser.getExtensionFilters().addAll(extFilterJPG, extFilterPNG);
+		chooseFile.setAlignment(Pos.TOP_LEFT);
+
 		
         chooseFile.setOnAction(ae -> {
 			file = fileChooser.showOpenDialog(this.getScene().getWindow());
 			if (file != null)
 				image.setImage(new Image(file.toURI().toString()));
 		});
+        
 	}
 
 	protected void setSubmitButton() {
@@ -377,7 +406,9 @@ public class CreateRecipeView extends GridPane {
 				}
 			}
 			
-			viewController.addRecipe(name, user, 1, 1);
+			int rate = rateSelection.getValue();
+			int dif = difficultySelection.getValue();
+			viewController.addRecipe(name, user, dif, rate);
 			
 			for (String tag : tags.split("\\W+")) {
 				database.addTag(tag, name, user);

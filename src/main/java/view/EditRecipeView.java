@@ -1,5 +1,6 @@
 package view;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.Image;
 import model.Ingredient;
 import model.Instruction;
@@ -36,6 +38,8 @@ public class EditRecipeView extends CreateRecipeView {
 			System.out.println("Default Image for Recipe in EditRecipeView not found.");
 		}
 		
+		rateSelection.getSelectionModel().select(recipe.getRating() - 1 );        
+        difficultySelection.getSelectionModel().select(recipe.getDifficulty() - 1 );        
 		
 		List<Tag> tagList = viewController.getAllTagsForRecipe(recipeName, recipeUser);
 		//DBTagList = new LinkedList<Tag>(tagList);
@@ -68,11 +72,13 @@ public class EditRecipeView extends CreateRecipeView {
 		
 		try {
 			String imagePath = vc.getMainImageForRecipe(recipe);
+			file = new File(imagePath);
+
 			image.setImage(new Image(new FileInputStream(imagePath)));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+				
 		Button deleteRecipeButton = new Button("Delete Recipe");
 		setDeleteRecipeButton(deleteRecipeButton);
 	}
@@ -114,7 +120,11 @@ public class EditRecipeView extends CreateRecipeView {
 		List<Review> reviewList = viewController.getAllReviewsForRecipe(OGrecipeName, user);
 				
 		String delete = viewController.deleteRecipe(OGrecipeName, user);
-		String add = viewController.addRecipe(recipeName, user, recipeDif, recipeRating);		
+		
+		int rateSelector = rateSelection.getValue();
+		int difSelector = difficultySelection.getValue();
+		
+		String add = viewController.addRecipe(recipeName, user, rateSelector, difSelector);		
 						
 		for (Review review : reviewList) {
 			String author = review.getAuthor();
@@ -149,6 +159,7 @@ public class EditRecipeView extends CreateRecipeView {
 			viewController.addInstruction(recipeName, user, text);			
 		}
 		
+		
 		viewController.addImageForRecipe(file.toPath().toString(), recipeName, user);
 		
 		System.out.println("recipe, ingredients and instructions updated!!");
@@ -170,7 +181,7 @@ public class EditRecipeView extends CreateRecipeView {
 		viewController.moveToMyPage();
 	});
 	
-	this.add(button, 1, 10);
+	this.add(button, 1, 11);
 	}
 
 } // CreateRecipe class
