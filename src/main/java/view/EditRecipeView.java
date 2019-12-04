@@ -1,5 +1,6 @@
 package view;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -7,12 +8,14 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.Image;
 import model.Ingredient;
 import model.Instruction;
 import model.Recipe;
 import model.Review;
 import model.Tag;
+import view.CreateRecipeView.TempInstruction;
 
 public class EditRecipeView extends CreateRecipeView {
 	
@@ -36,6 +39,8 @@ public class EditRecipeView extends CreateRecipeView {
 			System.out.println("Default Image for Recipe in EditRecipeView not found.");
 		}
 		
+		rateSelection.getSelectionModel().select(recipe.getRating() - 1 );        
+        difficultySelection.getSelectionModel().select(recipe.getDifficulty() - 1 );        
 		
 		List<Tag> tagList = viewController.getAllTagsForRecipe(recipeName, recipeUser);
 		//DBTagList = new LinkedList<Tag>(tagList);
@@ -66,6 +71,15 @@ public class EditRecipeView extends CreateRecipeView {
 		instructionsTable.setItems(tempInsList);
 		//DBInsList = FXCollections.observableArrayList(tempInsList);	
 		
+		try {
+			String imagePath = vc.getMainImageForRecipe(recipe);
+			file = new File(imagePath);
+
+			image.setImage(new Image(new FileInputStream(imagePath)));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+				
 		Button deleteRecipeButton = new Button("Delete Recipe");
 		setDeleteRecipeButton(deleteRecipeButton);
 	}
@@ -79,6 +93,9 @@ public class EditRecipeView extends CreateRecipeView {
 	
 	private void submit() {
 		
+		if (!areFieldsValid())
+			return;
+		
 		// setting main recipe variables for update
 		String recipeName = recipeNameField.getText();
 		String OGrecipeName = recipe.getRecipeName();
@@ -87,19 +104,32 @@ public class EditRecipeView extends CreateRecipeView {
 		// updating recipe name if different
 		int recipeDif = recipe.getDifficulty();
 		int recipeRating = recipe.getRating();
-		//if (!recipeName.equals(OGrecipeName)) {
-		//	viewController.addRecipe(OGrecipeName, user, recipeName, dif, rating);
+		
+		// new method for updating recipe instead of deleting and then
+		// creating a new one
+		///////////////////////////////////////////////////////////////////////////////////////////////////
+		/*
+		
+		viewController.updateRecipe(OGrecipeName, user, recipeName, recipeDif, recipeRating);
+		
+		//for (String tagName : tagsField.getText().split("\\W+")) {
+		//viewController.update(tagName, recipeName, user);
 		//}
 		
 		
+		
+		*/
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		
 		List<Review> reviewList = viewController.getAllReviewsForRecipe(OGrecipeName, user);
-		
+				
 		String delete = viewController.deleteRecipe(OGrecipeName, user);
-		String add = viewController.addRecipe(recipeName, user, recipeDif, recipeRating);		
 		
-		System.out.println("result: "+delete);
-		System.out.println("result: "+add);
+		int rateSelector = rateSelection.getValue();
+		int difSelector = difficultySelection.getValue();
 		
+		String add = viewController.addRecipe(recipeName, user, rateSelector, difSelector);		
+						
 		for (Review review : reviewList) {
 			String author = review.getAuthor();
 			String text = review.getText();
@@ -108,29 +138,13 @@ public class EditRecipeView extends CreateRecipeView {
 			
 			viewController.addReview(author, recipeName, user, text, dif, rating);
 		}
-		// ^ need to create the new recipe and then destroy the old recipe to prevent any row from referencing the old one
-		// causing a foreign table exception
 		
-		/*
-		for (Tag tag : DBTagList) {
-			String name = tag.getName();
-			viewController.deleteTag(name, OGrecipeName, user);
-		}
-		*/
 		for (String tagName : tagsField.getText().split("\\W+")) {
 			viewController.addTag(tagName, recipeName, user);
 		}
 		
 		// Updating the new ingredients.
 		ObservableList<Ingredient> ingList = ingredientTable.getItems();
-		
-		// deleting all ingredients
-		/*
-		for (Ingredient DBing : DBIngList) {
-			String DBname = DBing.getName();
-			viewController.deleteIngredient(DBname, OGrecipeName, user);
-		}
-		*/
 		
 		// adding the new ingredients
 		for (Ingredient ing : ingList) {
@@ -143,36 +157,62 @@ public class EditRecipeView extends CreateRecipeView {
 		// updating the instructions list
 		ObservableList<TempInstruction> insList = instructionsTable.getItems();
 		
-		// deleting all old instructions
-		/*
-		for (TempInstruction DBInstruction : DBInsList) {
-			String DBtext = DBInstruction.getStr();
-			viewController.deleteInstruction(null, OGrecipeName, user, DBtext);
-		}
-		*/
 		// adding the new Instructions
 		for (TempInstruction tableInstruction : insList) {
 			String text = tableInstruction.getStr();
 			viewController.addInstruction(recipeName, user, text);			
 		}
 		
-		/*
-		List<Review> reviewList = viewController.getAllReviewsForRecipe(OGrecipeName, user);
-		for (Review review : reviewList) {
-			String author = review.getAuthor();
-			String text = review.getText();
-			int dif = review.getDifficulty();
-			int rating = review.getRating();
-			
-			viewController.addReview(author, recipeName, user, text, dif, rating);
-		}
-		*/
+		
+		viewController.addImageForRecipe(file.toPath().toString(), recipeName, user);
 		
 		System.out.println("recipe, ingredients and instructions updated!!");
+		
+		/////////////////////////////////////////////////////////////////////////////////
 
 		viewController.moveToMyPage();
 
 	} // submit method
+	
+	private boolean areFieldsValid() {
+				
+		String name = recipeNameField.getText();
+		String tags = tagsField.getText();
+		ObservableList<Ingredient> ingredients = ingredientTable.getItems();
+		ObservableList<TempInstruction> instructions = instructionsTable.getItems();
+		
+		if (name.isEmpty() || ingredients.isEmpty() || instructions.isEmpty() || tags.isEmpty()) {
+			message.setText("Missing info for required field(s), check for red marks");
+			
+			String redMark = "-fx-border-color: red ; -fx-border-width: 2px ;";
+			String noMark = "";
+			
+			if (name.isEmpty())
+				recipeNameField.setStyle(redMark);
+			else 
+				recipeNameField.setStyle(noMark);
+			
+			if (tags.isEmpty())
+				tagsField.setStyle(redMark);
+			else
+				tagsField.setStyle(noMark);
+			
+			if (ingredients.isEmpty())
+				ingredientTable.setStyle(redMark);
+			else
+				ingredientTable.setStyle(noMark);
+			
+			if (instructions.isEmpty())
+				instructionsTable.setStyle(redMark);
+			else
+				instructionsTable.setStyle(noMark);
+			
+			return false;
+
+		}
+		
+		return true;
+	}
 	
 	private void setDeleteRecipeButton(Button button) {
 	
@@ -185,7 +225,7 @@ public class EditRecipeView extends CreateRecipeView {
 		viewController.moveToMyPage();
 	});
 	
-	this.add(button, 1, 10);
+	this.add(button, 1, 11);
 	}
 
 } // CreateRecipe class

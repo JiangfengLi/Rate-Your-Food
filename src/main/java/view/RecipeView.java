@@ -2,6 +2,7 @@ package view;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,6 +18,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -29,6 +35,7 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.util.Callback;
 import model.*;
@@ -47,6 +54,12 @@ public class RecipeView extends VBox {
 	private StackPane difficultyLayout;
 	private Circle circle2;
 	private Label difficulty;
+	private StackPane authorRatingLayout;
+	private Circle authorCircle1;
+	private Label authorRating;
+	private StackPane authorDifficultyLayout;
+	private Circle authorCircle2;
+	private Label authorDifficulty;
 	private Label ingredientsLabel;
 	private TableView<Ingredient> ingredientsTable;
 	private TableColumn<Ingredient, Float> ingAmount;
@@ -90,14 +103,25 @@ public class RecipeView extends VBox {
 		this.setAlignment(Pos.CENTER);
 		this.setPadding(new Insets(16,16,16,16));
 		this.setSpacing(8);
+		
+		 try
+	        {
+	            Image background = new Image( new FileInputStream( "src/main/resources/images/wallpaper.jpeg" ) );
+	            BackgroundSize aSize = new BackgroundSize( 1920, 700, true, true, true, true );
+	            setBackground( new Background( new BackgroundImage( background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, aSize ) ) );
+	        } catch ( IOException e )
+	        {
+	            e.printStackTrace();
+	        }	
+		
 		inititializeAllNodes();
 		
 		if( theRecipe == null )
 		{
 			setCreatorLabel("creator");
 			setRecipeLabel("Recipe Name");
-			setRating(0.0);
-			setDifficulty(0);
+			setAuthorRating(0.0);
+			setRecipeDifficulty(0);
 		}
 		else
 		{
@@ -121,8 +145,13 @@ public class RecipeView extends VBox {
 
 			setCreatorLabel(theRecipe.getCreator());
 			setRecipeLabel(theRecipe.getRecipeName());
-			setRating(theRecipe.getRating());
-			setDifficulty(theRecipe.getDifficulty());
+			
+			double[] ratings = getAvgRatings(reviewList);
+			
+			setAuthorRating(theRecipe.getRating());
+			setAuthorDif(theRecipe.getDifficulty());
+			setRecipeRating(ratings[1]);
+			setRecipeDifficulty(ratings[0]);
 			setTags(recipeTags);
 			ingredientsTable.setItems(ingredientsObsList);
 			setIngredientTable();
@@ -281,30 +310,80 @@ public class RecipeView extends VBox {
 	private void setIngredientLabel() {
 		ingredientsLabel.setText("Ingredients");
 	}
+	
 
-	private void setDifficulty(int dif) {
-		circle2.setFill(Color.valueOf("#f2ff39"));
-		circle2.setRadius(26.0);
-		circle2.setStroke(Color.TRANSPARENT);
-		circle2.setStrokeType(StrokeType.INSIDE);
-		circle2.setStrokeWidth(2.0);
+	private void setCircle(Circle  circle, double color, boolean difType) {
+		
+		if (difType) {
+			color = 6 - color;
+		}
+		
+		if (color < 3) {
+			double rate = ((color-1)/2);
+			circle.setFill(Color.color(1, rate, 0));
+		} else {
+			double rate = ((color-3)/2);
+			circle.setFill(Color.color(1-rate, 1, 0));
+		}
+		circle.setRadius(26.0);
+		circle.setStroke(Color.TRANSPARENT);
+		circle.setStrokeType(StrokeType.INSIDE);
+		circle.setStrokeWidth(2.0);
 
-		difficulty.setAlignment(javafx.geometry.Pos.CENTER);
-		difficulty.setText("" + dif);
-		difficulty.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+	}
+	
+	private void setRecipeDifficulty(double dif) {
+		setCircle(circle2,dif, true);
+		difficulty.setAlignment(Pos.CENTER);
+		difficulty.setText("dif\n" + String.format("%.02f", dif));
+		difficulty.setTextAlignment(TextAlignment.CENTER);
 	}
 
-	private void setRating(double rate) {
+	private void setRecipeRating(double rate) {
 
-		circle1.setFill(Color.valueOf("#f2ff39"));
-		circle1.setRadius(26.0);
-		circle1.setStroke(Color.TRANSPARENT);
-		circle1.setStrokeType(StrokeType.INSIDE);
-		circle1.setStrokeWidth(2.0);
-
+		setCircle(circle1, rate, false);
 		rating.setAlignment(Pos.CENTER);
-		rating.setText(String.format("%.02f", rate));
-		rating.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+		rating.setText("rate\n"+String.format("%.02f", rate));
+		rating.setTextAlignment(TextAlignment.CENTER);
+	}
+	
+	private double[] getAvgRatings(List<Review> reviewData) {
+		
+		double[] result = new double[2];
+		int counter = 0;
+		double difTotal = 0;
+		double rateTotal = 0;
+		if (reviewData.isEmpty()) {
+			result[0] = 1;
+			result[1] = 1;
+		} else {
+		
+			for (Review review: reviewData) {
+				
+				++counter;
+				difTotal += review.getDifficulty();
+				rateTotal += review.getRating();
+			}
+			
+			result[0] = difTotal / (counter);
+			result[1] = rateTotal / (counter);
+		}
+		
+		return result;
+	}
+	
+	private void setAuthorRating(double rate) {
+		setCircle(authorCircle1, rate, false);
+		authorRating.setAlignment(Pos.CENTER);
+		authorRating.setText("rate\n"+String.format("%.02f", rate));
+		authorRating.setTextAlignment(TextAlignment.CENTER);	
+	}
+	
+	private void setAuthorDif(int dif) {
+		setCircle(authorCircle2, dif, true);
+		authorDifficulty.setAlignment(Pos.CENTER);
+		authorDifficulty.setText("dif\n"+dif);
+		authorDifficulty.setTextAlignment(TextAlignment.CENTER);	
 	}
 
 	/*
@@ -326,6 +405,12 @@ public class RecipeView extends VBox {
 				result.append(tags.get(i).getName());
 			}
 			tagLabel.setText(result.toString());
+			tagLabel.setWrapText(true);
+			tagLabel.setStyle( "-fx-font-size: 18px;\n" +
+                "    -fx-font-style: italic;\n" +
+                "    -fx-text-fill: #ffffff;\n" +
+                "    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.5) , 0,0,0,1 );\n" +
+                "    -fx-underline: true;" );
 		}
 		
 		
@@ -333,7 +418,12 @@ public class RecipeView extends VBox {
 
 	private void setRecipeLabel(String name) {
 		recipeName.setText(name);
-		recipeName.setStyle("-fx-font: 24 arial;");
+		recipeName.setWrapText(true);
+		recipeName.setStyle( "-fx-font-size: 24px;\n" +
+                "    -fx-font-weight: bold;\n" +
+                "    -fx-text-fill: #000000;\n" +
+                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
+                "    -fx-underline: false;" );
 	}
 
 	/**
@@ -344,6 +434,11 @@ public class RecipeView extends VBox {
 	private void setImage() {
 		// grab 1st image associated with recipe if exists
 		String imgPath = vc.getMainImageForRecipe(theRecipe);
+		
+		imageView.setStyle(
+				"-fx-border-color: black;" + 
+				"-fx-border-style: solid;" + 
+				"-fx-border-width: 5;");
 		
 		imageView.setPreserveRatio(true);
 		imageView.setFitHeight(250);
@@ -363,6 +458,13 @@ public class RecipeView extends VBox {
                 "Serif",
                 FontPosture.ITALIC,
                 Font.getDefault().getSize()));
+		creator.setStyle(
+				"	 -fx-font-size: 12px;\n" +
+				"	 -fx-font-weight: bold;\n " +
+                "    -fx-font-style: italic;\n" +
+                "    -fx-text-fill: #000000;\n" +
+                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
+                "    -fx-underline: true;");
 
 	}
 
@@ -373,7 +475,6 @@ public class RecipeView extends VBox {
 		imageView = new ImageView();
 		recipeName = new Label();
 		tagLabel = new Label();
-		//tagLabel = new TextFlow();
 		summary = new Label();
 		ratingLayout = new StackPane();
 		circle1 = new Circle();
@@ -381,6 +482,12 @@ public class RecipeView extends VBox {
 		difficultyLayout = new StackPane();
 		circle2 = new Circle();
 		difficulty = new Label();
+		authorRatingLayout = new StackPane();
+		authorCircle1 = new Circle();
+		authorRating = new Label();
+		authorDifficultyLayout = new StackPane();
+		authorCircle2 = new Circle();
+		authorDifficulty = new Label();
 		ingredientsLabel = new Label();
 		ingredientsTable = new TableView<Ingredient>();
 		ingAmount = new TableColumn<Ingredient, Float>();
@@ -433,23 +540,37 @@ public class RecipeView extends VBox {
 		else
 			userRow.getChildren().add(creator);
 		
-		ratingLayout.getChildren().add(circle1);
-		ratingLayout.getChildren().add(rating);
+		ratingLayout.getChildren().addAll(circle1, rating);	
+		authorRatingLayout.getChildren().addAll(authorCircle1,authorRating);
+		Label authorTitle = new Label("Author's \nview");
+		authorTitle.setMinWidth(55);
+		authorTitle.setStyle("    -fx-font-weight: bold;\n" +
+	            "    -fx-background-color: #ff8c00;\n" + 
+	            "    -fx-underline: false;");
+		
+				
 		Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
 
-		titleAndRating.getChildren().addAll(recipeName, region1, ratingLayout);
+		titleAndRating.getChildren().addAll(recipeName, region1, authorTitle, authorRatingLayout, authorDifficultyLayout);
 		titleAndRating.setAlignment(Pos.CENTER_RIGHT);
 
 		saveToCart.getChildren().addAll(addToCartBtn);
 		saveToCart.setAlignment(Pos.CENTER_RIGHT);
 		
-		difficultyLayout.getChildren().add(circle2);
-		difficultyLayout.getChildren().add(difficulty);
+		difficultyLayout.getChildren().addAll(circle2, difficulty);
+		Label recipeTitle = new Label("Recipe's \nratings");
+		recipeTitle.setMinWidth(55);
+		recipeTitle.setStyle("    -fx-font-weight: bold;\n" +
+            "    -fx-background-color: #ff8c00;\n" + 
+            "    -fx-underline: false;");
+
+
+		authorDifficultyLayout.getChildren().addAll(authorCircle2, authorDifficulty);
 		Region region2 = new Region();
         HBox.setHgrow(region2, Priority.ALWAYS);
         
-		tagsAndDif.getChildren().addAll(tagLabel, region2, difficultyLayout);
+		tagsAndDif.getChildren().addAll(tagLabel, region2, recipeTitle, ratingLayout, difficultyLayout);
 		
 		ingredientInfo.getChildren().addAll(titleAndRating,tagsAndDif, saveToCart, summary);
 		ingredientTop.getChildren().addAll(imageView,ingredientInfo);
