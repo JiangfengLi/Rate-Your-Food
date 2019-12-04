@@ -31,7 +31,6 @@ import model.Recipe;
 
 public class CreateRecipeView extends GridPane {
 
-	private Label message;
 	private Label recipeName;
 	private Label tags;
 	private HBox ingredientFields;
@@ -69,6 +68,7 @@ public class CreateRecipeView extends GridPane {
 	//protected ObservableList<Ingredient> ingredientList;
 	//protected ObservableList<TempInstruction> tempInstructionlist;
 	
+	protected Label message;
 	protected ChoiceBox<Integer> rateSelection;
     protected ChoiceBox<Integer> difficultySelection;
 	protected File file;

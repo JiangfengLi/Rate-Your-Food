@@ -15,6 +15,7 @@ import model.Instruction;
 import model.Recipe;
 import model.Review;
 import model.Tag;
+import view.CreateRecipeView.TempInstruction;
 
 public class EditRecipeView extends CreateRecipeView {
 	
@@ -91,6 +92,9 @@ public class EditRecipeView extends CreateRecipeView {
 	}
 	
 	private void submit() {
+		
+		if (!areFieldsValid())
+			return;
 		
 		// setting main recipe variables for update
 		String recipeName = recipeNameField.getText();
@@ -169,6 +173,46 @@ public class EditRecipeView extends CreateRecipeView {
 		viewController.moveToMyPage();
 
 	} // submit method
+	
+	private boolean areFieldsValid() {
+				
+		String name = recipeNameField.getText();
+		String tags = tagsField.getText();
+		ObservableList<Ingredient> ingredients = ingredientTable.getItems();
+		ObservableList<TempInstruction> instructions = instructionsTable.getItems();
+		
+		if (name.isEmpty() || ingredients.isEmpty() || instructions.isEmpty() || tags.isEmpty()) {
+			message.setText("Missing info for required field(s), check for red marks");
+			
+			String redMark = "-fx-border-color: red ; -fx-border-width: 2px ;";
+			String noMark = "";
+			
+			if (name.isEmpty())
+				recipeNameField.setStyle(redMark);
+			else 
+				recipeNameField.setStyle(noMark);
+			
+			if (tags.isEmpty())
+				tagsField.setStyle(redMark);
+			else
+				tagsField.setStyle(noMark);
+			
+			if (ingredients.isEmpty())
+				ingredientTable.setStyle(redMark);
+			else
+				ingredientTable.setStyle(noMark);
+			
+			if (instructions.isEmpty())
+				instructionsTable.setStyle(redMark);
+			else
+				instructionsTable.setStyle(noMark);
+			
+			return false;
+
+		}
+		
+		return true;
+	}
 	
 	private void setDeleteRecipeButton(Button button) {
 	
