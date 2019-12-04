@@ -95,6 +95,8 @@ public class EditRecipeView extends CreateRecipeView {
 		int recipeDif = recipe.getDifficulty();
 		int recipeRating = recipe.getRating();
 		
+		// new method for updating recipe instead of deleting and then
+		// creating a new one
 		///////////////////////////////////////////////////////////////////////////////////////////////////
 		/*
 		

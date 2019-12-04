@@ -145,7 +145,6 @@ public class CreateRecipeView extends GridPane {
         ingName.setResizable(false);
         ingUnit.setResizable(false);
 
-
 		instructions = new Label("Instructions*");
 		instructionsTable = new TableView<TempInstruction>();
 		insStep = new TableColumn<TempInstruction, Integer>("#");
