@@ -2,6 +2,7 @@ package view;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,6 +18,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -97,6 +103,17 @@ public class RecipeView extends VBox {
 		this.setAlignment(Pos.CENTER);
 		this.setPadding(new Insets(16,16,16,16));
 		this.setSpacing(8);
+		
+		 try
+	        {
+	            Image background = new Image( new FileInputStream( "src/main/resources/images/wallpaper.jpeg" ) );
+	            BackgroundSize aSize = new BackgroundSize( 1920, 700, true, true, true, true );
+	            setBackground( new Background( new BackgroundImage( background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, aSize ) ) );
+	        } catch ( IOException e )
+	        {
+	            e.printStackTrace();
+	        }	
+		
 		inititializeAllNodes();
 		
 		if( theRecipe == null )
@@ -389,6 +406,11 @@ public class RecipeView extends VBox {
 			}
 			tagLabel.setText(result.toString());
 			tagLabel.setWrapText(true);
+			tagLabel.setStyle( "-fx-font-size: 18px;\n" +
+                "    -fx-font-style: italic;\n" +
+                "    -fx-text-fill: #ffffff;\n" +
+                "    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.5) , 0,0,0,1 );\n" +
+                "    -fx-underline: true;" );
 		}
 		
 		
@@ -397,7 +419,11 @@ public class RecipeView extends VBox {
 	private void setRecipeLabel(String name) {
 		recipeName.setText(name);
 		recipeName.setWrapText(true);
-		recipeName.setStyle("-fx-font: 24 arial;");
+		recipeName.setStyle( "-fx-font-size: 24px;\n" +
+                "    -fx-font-weight: bold;\n" +
+                "    -fx-text-fill: #000000;\n" +
+                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
+                "    -fx-underline: false;" );
 	}
 
 	/**
@@ -408,6 +434,11 @@ public class RecipeView extends VBox {
 	private void setImage() {
 		// grab 1st image associated with recipe if exists
 		String imgPath = vc.getMainImageForRecipe(theRecipe);
+		
+		imageView.setStyle(
+				"-fx-border-color: black;" + 
+				"-fx-border-style: solid;" + 
+				"-fx-border-width: 5;");
 		
 		imageView.setPreserveRatio(true);
 		imageView.setFitHeight(250);
@@ -427,6 +458,13 @@ public class RecipeView extends VBox {
                 "Serif",
                 FontPosture.ITALIC,
                 Font.getDefault().getSize()));
+		creator.setStyle(
+				"	 -fx-font-size: 12px;\n" +
+				"	 -fx-font-weight: bold;\n " +
+                "    -fx-font-style: italic;\n" +
+                "    -fx-text-fill: #000000;\n" +
+                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );\n" +
+                "    -fx-underline: true;");
 
 	}
 
@@ -502,13 +540,14 @@ public class RecipeView extends VBox {
 		else
 			userRow.getChildren().add(creator);
 		
-		Label ratingLabel = new Label("rating");
-		Label difficultyLabel = new Label("difficulty");
-		
 		ratingLayout.getChildren().addAll(circle1, rating);	
 		authorRatingLayout.getChildren().addAll(authorCircle1,authorRating);
 		Label authorTitle = new Label("Author's \nview");
-		authorTitle.setMinWidth(50);
+		authorTitle.setMinWidth(55);
+		authorTitle.setStyle("    -fx-font-weight: bold;\n" +
+	            "    -fx-background-color: #ff8c00;\n" + 
+	            "    -fx-underline: false;");
+		
 				
 		Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
@@ -521,7 +560,10 @@ public class RecipeView extends VBox {
 		
 		difficultyLayout.getChildren().addAll(circle2, difficulty);
 		Label recipeTitle = new Label("Recipe's \nratings");
-		recipeTitle.setMinWidth(50);
+		recipeTitle.setMinWidth(55);
+		recipeTitle.setStyle("    -fx-font-weight: bold;\n" +
+            "    -fx-background-color: #ff8c00;\n" + 
+            "    -fx-underline: false;");
 
 
 		authorDifficultyLayout.getChildren().addAll(authorCircle2, authorDifficulty);

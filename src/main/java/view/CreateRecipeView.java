@@ -3,6 +3,7 @@ package view;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 import javafx.collections.ObservableList;
@@ -18,11 +19,18 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import model.DBAccess;
 import model.Ingredient;
@@ -104,6 +112,17 @@ public class CreateRecipeView extends GridPane {
 		database = new DBAccess();
 		this.viewController = vc;
 		this.setPadding(new Insets(10, 10, 10, 10));
+		
+		// set up the background image
+        try
+        {
+            Image background = new Image( new FileInputStream( "src/main/resources/images/wallpaper.jpeg" ) );
+            BackgroundSize aSize = new BackgroundSize( 1920, 700, true, true, true, true );
+            setBackground( new Background( new BackgroundImage( background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, aSize ) ) );
+        } catch ( IOException e )
+        {
+            e.printStackTrace();
+        }		
 	
 	}
 	
@@ -112,8 +131,11 @@ public class CreateRecipeView extends GridPane {
 
 		message = new Label();
 		recipeName = new Label("Recipe Name*");
+		recipeName.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+
 		recipeNameField = new TextField();
 		tags = new Label("tags by space*");
+		tags.setFont(Font.font("Verdana", FontWeight.BOLD, 9));
 		tagsField = new TextField();
 		image = new ImageView();
 		image.setImage(new Image(new FileInputStream(defaultURL)));
@@ -121,6 +143,7 @@ public class CreateRecipeView extends GridPane {
 		image.setFitHeight(500);
 		file = new File("src/main/resources/images/preview.png");
 		ingredientLabel = new Label("Ingredients");
+		ingredientLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
 		ingredientFields = new HBox(2);
 		ingredientAmount = new VBox(2);
 		ingredientUnit = new VBox(2);
@@ -129,8 +152,11 @@ public class CreateRecipeView extends GridPane {
 		ingredientUnitField = new TextField("tbsp");
 		ingredientNameField = new TextField("sugar");
 		ingredientAmountLabel = new Label("Amount");
+		ingredientAmountLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 9));
 		ingredientUnitLabel = new Label("Unit");
+		ingredientUnitLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 9));
 		ingredientNameLabel = new Label("Name");
+		ingredientNameLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 9));
 		ingredientAmount.getChildren().addAll(ingredientAmountField, ingredientAmountLabel);
 		ingredientUnit.getChildren().addAll(ingredientUnitField, ingredientUnitLabel);
 		ingredientName.getChildren().addAll(ingredientNameField, ingredientNameLabel);
@@ -153,6 +179,7 @@ public class CreateRecipeView extends GridPane {
         ingUnit.setResizable(false);
 
 		instructions = new Label("Instructions*");
+		instructions.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
 		instructionsTable = new TableView<TempInstruction>();
 		insStep = new TableColumn<TempInstruction, Integer>("#");
 		insString = new TableColumn<TempInstruction, String>("instruction");
@@ -222,11 +249,13 @@ public class CreateRecipeView extends GridPane {
 	private void setSelectors() {
 		
 		Label ratingLabel = new Label("Rating");
+		ratingLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 9));
 		Label difLabel = new Label("Difficulty");
+		difLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 9));
 		
 		//set up choice box
         rateSelection = new ChoiceBox<>();
-        rateSelection.getItems().addAll(1, 2, 3, 4, 5);     
+        rateSelection.getItems().addAll(1, 2, 3, 4, 5);
         rateSelection.getSelectionModel().select(0);        
         
         difficultySelection = new ChoiceBox<>();       
