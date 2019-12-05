@@ -49,9 +49,8 @@ public class ReviewView extends VBox{
     protected final String SUBTITLEFONT = "-fx-font-size: 14px;\n";
     
     protected final String LABELSTYLE = "    -fx-font-weight: bold;\n" +
-            "    -fx-text-fill: #ee82ee;\n" +
-            "    -fx-effect: dropshadow( gaussian , rgba(255,255,0,0.5) , 0,0,0,1 );\n" +
-            "    -fx-background-color: #f0f8ff;\n" + 
+            "    -fx-text-fill: #000000;\n" +
+            "    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.5) , 0,0,0,1 );\n" +
             "    -fx-underline: false;";
 
 	
@@ -146,14 +145,15 @@ public class ReviewView extends VBox{
 		// set up the background image
         try
         {
-            Image background = new Image( new FileInputStream( "src/main/resources/images/food_review_image.jpg" ) );
+            Image background = new Image( new FileInputStream( "src/main/resources/images/wallpaper.jpeg" ) );
+            
             BackgroundSize aSize = new BackgroundSize( 1920, 700, true, true, true, true );
-            this.setBackground( new Background( new BackgroundImage( background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, aSize ) ) );
+            Background BG = new Background( new BackgroundImage( background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, aSize ) );            
+            this.setBackground(BG);
         } catch ( IOException IOE )
         {
         	IOE.printStackTrace();
         }			        
-        
         
         // set up click event handler for button
         Back.setOnAction(new SetBackHandler());
